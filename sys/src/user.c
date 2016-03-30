@@ -222,7 +222,7 @@ void PortInit(void)
     GPIO_MODE_OUT_PP_HIGH_SLOW 低速推挽高电平输出，可工作到2MHz。
    ------------------------------------------------------------------------------------*/
 } 
-//================================================================== 
+//============================================UART串口模块 begin
 /*--------------------------------
   配置 UART1
     - BaudRate = 9600 baud
@@ -246,6 +246,7 @@ void Uart_Model_Init(void)
     UART1_CR2   =  0x08;//  send only //0x0C;           //发送及接收使能 
     //UART1_CR2   |= 0x20;          //接收中断使能  
 } 
+//==========================================
 void Uart_SendByte(uint8_t DataByte)      
 {   
     //===单线通讯时，发送数据时避免影响接收管脚，故发送数据时先禁止接收及其中断
@@ -259,7 +260,7 @@ void Uart_SendByte(uint8_t DataByte)
     UART1_SR &= ~0x48;
     //UART1_CR2 |= 0x24; 
 }  
-	
+//==========================================
 void itoa(char *buf, int i, int base)
 {
     #define LEN	20
@@ -295,6 +296,7 @@ void itoa(char *buf, int i, int base)
     }
 }
 
+//==========================================
 void Uart_SendStr(unsigned char *tx_pData) 
 {
     unsigned int i, nLen; 
@@ -306,7 +308,7 @@ void Uart_SendStr(unsigned char *tx_pData)
     }
 }
 
- 
+//==========================================
 void Uart_SendData(unsigned int tx_data, int base) 
 {
   unsigned char buf[20] = {0};
@@ -320,7 +322,7 @@ void Uart_SendData(unsigned int tx_data, int base)
   
   Uart_SendStr(buf);
 }
-
+//============================================UART串口模块 end
 
 //==================================================================
 void I2C_Model_Init(void)

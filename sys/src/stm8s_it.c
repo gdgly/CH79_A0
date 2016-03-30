@@ -338,18 +338,11 @@ INTERRUPT_HANDLER(TIM1_CAP_COM_IRQHandler, 12)
       }
     }
   } 
-  //========================================
-  if(1)//(IS_SIGNAL_IN())
+  //======================================== 
+  if(LedFlash_t < MAX_UINT16_T_NUM)
   {
-    if(LedFlash_t < MAX_UINT16_T_NUM)
-    {
-      LedFlash_t += 1;
-    }
-  }
-  else
-  {
-    ;//LedFlash_t = 0;
-  }
+    LedFlash_t += 1;
+  } 
   //=======================================
   if(Temp_Volt_Sample_Cnt < MAX_UINT16_T_NUM)
   {  
