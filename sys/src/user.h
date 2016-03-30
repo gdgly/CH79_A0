@@ -113,6 +113,7 @@ void LowPower_Powerdown_Enter(void);
   //extern unsigned int CC_Val;
   //extern unsigned int Current_Val;
   
+  extern unsigned int Check_Val;
   extern unsigned char Buf[3];
   extern unsigned int Adc_value[10];
   extern unsigned int Cell_Volt[10];

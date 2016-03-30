@@ -44,7 +44,7 @@
 #define   DisCurOv_Re_t_SET     2000                //  单位：mS, MCU（软件）放电过流保护释放延时时间
 #define   DisCurShort_Re_t_SET  2000                //  单位：mS, MCU（软件）过充保护延时时间
 //===================================
-#define   PowerOff_Delay_t_SET  500                 //  单位：mS
+#define   PowerOff_Delay_t_SET  200                 //  单位：mS
 #define   CELLBALANCE_BEGIN_VAL 4000                //  单位：mV
 #define   CELLBALANCE_DELTA_VAL 50                 //  单位：mV
 
@@ -56,7 +56,7 @@
 //================================== 
 #define   IS_SIGNAL_IN()        PD_IDR_IDR3 == 0
 #define   IS_CHG_DETECT()       PD_IDR_IDR2 == 0
-#define   IS_LOAD_DETECT()      PA_IDR_IDR3 == 0
+//#define   IS_LOAD_DETECT()      PA_IDR_IDR3 == 0
 #define   IS_ALERT()            PC_IDR_IDR7 == 1
 
 #define   VCC1_ON()             PA_ODR_ODR1 = 1
@@ -64,8 +64,8 @@
 #define   WAKEUP_AFE_ON()       PD_ODR_ODR4 = 1
 #define   WAKEUP_AFE_OFF()      PD_ODR_ODR4 = 0
 
-#define   LOAD_DETECT_CTRL_ON()       PC_ODR_ODR6 = 1
-#define   LOAD_DETECT_CTRL_OFF()      PC_ODR_ODR6 = 0
+#define   FAULT_DETECT_CTRL_ON()   PC_ODR_ODR6 = 1
+#define   FAULT_DETECT_CTRL_OFF()  PC_ODR_ODR6 = 0
 
 #define   LED1_ON()             PC_ODR_ODR3 = 1
 #define   LED1_OFF()            PC_ODR_ODR3 = 0

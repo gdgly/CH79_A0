@@ -192,7 +192,7 @@ void Afe_Device_Init(void)
   Afe_Get_SysStatus(); 
   Afe_ADC_Enable();
   Afe_CC_Disable();
-  //Afe_CC_1Shot_Set();
+  Afe_CC_1Shot_Set();
   Afe_Temp_Enable();
   Afe_Get_GainOffset();  
   Afe_SCD_Set(SCD_THREHOLD_VAL_SET, SCD_DELAY_SET);
@@ -202,12 +202,12 @@ void Afe_Device_Init(void)
 }
 
 //==========================================================================
-void Afe_SCD_Set(uint16_t SCD_val, uint16_t SCD_delay)
+void Afe_SCD_Set(uint16_t SCD_val, uint16_t SCD_delay)//mA
 {
   uint8_t RSNS_mark = 0;
   uint8_t SCD_val_tmp = 0;
   uint8_t SCD_delay_tmp = 0;
-  SCD_val = SCD_val/1000;
+  SCD_val = (uint16_t)((uint32_t)5*SCD_val/1000);
   if(SCD_val > 100)
   {
     RSNS_mark = 0x01; 
@@ -297,7 +297,9 @@ void Afe_SCD_Set(uint16_t SCD_val, uint16_t SCD_delay)
     SCD_delay_tmp = 0x00;  // 70uS
   }
   //== Protect page36
-  SCD_val_tmp = 0x02;    // 44mV
+  RSNS_mark = 1;
+  //SCD_val_tmp = 0x02;    // 44mV
+  SCD_val_tmp = 0x07;    // 200mV/5mR = 40A   
   SCD_delay_tmp = 0x03;  // 400uS
   PROTECT1_Last =  (RSNS_mark <<8) + (SCD_delay_tmp << 3) + SCD_val_tmp; //SCD
   I2C_Write(PROTECT1_ADDR,PROTECT1_Last);
@@ -311,7 +313,8 @@ void Afe_SCD_Set(uint16_t SCD_val, uint16_t SCD_delay)
 void Afe_OCD_Set(uint16_t OCD_val, uint16_t OCD_delay)
 { 
   uint8_t OCD_val_tmp,OCD_delay_tmp;
-  OCD_val = OCD_val/1000;
+  //OCD_val = OCD_val/1000;
+  OCD_val = (uint16_t)((uint32_t)5*OCD_val/1000);
   if(SCD_THREHOLD_VAL_SET >= 100000)
   { 
     if(OCD_val > 94)
@@ -481,7 +484,8 @@ void Afe_OCD_Set(uint16_t OCD_val, uint16_t OCD_delay)
   }
   //== Protect page36
   OCD_delay_tmp = 0x07;   // 1280mS
-  OCD_val_tmp = 0x01;     //  11A 
+  //OCD_val_tmp = 0x01;     //  11A 
+  OCD_val_tmp = 0x07;     //  56mV/5mR = 11A 
   PROTECT2_Last = (OCD_delay_tmp << 4) + OCD_val_tmp; //OCD
   I2C_Write(PROTECT2_ADDR,PROTECT2_Last);
   //PROTECT2_Last = 0x7F; //OCD
@@ -648,38 +652,31 @@ void Afe_FET_ChgOff_DisOff(void)
     Enter SHIP mode from NORMAL   Set to 0              Set to 0
 */
 void Afe_FET_ChgDis_Cntrl(void)
-{
+{ 
   if(WorkMode == IDLE_MODE)
   {
-    Afe_FET_ChgOff_DisOff();
-    LOAD_DETECT_CTRL_ON();
+    Afe_FET_ChgOff_DisOff(); 
   }
   else if(WorkMode == CHARGE_MODE)
-  {
-    //LOAD_DETECT_CTRL_OFF();
+  { 
     if(Bits_flag.Bit.ChgOv || Bits_flag.Bit.ChgTemp || Bits_flag.Bit.ChgCurOv || Bits_flag.Bit.AfeErr)
     {
-      Afe_FET_ChgOff_DisOff();
-      LOAD_DETECT_CTRL_ON();
+      Afe_FET_ChgOff_DisOff(); 
     }
     else
     { 
-      Afe_FET_ChgOn_DisOn();
-      LOAD_DETECT_CTRL_OFF();
+      Afe_FET_ChgOn_DisOn(); 
     }
   }
   else if(WorkMode == DISCHARGE_MODE)
-  {
-    LOAD_DETECT_CTRL_OFF();
+  { 
     if(Bits_flag.Bit.DisOv || Bits_flag.Bit.DisTemp || Bits_flag.Bit.DisCurOv || Bits_flag.Bit.AfeErr || Bits_flag.Bit.DisCurShort)
     {
-      Afe_FET_ChgOff_DisOff();
-      //LOAD_DETECT_CTRL_ON();
+      Afe_FET_ChgOff_DisOff(); 
     }
     else
     { 
-      Afe_FET_ChgOn_DisOn();
-      //LOAD_DETECT_CTRL_OFF();
+      Afe_FET_ChgOn_DisOn(); 
     }
   }
 }

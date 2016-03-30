@@ -2,9 +2,9 @@
 #include "stm8s.h"  
 #include "user.h"  
 #include "macro_def.h"  
-#include "iostm8s003f3.h"  
-#include "bq769x0.h"  
-void main(void)  
+#include "iostm8s003f3.h"
+#include "bq769x0.h" 
+void main(void)
 {  
   uint8_t i = 0;
   //-----------------------------
@@ -18,9 +18,10 @@ void main(void)
   VCC1_ON();
   Timer2Init();
   enableInterrupts();  
-  Delay_ms(50);    
+  Delay_ms(50);
+  ClrWdt();      
   Afe_Device_Init();
-  Soc_OCV_CorrectEn_Flag  = 1; 
+  Soc_OCV_CorrectEn_Flag = 1; 
   LowPower_MCU_Entry_Flag = 0; 
   LED1_OFF();  
   //Afe_ADC_Disable();  //100+uA
@@ -32,11 +33,11 @@ void main(void)
     { 
       Afe_Get_SysStatus(); 
       
-      /*  
+      /* 
       Uart_SendStr("\r\n SYS_STAT= ");  Uart_SendData(SYS_STAT.Byte,16); 
       Uart_SendStr(" SYS_CTRL1 = ");    Uart_SendData(SYS_CTRL1.Byte,16); 
       Uart_SendStr(" SYS_CTRL2 = ");    Uart_SendData(SYS_CTRL2.Byte,16);  
-       */
+      */
       ModeCheck(); 
       
       ClearStatus();

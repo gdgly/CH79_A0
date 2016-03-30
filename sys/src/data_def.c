@@ -21,6 +21,7 @@ signed int CC_AD;
 //unsigned int Current_Val;
 signed char  ADCOffset_Val;
 
+unsigned int Check_Val;
 unsigned int Adc_value[10];
 unsigned int Cell_Volt[10];
 unsigned int Cell_Volt_Tol;

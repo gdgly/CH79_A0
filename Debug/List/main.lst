@@ -1,6 +1,6 @@
 ###############################################################################
 #                                                                             #
-# IAR C/C++ Compiler V1.31.1.20058 [Evaluation] for STM830/Mar/2016  14:30:32 #
+# IAR C/C++ Compiler V1.31.1.20058 [Evaluation] for STM830/Mar/2016  14:49:18 #
 # Copyright 2010-2012 IAR Systems AB.                                         #
 #                                                                             #
 #    Source file  =  D:\ProjectPath\GitPath\CH79_A0\sys\src\main.c            #
@@ -33,9 +33,9 @@ D:\ProjectPath\GitPath\CH79_A0\sys\src\main.c
       2          #include "stm8s.h"  
       3          #include "user.h"  
       4          #include "macro_def.h"  
-      5          #include "iostm8s003f3.h"  
-      6          #include "bq769x0.h"  
-      7          void main(void)  
+      5          #include "iostm8s003f3.h"
+      6          #include "bq769x0.h" 
+      7          void main(void)
       8          {  
       9            uint8_t i = 0;
      10            //-----------------------------
@@ -49,75 +49,75 @@ D:\ProjectPath\GitPath\CH79_A0\sys\src\main.c
      18            VCC1_ON();
      19            Timer2Init();
      20            enableInterrupts();  
-     21            Delay_ms(50);    
-     22            Afe_Device_Init();
-     23            Soc_OCV_CorrectEn_Flag  = 1; 
-     24            LowPower_MCU_Entry_Flag = 0; 
-     25            LED1_OFF();  
-     26            //Afe_ADC_Disable();  //100+uA
-     27            //Afe_Temp_Disable(); //100+uA
-     28            while(1)
-     29            {
-     30              ClrWdt();   
-     31              if(LowPower_MCU_Entry_Flag == 0)
-     32              { 
-     33                Afe_Get_SysStatus(); 
-     34                
-     35                /*  
-     36                Uart_SendStr("\r\n SYS_STAT= ");  Uart_SendData(SYS_STAT.Byte,16); 
-     37                Uart_SendStr(" SYS_CTRL1 = ");    Uart_SendData(SYS_CTRL1.Byte,16); 
-     38                Uart_SendStr(" SYS_CTRL2 = ");    Uart_SendData(SYS_CTRL2.Byte,16);  
-     39                 */
-     40                ModeCheck(); 
-     41                
-     42                ClearStatus();
-     43                
-     44                Afe_Volt_Val_Get();
-     45                
-     46                CurrentCheck();
-     47                
-     48                VoltCheck();
-     49                
-     50                TempCheck();
-     51                
-     52                CellBal_Cntrl();
-     53                
-     54                Afe_FET_ChgDis_Cntrl();
-     55                
-     56                Afe_AbnormalCheck();
-     57                
-     58                LedShow_Cntrl();     //LedShow_WorkMode();   // 
-     59                /*    
-     60                Uart_SendStr(" WorkMode= ");      Uart_SendData(WorkMode,16); 
-     61                Uart_SendStr(" Bits_flag = ");    Uart_SendData(Bits_flag.Byte,16); 
-     62                
-     63                Uart_SendStr(" Current_Val= ");   Uart_SendData((uint16_t)Current_Val,10);
-     64                Uart_SendStr(" Volt_Avg= ");      Uart_SendData(Cell_Volt_Avg,10); 
-     65                Uart_SendStr(" Max= ");           Uart_SendData(Cell_Volt_Max,10);
-     66                Uart_SendStr(" Min= ");           Uart_SendData(Cell_Volt_Min,10);
-     67                 
-     68                Uart_SendStr(" soc_rt= ");        Uart_SendData((uint16_t)SocCalc.soc_rt,10); 
-     69                Uart_SendStr(" ah= ");            Uart_SendData((uint16_t)SocReg.ah,10);
-     70                Uart_SendStr(" CellBal= ");       Uart_SendData((uint16_t)CellBalance_Selct,16);  
-     71                
-     72                Uart_SendStr("\r\n");
-     73                for(i =0;i<10;i++)
-     74                { 
-     75                  Uart_SendStr(" C_");
-     76                  Uart_SendData(i,10);  
-     77                  Uart_SendStr("= ");
-     78                  Uart_SendData(Cell_Volt[i],10);
-     79                }
-     80          
-     81                Uart_SendStr("\r\n");*/ 
-     82             
-     83              }
-     84              LowPower_Cntrl();
-     85            }    
-     86           
-     87          }
-     88           
-     89          
+     21            Delay_ms(50);
+     22            ClrWdt();      
+     23            Afe_Device_Init();
+     24            Soc_OCV_CorrectEn_Flag = 1; 
+     25            LowPower_MCU_Entry_Flag = 0; 
+     26            LED1_OFF();  
+     27            //Afe_ADC_Disable();  //100+uA
+     28            //Afe_Temp_Disable(); //100+uA
+     29            while(1)
+     30            {
+     31              ClrWdt();   
+     32              if(LowPower_MCU_Entry_Flag == 0)
+     33              { 
+     34                Afe_Get_SysStatus(); 
+     35                
+     36                /* 
+     37                Uart_SendStr("\r\n SYS_STAT= ");  Uart_SendData(SYS_STAT.Byte,16); 
+     38                Uart_SendStr(" SYS_CTRL1 = ");    Uart_SendData(SYS_CTRL1.Byte,16); 
+     39                Uart_SendStr(" SYS_CTRL2 = ");    Uart_SendData(SYS_CTRL2.Byte,16);  
+     40                */
+     41                ModeCheck(); 
+     42                
+     43                ClearStatus();
+     44                
+     45                Afe_Volt_Val_Get();
+     46                
+     47                CurrentCheck();
+     48                
+     49                VoltCheck();
+     50                
+     51                TempCheck();
+     52                
+     53                CellBal_Cntrl();
+     54                
+     55                Afe_FET_ChgDis_Cntrl();
+     56                
+     57                Afe_AbnormalCheck();
+     58                
+     59                LedShow_Cntrl();     //LedShow_WorkMode();   // 
+     60                /*    
+     61                Uart_SendStr(" WorkMode= ");      Uart_SendData(WorkMode,16); 
+     62                Uart_SendStr(" Bits_flag = ");    Uart_SendData(Bits_flag.Byte,16); 
+     63                
+     64                Uart_SendStr(" Current_Val= ");   Uart_SendData((uint16_t)Current_Val,10);
+     65                Uart_SendStr(" Volt_Avg= ");      Uart_SendData(Cell_Volt_Avg,10); 
+     66                Uart_SendStr(" Max= ");           Uart_SendData(Cell_Volt_Max,10);
+     67                Uart_SendStr(" Min= ");           Uart_SendData(Cell_Volt_Min,10);
+     68                 
+     69                Uart_SendStr(" soc_rt= ");        Uart_SendData((uint16_t)SocCalc.soc_rt,10); 
+     70                Uart_SendStr(" ah= ");            Uart_SendData((uint16_t)SocReg.ah,10);
+     71                Uart_SendStr(" CellBal= ");       Uart_SendData((uint16_t)CellBalance_Selct,16);  
+     72                
+     73                Uart_SendStr("\r\n");
+     74                for(i =0;i<10;i++)
+     75                { 
+     76                  Uart_SendStr(" C_");
+     77                  Uart_SendData(i,10);  
+     78                  Uart_SendStr("= ");
+     79                  Uart_SendData(Cell_Volt[i],10);
+     80                }
+     81          
+     82                Uart_SendStr("\r\n");*/ 
+     83             
+     84              }
+     85              LowPower_Cntrl();
+     86            }    
+     87           
+     88          }
+     89           
      90          
      91          
      92          
@@ -130,6 +130,7 @@ D:\ProjectPath\GitPath\CH79_A0\sys\src\main.c
      99          
     100          
     101          
+    102          
 
    Section sizes:
 
@@ -137,13 +138,13 @@ D:\ProjectPath\GitPath\CH79_A0\sys\src\main.c
      -------------- -----
      _A_PA_ODR         1
      _A_PC_ODR         1
-     main             92
+     main             95
 
  
   2 bytes in section .near.noinit
- 92 bytes in section .near_func.text
+ 95 bytes in section .near_func.text
  
- 92 bytes of CODE memory
+ 95 bytes of CODE memory
   0 bytes of DATA memory (+ 2 bytes shared)
 
 Errors: none

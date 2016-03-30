@@ -129,7 +129,7 @@ void SysInit(void)
     CLK_CKDIVR = 0x02;  // 主频为Fmaster为Fhsi：16MHz, Fcpu为4MHz  0.25us
     //CLK_PCKENR1 = 0;    // 禁止Fmaster 与外设连接
     //CLK_PCKENR2 = 0;
-    /*
+    /* */
     //------------------A/D conversion 
     CLK_PCKENR2 |= 0x08;           //使能Fmaster与外设ADC模块连接 
     ADC_CR1 = 0x00;               // ADC时钟=主时钟/2=8MHZ,单次转换模式Tad =1/8,未使能ADC
@@ -139,9 +139,9 @@ void SysInit(void)
     ADC_TDRH = 0xFF;              //禁止施密特触发功能
     ADC_TDRL = 0x00; 
     nop(); nop();
-    //ADC_TDRL = 0x14;              // AIN2、AIN4 0b00010100 
+    //ADC_TDRL = 0x08;              // AIN3  0b0000 1000 
     CLK_PCKENR2 &=~(0x08);
-    */
+   
 }
 //==================================================================
 //==================================================================
@@ -170,24 +170,24 @@ void ClrWdt(void)
 //==================================================================
 void PortInit(void)
 { 
-  GPIO_Init(GPIOA, GPIO_PIN_3, GPIO_MODE_IN_PU_NO_IT);        // LOAD_DETECT
-  GPIO_Init(GPIOA, GPIO_PIN_2, GPIO_MODE_IN_FL_NO_IT);    // undifine
-  GPIO_Init(GPIOA, GPIO_PIN_1, GPIO_MODE_OUT_PP_HIGH_FAST);    // undifine
+  GPIO_Init(GPIOA, GPIO_PIN_3, GPIO_MODE_OUT_PP_LOW_FAST);//GPIO_MODE_IN_PU_NO_IT);        // LOAD_DETECT
+  GPIO_Init(GPIOA, GPIO_PIN_2, GPIO_MODE_OUT_PP_LOW_FAST);//GPIO_MODE_IN_FL_NO_IT);    // undifined
+  GPIO_Init(GPIOA, GPIO_PIN_1, GPIO_MODE_OUT_PP_LOW_FAST);//GPIO_MODE_OUT_PP_HIGH_FAST);    // undifined
   
   //GPIO_Init(GPIOB, GPIO_PIN_5, GPIO_MODE_OUT_PP_LOW_FAST);           
   //GPIO_Init(GPIOB, GPIO_PIN_4, GPIO_MODE_OUT_PP_LOW_FAST);       
  
   GPIO_Init(GPIOC, GPIO_PIN_7, GPIO_MODE_OUT_PP_LOW_FAST);//GPIO_MODE_IN_FL_NO_IT);//GPIO_MODE_IN_PU_NO_IT);        //ALERT 
-  GPIO_Init(GPIOC, GPIO_PIN_6, GPIO_MODE_OUT_PP_LOW_FAST);    //LOAD_DETECT_CTRL
+  GPIO_Init(GPIOC, GPIO_PIN_6, GPIO_MODE_OUT_PP_LOW_FAST);    //chger fault control 
   GPIO_Init(GPIOC, GPIO_PIN_5, GPIO_MODE_OUT_PP_LOW_FAST);    //LED1
   GPIO_Init(GPIOC, GPIO_PIN_4, GPIO_MODE_OUT_PP_LOW_FAST);    //LED2
   GPIO_Init(GPIOC, GPIO_PIN_3, GPIO_MODE_OUT_PP_LOW_FAST);    //LED3 
    
   GPIO_Init(GPIOD, GPIO_PIN_6, GPIO_MODE_IN_PU_IT);          
   GPIO_Init(GPIOD, GPIO_PIN_5, GPIO_MODE_OUT_PP_HIGH_FAST);          
-  GPIO_Init(GPIOD, GPIO_PIN_4, GPIO_MODE_IN_FL_NO_IT);//GPIO_MODE_OUT_PP_LOW_FAST);    //Wakeup_Afe
-  GPIO_Init(GPIOD, GPIO_PIN_3, GPIO_MODE_IN_FL_IT);//GPIO_MODE_IN_FL_NO_IT);//GPIO_MODE_IN_PU_NO_IT);//        //Signal_in
-  GPIO_Init(GPIOD, GPIO_PIN_2, GPIO_MODE_IN_FL_IT);//GPIO_MODE_IN_FL_NO_IT);//GPIO_MODE_IN_PU_NO_IT);          //CHG_DETECT
+  GPIO_Init(GPIOD, GPIO_PIN_4, GPIO_MODE_OUT_PP_LOW_FAST);    //undefined
+  GPIO_Init(GPIOD, GPIO_PIN_3, GPIO_MODE_IN_FL_NO_IT);//GPIO_MODE_IN_PU_NO_IT);//GPIO_MODE_IN_FL_IT);//        //chger fault input
+  GPIO_Init(GPIOD, GPIO_PIN_2, GPIO_MODE_IN_FL_NO_IT);//GPIO_MODE_IN_FL_NO_IT);//GPIO_MODE_IN_PU_NO_IT);          //Triger Voltage measurement
 #if 0
   CPU_CFG_GCR |=0x01;                                         //SWIN模式被禁用，SWIM引脚可被用作普通I/O口
   GPIO_Init(GPIOD, GPIO_PIN_1, GPIO_MODE_OUT_PP_HIGH_FAST);   //MUC_DO3
@@ -348,8 +348,9 @@ void itoa(char *buf, int i, int base)
 void Uart_SendStr(unsigned char *tx_pData) 
 {
     unsigned int i, nLen;
-    ClrWdt();
+
     nLen = strlen(tx_pData);
+    ClrWdt();
     for(i=0; i<nLen; i++)
     {
       Uart_SendByte(tx_pData[i]);
@@ -736,137 +737,11 @@ void VoltCheck(void)
     }
     */
   }
-} 
+}  
 //==========================================================================
 void ModeCheck_Backup(void)
-{    
-  static uint8_t ExchangeMode_Cnt = 0;
-  uint8_t FET_Status = 0;
-  if(SYS_CTRL2.Bit.DSG_ON || SYS_CTRL2.Bit.CHG_ON)//SYS_CTRL2_Last << 6 )
-  {
-    FET_Status = 0;
-  }
-  else
-  {
-    FET_Status = 1;
-  }
-  
-  if(!IS_SIGNAL_IN())
-  {
-    if(ExchangeMode_Cnt > 0)
-    {
-      ExchangeMode_Cnt -= 1;
-    }
-    else 
-    { 
-      WorkMode = IDLE_MODE;
-    }
-  }
-  else
-  {
-    
-  if((WorkMode == IDLE_MODE && FET_Status == 1 && IS_CHG_DETECT()) || CC_Val >= 5)
-  { 
-    if(ExchangeMode_Cnt > 20)
-    {
-      ExchangeMode_Cnt -= 1;
-    }
-    else if(ExchangeMode_Cnt < 20)
-    {
-      ExchangeMode_Cnt += 1;
-    }
-    else
-    { 
-      ExchangeMode_Cnt = 20;
-      WorkMode = CHARGE_MODE;
-      DisOv_t = 0;  
-      DisCurOv_t = 0;  
-      DisCurOv_Re_t = 0; 
-      PowerOff_Delay_t = 0;
-    }
-  } 
-  //else if ((WorkMode == IDLE_MODE && FET_Status == 1 && (IS_LOAD_DETECT() || SYS_CTRL1.Bit.LOAD_PRESENT)) || Current_Val >= 2)//|| || IS_SIGNAL_IN()) IS_SIGNAL_IN() )//IS_LOAD_DETECT())
-  else if ((WorkMode == IDLE_MODE && FET_Status == 1 && IS_LOAD_DETECT()) || Current_Val >= 2)//|| || IS_SIGNAL_IN()) IS_SIGNAL_IN() )//IS_LOAD_DETECT())
-  { 
-    if(ExchangeMode_Cnt > 10)
-    {
-      ExchangeMode_Cnt -= 1;
-    }
-    else if(ExchangeMode_Cnt < 10)
-    {
-      ExchangeMode_Cnt += 1;
-    }
-    else
-    { 
-      ExchangeMode_Cnt = 10;
-      WorkMode = DISCHARGE_MODE;
-      ChgOv_t = 0; 
-      ChgCurOv_t = 0; 
-      ChgCurOv_Re_t = 0; 
-    }
-  } 
-  }/*
-  else if(WorkMode != IDLE_MODE && SYS_CTRL2.Bit.CHG_ON && SYS_CTRL2.Bit.DSG_ON)// 负载接上，小电流或无电流时，关闭CHG_ON，来检测LOAD_PRESENT
-  { 
-    SYS_CTRL2_Last &= ~0x03; 
-    I2C_Write(SYS_CTRL2_ADDR,SYS_CTRL2_Last);
-    Delay_ms(20);
-    I2C_Read(SYS_CTRL1_ADDR,&SYS_CTRL1_Last); 
-    SYS_CTRL1.Byte = SYS_CTRL1_Last;
-    if(SYS_CTRL1.Bit.LOAD_PRESENT) 
-    { 
-      SYS_CTRL2_Last |= 0x03; 
-      I2C_Write(SYS_CTRL2_ADDR,SYS_CTRL2_Last);
-    } 
-    else
-    {
-      ExchangeMode_Cnt = 0;
-      WorkMode = IDLE_MODE; 
-    } 
-  }
-  else 
-  {
-    if(ExchangeMode_Cnt > 0)
-    {
-      ExchangeMode_Cnt -= 1;
-    }
-    else 
-    { 
-      WorkMode = IDLE_MODE;
-    }
-  }  */
-  //===========================================
-  if(WorkMode == CHARGE_MODE)
-  {
-      Bits_flag.Bit.DisOv = 0;
-      Bits_flag.Bit.DisCurShort = 0;
-      Bits_flag.Bit.DisCurOv = 0;
-      Bits_flag.Bit.DisTemp = 0;
-  }
-  else
-  {
-      Bits_flag.Bit.ChgOv = 0;
-      Bits_flag.Bit.ChgCurOv = 0;
-      Bits_flag.Bit.ChgTemp = 0;
-  }
-}  
-
-//==========================================================================
-void ModeCheck(void)
 {     
-  static uint8_t Afe_CC_Disable_Lock = 0;
-  uint8_t FET_Status = 0;
-  /*
-  if(SYS_CTRL2.Bit.DSG_ON || SYS_CTRL2.Bit.CHG_ON)//SYS_CTRL2_Last << 6 )
-  {
-    FET_Status = 0;
-  }
-  else
-  {
-    FET_Status = 1;
-  }
-  */
-  //if((FET_Status == 1 && IS_CHG_DETECT()) || CC_Val >= 10)
+  static uint8_t Afe_CC_Disable_Lock = 0; 
   if(IS_CHG_DETECT() || CC_Val >= 10)
   {  
     if(ChgExchangeMode_Cnt >= 50)
@@ -876,9 +751,8 @@ void ModeCheck(void)
       IdleExchangeMode_Cnt = 0;
       WorkMode = CHARGE_MODE;
     }
-  } 
-  //else if ((FET_Status == 1 && (IS_LOAD_DETECT() || SYS_CTRL1.Bit.LOAD_PRESENT)) || Current_Val >= 20 || IS_SIGNAL_IN()) 
-  else if(IS_SIGNAL_IN()) // (FET_Status == 1 && (IS_LOAD_DETECT() || SYS_CTRL1.Bit.LOAD_PRESENT)) || Current_Val >= 20 || 
+  }  
+  else if(IS_SIGNAL_IN())  
   {  
     if(DisExchangeMode_Cnt >= 100)
     { 
@@ -933,14 +807,53 @@ void ModeCheck(void)
   }
 }
 
+//==========================================================================
+void ModeCheck(void)
+{     
+  static uint8_t Afe_CC_Disable_Lock = 0;
+  uint8_t FET_Status = 0; 
+  Check_Val = ADConverse(3); 
+  if((Check_Val >= 130 && Check_Val < 160) || CC_Val >= 10)
+  {  
+    if(ChgExchangeMode_Cnt >= 50)
+    { 
+      ChgExchangeMode_Cnt  = 100;
+      DisExchangeMode_Cnt  = 0;
+      IdleExchangeMode_Cnt = 0;
+      WorkMode = CHARGE_MODE;
+    }
+  }  
+  //else if(IS_SIGNAL_IN()) // (FET_Status == 1 && (IS_LOAD_DETECT() || SYS_CTRL1.Bit.LOAD_PRESENT)) || Current_Val >= 20 || 
+  else if((Check_Val >= 220 && Check_Val < 630)) 
+  {  
+    if(DisExchangeMode_Cnt >= 100)
+    { 
+      IdleExchangeMode_Cnt = 0;
+      ChgExchangeMode_Cnt = 0;
+      DisExchangeMode_Cnt = 100; 
+      WorkMode = DISCHARGE_MODE;
+    }
+  } 
+  else if(Check_Val < 10)
+  { 
+    if(IdleExchangeMode_Cnt >= 100)
+    { 
+      IdleExchangeMode_Cnt = 100;
+      ChgExchangeMode_Cnt = 0;
+      DisExchangeMode_Cnt = 0;
+      WorkMode = IDLE_MODE;
+    }
+  } 
+}
+
   //===========================================
 void ClearStatus(void)
 {
   if(WorkMode == CHARGE_MODE)
   {  
-    LowPower_MCU_Entry_Flag = 0;
-    Dis_First_Run_Flag = 0;
-    Dis_First_Run_t = 0;
+      LowPower_MCU_Entry_Flag = 0;
+      Dis_First_Run_Flag = 0;
+      Dis_First_Run_t = 0;
       DisOv_t = 0;  
       //DisCurOv_t = 0;  
       //DisCurOv_Re_t = 0; 
@@ -1390,20 +1303,20 @@ void LowPower_Entry_MCU_Set(void)
     ClrWdt();  
     LowPower_MCU_Entry_Flag = 1; 
     halt(); 
-    ClrWdt();   
+    ClrWdt();  
     Delay_ms(5); 
     //======================================
     if(LowPower_MCU_Entry_Flag == 1)
     {
       if((LowPower_Entry_Exit_Cnt ++) >= 100) 
       {
-        LowPower_MCU_Entry_Flag = 0;
-        LowPower_Entry_Exit_Cnt = 0;
+        LowPower_MCU_Entry_Flag = 0; 
+        LowPower_Entry_Exit_Cnt = 0; 
       }
     }
     else
     {
-      LowPower_Entry_Exit_Cnt = 0;
+      LowPower_Entry_Exit_Cnt = 0; 
       CLK_PCKENR2 &= ~CLK_PCKENR2_AWU; 
       CLK->ICKR &= ~CLK_ICKR_SWUAH; 
       Afe_ADC_Enable(); Afe_Temp_Enable();Delay_ms(10); 
@@ -1428,31 +1341,82 @@ void LowPower_Entry_MCU_Set_Backup(void)
     halt(); 
      
     LowPower_Entry_Delay_t = 0;
-     
+    
     Delay_ms(100); 
     CLK_PCKENR2 &= ~CLK_PCKENR2_AWU; 
-    CLK->ICKR &= ~CLK_ICKR_SWUAH;
-    //LowPower_Exit_MCU_Set();
+    CLK->ICKR &= ~CLK_ICKR_SWUAH; 
+    //LowPower_Exit_MCU_Set(); 
     Afe_ADC_Enable(); 
-    Afe_Temp_Enable();
+    Afe_Temp_Enable(); 
   }
-} 
-void LowPower_Exit_MCU_Set(void)
-{   
-} 
+}  
 void LowPower_Powerdown_Enter(void)
 {
+  uint8_t i = 0;
   if(PowerOff_Delay_t >= PowerOff_Delay_t_SET)
   {
     while(1)
-    { 
+    {   
       Afe_EnterShipMode(); 
-      Delay_ms(1000);
+      if((i ++) < 100)
+      { 
+        ClrWdt();
+        Delay_ms(50);
+      }
+      else
+      {
+        Delay_ms(1000);
+      }
     } 
   }  
 }
 //==============================================================================
 void LowPower_Cntrl(void)
+{  
+  if(WorkMode == IDLE_MODE)
+  {
+    if(!SYS_CTRL2.Bit.DSG_ON && !SYS_CTRL2.Bit.CHG_ON )  
+    {
+      LowPower_Powerdown_Enter();  
+    } 
+  }
+  else
+  {
+    PowerOff_Delay_t = 0;
+  }
+}
+//==============================================================================
+void LowPower_Cntrl_1(void)
+{ 
+  if(LowPower_MCU_Entry_Flag ==0)//(0)//
+  {
+    if(!SYS_CTRL1.Bit.ADC_EN) 
+    { 
+      Afe_ADC_Enable(); 
+    }
+    if(!SYS_CTRL1.Bit.TEMP_SEL )
+    {
+      Afe_Temp_Enable();
+    }
+  }
+  if(WorkMode == CHARGE_MODE)
+  {
+    return;
+  }
+  if(Bits_flag.Bit.DisOv)  
+  {
+    if(!SYS_CTRL2.Bit.DSG_ON && !SYS_CTRL2.Bit.CHG_ON )  
+    {
+      LowPower_Powerdown_Enter();  
+    }
+  }
+  else
+  {
+    LowPower_Entry_MCU_Set();  
+  }
+}
+//==============================================================================
+void LowPower_Cntrl_Backup(void)
 { 
   if(LowPower_MCU_Entry_Flag ==0)//(0)//
   {

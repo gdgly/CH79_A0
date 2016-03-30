@@ -398,6 +398,7 @@ INTERRUPT_HANDLER(TIM1_CAP_COM_IRQHandler, 12)
       DisOv_t += 1;
     }
     //=======================================
+    /*
     if(Bits_flag.Bit.DisOv)
     {
       if( PowerOff_Delay_t < MAX_UINT16_T_NUM)
@@ -409,61 +410,62 @@ INTERRUPT_HANDLER(TIM1_CAP_COM_IRQHandler, 12)
     {
       PowerOff_Delay_t = 0;
     } 
-  }
-  //=======================================
-  if(WorkMode == DISCHARGE_MODE)
-  { 
-    if(Dis_First_Run_Flag == 0)
-    {
-      if(Dis_First_Run_t < 200)
+    */ 
+    //=======================================
+    if(WorkMode == DISCHARGE_MODE)
+    { 
+      if(Dis_First_Run_Flag == 0)
       {
-        Dis_First_Run_t += 1;
+        if(Dis_First_Run_t < 200)
+        {
+          Dis_First_Run_t += 1;
+        }
       }
-    }
-    else
-    {
-      Dis_First_Run_t = 0;
-    }
-    //=======================================
-    if(Bits_flag.Bit.DisCurShort)
-    {
-      if( DisCurShort_Re_t < MAX_UINT16_T_NUM)
+      else
       {
-        DisCurShort_Re_t += 1;
+        Dis_First_Run_t = 0;
       }
-    }
-    else
-    {
-      DisCurShort_Re_t = 0;
-    }
-    //=======================================
-    if(DisCurOv_t < MAX_UINT16_T_NUM)
-    {
-      DisCurOv_t += 1;
-    }
-    //=======================================
-    if(DisCurOv_t1 < MAX_UINT16_T_NUM)
-    {
-      DisCurOv_t1 += 1;
-    }
-    //=======================================
-    if(DisCurOv_t2 < MAX_UINT16_T_NUM)
-    {
-      DisCurOv_t2 += 1;
-    }
-    //=======================================
-    
-    if(Bits_flag.Bit.DisCurOv)
-    {
-      if( DisCurOv_Re_t < MAX_UINT16_T_NUM)
+      //=======================================
+      if(Bits_flag.Bit.DisCurShort)
       {
-        DisCurOv_Re_t += 1;
+        if( DisCurShort_Re_t < MAX_UINT16_T_NUM)
+        {
+          DisCurShort_Re_t += 1;
+        }
       }
-    }
-    else
-    {
-      DisCurOv_Re_t = 0;
-    }
+      else
+      {
+        DisCurShort_Re_t = 0;
+      }
+      //=======================================
+      if(DisCurOv_t < MAX_UINT16_T_NUM)
+      {
+        DisCurOv_t += 1;
+      }
+      //=======================================
+      if(DisCurOv_t1 < MAX_UINT16_T_NUM)
+      {
+        DisCurOv_t1 += 1;
+      }
+      //=======================================
+      if(DisCurOv_t2 < MAX_UINT16_T_NUM)
+      {
+        DisCurOv_t2 += 1;
+      }
+      //=======================================
+      
+      if(Bits_flag.Bit.DisCurOv)
+      {
+        if( DisCurOv_Re_t < MAX_UINT16_T_NUM)
+        {
+          DisCurOv_Re_t += 1;
+        }
+      }
+      else
+      {
+        DisCurOv_Re_t = 0;
+      }
+    } 
   }
   //=======================================
   if(Bits_flag.Bit.AfeErr)
@@ -484,12 +486,19 @@ INTERRUPT_HANDLER(TIM1_CAP_COM_IRQHandler, 12)
     {
       LowPower_Entry_Delay_t += 1;
     }
+    if(PowerOff_Delay_t < MAX_UINT16_T_NUM)
+    {
+      PowerOff_Delay_t += 1;
+    }
   }
+  /*
   else
   {
+    PowerOff_Delay_t = 0;
     LowPower_MCU_Entry_Flag = 0;
     LowPower_Entry_Delay_t = 0;
   }
+  */
 }
 
 /**
