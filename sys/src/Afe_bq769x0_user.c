@@ -186,17 +186,22 @@ void Afe_Device_Init(void)
   //Delay_ms(100); 
   I2C_Write(SYS_STAT_ADDR,0xFF); 
   SYS_STAT_Last = 0x00; 
+  ClrWdt(); 
   //Delay_us(50);  
    /**/
   Afe_CellBalance_Disable(); 
   Afe_Get_SysStatus(); 
+  ClrWdt(); 
   Afe_ADC_Enable();
   Afe_CC_Disable();
+  ClrWdt(); 
   Afe_CC_1Shot_Set();
   Afe_Temp_Enable();
-  Afe_Get_GainOffset();  
+  Afe_Get_GainOffset();
+  ClrWdt();   
   Afe_SCD_Set(SCD_THREHOLD_VAL_SET, SCD_DELAY_SET);
   Afe_OCD_Set(OCD_THREHOLD_VAL_SET, OCD_DELAY_SET);
+  ClrWdt(); 
   Afe_OV_UV_Delay_Set(OV_DELAY_SET,UV_DELAY_SET); 
   Afe_OV_UV_Threshold_Set(OV_THREHOLD_VAL_SET, UV_THREHOLD_VAL_SET);
 }
@@ -569,9 +574,9 @@ void Afe_CC_Disable(void)
 //==========================================================================
 void Afe_CC_1Shot_Set(void)
 { 
-    SYS_STAT_Last |= 0x80;
-    I2C_Write(SYS_STAT_ADDR,SYS_STAT_Last); 
-    SYS_STAT_Last &= ~0x80;
+  SYS_STAT_Last |= 0x80;
+  I2C_Write(SYS_STAT_ADDR,SYS_STAT_Last); 
+  SYS_STAT_Last &= ~0x80;
   SYS_CTRL2.Bit.CC_EN = 0;
   SYS_CTRL2.Bit.CC_ONESHOT = 1;
   SYS_CTRL2.Bit.DELAY_DIS = 0;

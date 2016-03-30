@@ -1,5 +1,5 @@
 //===2016-03-25pm
-//===C-version
+//===C-version-git-control
 #include "stm8s.h"  
 #include "user.h"  
 #include "macro_def.h"  
@@ -9,55 +9,56 @@ void main(void)
 {  
   uint8_t i = 0;
   //-----------------------------
-  disableInterrupts();
-  SysInit(); 
-  PortInit(); 
-  LED1_ON();  
-  I2C_Model_Init();
-  //Uart_Model_Init();
-  Var_Init();
-  VCC1_ON();
-  Timer2Init();
-  enableInterrupts();  
-  Delay_ms(50);
-  ClrWdt();      
-  Afe_Device_Init();
-  Soc_OCV_CorrectEn_Flag = 1; 
-  LowPower_MCU_Entry_Flag = 0; 
-  LED1_OFF();  
-  //Afe_ADC_Disable();  //100+uA
-  //Afe_Temp_Disable(); //100+uA
+  disableInterrupts();   // 关闭MCU全局变量
+  SysInit();             // 系统初始化，MCU时钟配置、ADC模块初始化
+  PortInit();            // MCU管脚配置
+  LED1_ON();             // 复位后亮LED1，在完成AFE IC初始化之后，熄灭
+  I2C_Model_Init();      // 启用MCU的IIC模块
+  //Uart_Model_Init();   // 启用MCU的UART模块
+  Var_Init();            // 初始化各变量值
+  //VCC1_ON();           // C-version 没有定义管脚
+  Timer2Init();          // 设置TIMER 2为基准时间的定时器
+  enableInterrupts();    // 打开MCU全局中断
+  Delay_ms(50);          // 延时50mS，MCU稳定
+  ClrWdt();              // 启用看门狗
+  Afe_Device_Init();     // 初始化AFE IC，包括开启ADC、电流检测模块、设置过放过充电芯电压值、放电过流、短路保护等参数
+  Soc_OCV_CorrectEn_Flag = 1;  // 上电允许SOC的OCV校准
+  LowPower_MCU_Entry_Flag = 0; // MCU运行于低功耗状态标识符
+  LED1_OFF();                  // 关闭LED1
+  //Afe_ADC_Disable();         // 100+uA
+  //Afe_Temp_Disable();        // 100+uA
   while(1)
   {
-    ClrWdt();   
-    if(LowPower_MCU_Entry_Flag == 0)
+    ClrWdt();                          // 刷新看门狗 1S未刷新复位
+    if(LowPower_MCU_Entry_Flag == 0)   // 如果MCU不处于低功耗运行模式
     { 
-      Afe_Get_SysStatus(); 
+      Afe_Get_SysStatus();             // AFE IC 状态检测，包括充放电MOS管开关状态、电流采样结束状态、AFE IC（错误、过流、短路、过充、过放）异常状态
       
       /* 
       Uart_SendStr("\r\n SYS_STAT= ");  Uart_SendData(SYS_STAT.Byte,16); 
       Uart_SendStr(" SYS_CTRL1 = ");    Uart_SendData(SYS_CTRL1.Byte,16); 
       Uart_SendStr(" SYS_CTRL2 = ");    Uart_SendData(SYS_CTRL2.Byte,16);  
       */
-      ModeCheck(); 
       
-      ClearStatus();
+      ModeCheck();         // 充电、放电、空载工作模式检测
       
-      Afe_Volt_Val_Get();
+      ClearStatus();       // 各工作模式下的变量清零处理
       
-      CurrentCheck();
+      Afe_Volt_Val_Get();  // AFE IC 温度值、电芯电压值、电流值采样
       
-      VoltCheck();
+      CurrentCheck();      // 电流异常检测
       
-      TempCheck();
+      VoltCheck();         // 电压异常检测
       
-      CellBal_Cntrl();
+      TempCheck();         // 温度异常检测
       
-      Afe_FET_ChgDis_Cntrl();
+      CellBal_Cntrl();     // 充电均衡控制管理
       
-      Afe_AbnormalCheck();
+      Afe_FET_ChgDis_Cntrl();       // 充放电MOS管控制管理
       
-      LedShow_Cntrl();     //LedShow_WorkMode();   // 
+      Afe_AbnormalCheck();          // AFE IC 内部异常检测
+      
+      LedShow_Cntrl();     //LedShow_WorkMode();   // 工作电量指示灯显示
       /*    
       Uart_SendStr(" WorkMode= ");      Uart_SendData(WorkMode,16); 
       Uart_SendStr(" Bits_flag = ");    Uart_SendData(Bits_flag.Byte,16); 
@@ -83,7 +84,7 @@ void main(void)
       Uart_SendStr("\r\n");*/ 
    
     }
-    LowPower_Cntrl();
+    LowPower_Cntrl();        // 低功耗控制管理
   }    
  
 }

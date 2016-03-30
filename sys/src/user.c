@@ -139,7 +139,7 @@ void SysInit(void)
     ADC_TDRH = 0xFF;              //禁止施密特触发功能
     ADC_TDRL = 0x00; 
     nop(); nop();
-    //ADC_TDRL = 0x08;              // AIN3  0b0000 1000 
+    ADC_TDRL = 0x08;              // AIN3  0b0000 1000 
     CLK_PCKENR2 &=~(0x08);
    
 }
@@ -170,24 +170,24 @@ void ClrWdt(void)
 //==================================================================
 void PortInit(void)
 { 
-  GPIO_Init(GPIOA, GPIO_PIN_3, GPIO_MODE_OUT_PP_LOW_FAST);//GPIO_MODE_IN_PU_NO_IT);        // LOAD_DETECT
-  GPIO_Init(GPIOA, GPIO_PIN_2, GPIO_MODE_OUT_PP_LOW_FAST);//GPIO_MODE_IN_FL_NO_IT);    // undifined
-  GPIO_Init(GPIOA, GPIO_PIN_1, GPIO_MODE_OUT_PP_LOW_FAST);//GPIO_MODE_OUT_PP_HIGH_FAST);    // undifined
+  GPIO_Init(GPIOA, GPIO_PIN_3, GPIO_MODE_OUT_PP_LOW_FAST);    // undifined
+  GPIO_Init(GPIOA, GPIO_PIN_2, GPIO_MODE_OUT_PP_LOW_FAST);    // undifined
+  GPIO_Init(GPIOA, GPIO_PIN_1, GPIO_MODE_OUT_PP_LOW_FAST);    // undifined
   
-  //GPIO_Init(GPIOB, GPIO_PIN_5, GPIO_MODE_OUT_PP_LOW_FAST);           
-  //GPIO_Init(GPIOB, GPIO_PIN_4, GPIO_MODE_OUT_PP_LOW_FAST);       
+  GPIO_Init(GPIOB, GPIO_PIN_5, GPIO_MODE_OUT_PP_LOW_FAST);           
+  GPIO_Init(GPIOB, GPIO_PIN_4, GPIO_MODE_OUT_PP_LOW_FAST);       
  
-  GPIO_Init(GPIOC, GPIO_PIN_7, GPIO_MODE_OUT_PP_LOW_FAST);//GPIO_MODE_IN_FL_NO_IT);//GPIO_MODE_IN_PU_NO_IT);        //ALERT 
-  GPIO_Init(GPIOC, GPIO_PIN_6, GPIO_MODE_OUT_PP_LOW_FAST);    //chger fault control 
-  GPIO_Init(GPIOC, GPIO_PIN_5, GPIO_MODE_OUT_PP_LOW_FAST);    //LED1
-  GPIO_Init(GPIOC, GPIO_PIN_4, GPIO_MODE_OUT_PP_LOW_FAST);    //LED2
-  GPIO_Init(GPIOC, GPIO_PIN_3, GPIO_MODE_OUT_PP_LOW_FAST);    //LED3 
+  GPIO_Init(GPIOC, GPIO_PIN_7, GPIO_MODE_OUT_PP_LOW_FAST);    // ALERT 
+  GPIO_Init(GPIOC, GPIO_PIN_6, GPIO_MODE_OUT_PP_LOW_FAST);    // chger fault control 
+  GPIO_Init(GPIOC, GPIO_PIN_5, GPIO_MODE_OUT_PP_LOW_FAST);    // LED1
+  GPIO_Init(GPIOC, GPIO_PIN_4, GPIO_MODE_OUT_PP_LOW_FAST);    // LED2
+  GPIO_Init(GPIOC, GPIO_PIN_3, GPIO_MODE_OUT_PP_LOW_FAST);    // LED3 
    
   GPIO_Init(GPIOD, GPIO_PIN_6, GPIO_MODE_IN_PU_IT);          
   GPIO_Init(GPIOD, GPIO_PIN_5, GPIO_MODE_OUT_PP_HIGH_FAST);          
-  GPIO_Init(GPIOD, GPIO_PIN_4, GPIO_MODE_OUT_PP_LOW_FAST);    //undefined
-  GPIO_Init(GPIOD, GPIO_PIN_3, GPIO_MODE_IN_FL_NO_IT);//GPIO_MODE_IN_PU_NO_IT);//GPIO_MODE_IN_FL_IT);//        //chger fault input
-  GPIO_Init(GPIOD, GPIO_PIN_2, GPIO_MODE_IN_FL_NO_IT);//GPIO_MODE_IN_FL_NO_IT);//GPIO_MODE_IN_PU_NO_IT);          //Triger Voltage measurement
+  GPIO_Init(GPIOD, GPIO_PIN_4, GPIO_MODE_OUT_PP_LOW_FAST);    // undefined
+  GPIO_Init(GPIOD, GPIO_PIN_3, GPIO_MODE_IN_FL_NO_IT);        // chger fault input
+  GPIO_Init(GPIOD, GPIO_PIN_2, GPIO_MODE_IN_FL_NO_IT);        // Triger Voltage measurement
 #if 0
   CPU_CFG_GCR |=0x01;                                         //SWIN模式被禁用，SWIM引脚可被用作普通I/O口
   GPIO_Init(GPIOD, GPIO_PIN_1, GPIO_MODE_OUT_PP_HIGH_FAST);   //MUC_DO3
@@ -196,96 +196,42 @@ void PortInit(void)
 #endif
   //EXTI_CR1 |=0x40;//上升沿触发//0x80;//下降沿触发
   EXTI_SetExtIntSensitivity(EXTI_PORT_GPIOD, EXTI_SENSITIVITY_FALL_ONLY);//Signal_In下降沿触发
-/*
-	GPIO_MODE_IN_FL_NO_IT 无中断功能的浮动输入。  //ADC input
-	
-	GPIO_MODE_IN_PU_NO_IT 无中断功能的上拉输入。  //normal digit input
-	
-	GPIO_MODE_IN_FL_IT 带中断功能的浮动输入。  
-	
-	GPIO_MODE_IN_PU_IT 带中断功能的上拉输入。	
-	
-	GPIO_MODE_OUT_OD_LOW_FAST 高速开漏低电平输出，可工作到10MHz。  
-	
-	GPIO_MODE_OUT_PP_LOW_FAST 高速推挽低电平输出，可工作到10MHz。  
-	
-	GPIO_MODE_OUT_OD_LOW_SLOW 低速开漏低电平输出，可工作到2MHz。	//undefined port
-	
-	GPIO_MODE_OUT_PP_LOW_SLOW 低速推挽低电平输出，可工作到2MHz。	
-	
-	GPIO_MODE_OUT_OD_HIZ_FAST 高速开漏高阻态输出，可工作到10MHz。  
-	
-	GPIO_MODE_OUT_PP_HIGH_FAST 高速推挽高电平输出，可工作到10MHz。  
-	
-	GPIO_MODE_OUT_OD_HIZ_SLOW 低速开漏高阻态输出，可工作到2MHz。	
-	
-	GPIO_MODE_OUT_PP_HIGH_SLOW 低速推挽高电平输出，可工作到2MHz。
-*/
-}
-//==================================================================
-void PortInit_Backup(void)
-{ 
-  GPIO_Init(GPIOA, GPIO_PIN_3, GPIO_MODE_IN_PU_NO_IT);        // LOAD_DETECT
-  GPIO_Init(GPIOA, GPIO_PIN_2, GPIO_MODE_OUT_PP_LOW_FAST);    // undifine
-  GPIO_Init(GPIOA, GPIO_PIN_1, GPIO_MODE_OUT_PP_LOW_FAST);    // undifine
-  
-  //GPIO_Init(GPIOB, GPIO_PIN_5, GPIO_MODE_IN_PU_NO_IT);           
-  //GPIO_Init(GPIOB, GPIO_PIN_4, GPIO_MODE_OUT_OD_HIZ_FAST);       
- 
-  GPIO_Init(GPIOC, GPIO_PIN_7, GPIO_MODE_OUT_PP_LOW_FAST);//GPIO_MODE_IN_FL_NO_IT);//GPIO_MODE_IN_PU_NO_IT);        //ALERT 
-  GPIO_Init(GPIOC, GPIO_PIN_6, GPIO_MODE_OUT_PP_LOW_FAST);    //undifine
-  GPIO_Init(GPIOC, GPIO_PIN_5, GPIO_MODE_OUT_PP_LOW_FAST);    //LED1
-  GPIO_Init(GPIOC, GPIO_PIN_4, GPIO_MODE_OUT_PP_LOW_FAST);    //LED2
-  GPIO_Init(GPIOC, GPIO_PIN_3, GPIO_MODE_OUT_PP_LOW_FAST);    //LED3 
-   
-  GPIO_Init(GPIOD, GPIO_PIN_6, GPIO_MODE_IN_PU_IT);          
-  GPIO_Init(GPIOD, GPIO_PIN_5, GPIO_MODE_OUT_PP_HIGH_FAST);          
-  GPIO_Init(GPIOD, GPIO_PIN_4, GPIO_MODE_OUT_PP_LOW_FAST);    //Wakeup_Afe
-  GPIO_Init(GPIOD, GPIO_PIN_3, GPIO_MODE_IN_FL_NO_IT);//GPIO_MODE_IN_PU_NO_IT);        //Signal_in
-  GPIO_Init(GPIOD, GPIO_PIN_2, GPIO_MODE_IN_FL_NO_IT);//GPIO_MODE_IN_PU_NO_IT);        //CHG_DETECT
-#if 0
-  CPU_CFG_GCR |=0x01;                                         //SWIN模式被禁用，SWIM引脚可被用作普通I/O口
-  GPIO_Init(GPIOD, GPIO_PIN_1, GPIO_MODE_OUT_PP_HIGH_FAST);   //MUC_DO3
-#else
-  GPIO_Init(GPIOD, GPIO_PIN_1, GPIO_MODE_IN_PU_NO_IT);        //SWIN 
-#endif
-  //EXTI_CR1 |=0x40;//上升沿触发//0x80;//下降沿触发
-  EXTI_SetExtIntSensitivity(EXTI_PORT_GPIOD, EXTI_SENSITIVITY_FALL_ONLY);//Signal_In下降沿触发
-/*
-	GPIO_MODE_IN_FL_NO_IT 无中断功能的浮动输入。  //ADC input
-	
-	GPIO_MODE_IN_PU_NO_IT 无中断功能的上拉输入。  //normal digit input
-	
-	GPIO_MODE_IN_FL_IT 带中断功能的浮动输入。  
-	
-	GPIO_MODE_IN_PU_IT 带中断功能的上拉输入。	
-	
-	GPIO_MODE_OUT_OD_LOW_FAST 高速开漏低电平输出，可工作到10MHz。  
-	
-	GPIO_MODE_OUT_PP_LOW_FAST 高速推挽低电平输出，可工作到10MHz。  
-	
-	GPIO_MODE_OUT_OD_LOW_SLOW 低速开漏低电平输出，可工作到2MHz。	//undefined port
-	
-	GPIO_MODE_OUT_PP_LOW_SLOW 低速推挽低电平输出，可工作到2MHz。	
-	
-	GPIO_MODE_OUT_OD_HIZ_FAST 高速开漏高阻态输出，可工作到10MHz。  
-	
-	GPIO_MODE_OUT_PP_HIGH_FAST 高速推挽高电平输出，可工作到10MHz。  
-	
-	GPIO_MODE_OUT_OD_HIZ_SLOW 低速开漏高阻态输出，可工作到2MHz。	
-	
-	GPIO_MODE_OUT_PP_HIGH_SLOW 低速推挽高电平输出，可工作到2MHz。
-*/
-}
+  /*------------------------------------------------------------------------------------
+    GPIO_MODE_IN_FL_NO_IT 无中断功能的浮动输入。  // ADC input
+    
+    GPIO_MODE_IN_PU_NO_IT 无中断功能的上拉输入。  // normal digit input
+    
+    GPIO_MODE_IN_FL_IT 带中断功能的浮动输入。  
+    
+    GPIO_MODE_IN_PU_IT 带中断功能的上拉输入。	
+    
+    GPIO_MODE_OUT_OD_LOW_FAST 高速开漏低电平输出，可工作到10MHz。  
+    
+    GPIO_MODE_OUT_PP_LOW_FAST 高速推挽低电平输出，可工作到10MHz。  
+    
+    GPIO_MODE_OUT_OD_LOW_SLOW 低速开漏低电平输出，可工作到2MHz。	// undefined port
+    
+    GPIO_MODE_OUT_PP_LOW_SLOW 低速推挽低电平输出，可工作到2MHz。	
+    
+    GPIO_MODE_OUT_OD_HIZ_FAST 高速开漏高阻态输出，可工作到10MHz。  
+    
+    GPIO_MODE_OUT_PP_HIGH_FAST 高速推挽高电平输出，可工作到10MHz。  
+    
+    GPIO_MODE_OUT_OD_HIZ_SLOW 低速开漏高阻态输出，可工作到2MHz。	
+    
+    GPIO_MODE_OUT_PP_HIGH_SLOW 低速推挽高电平输出，可工作到2MHz。
+   ------------------------------------------------------------------------------------*/
+} 
 //================================================================== 
-/* 配置 UART1
+/*--------------------------------
+  配置 UART1
     - BaudRate = 9600 baud
     - Word Length = 8 Bits
     - One Stop Bit
     - No parity
     - Receive and transmit enabled
     - UART1 Clock disabled
-*/
+--------------------------------*/
 void Uart_Model_Init(void)
 {
     //UART1_DeInit(); 
@@ -316,39 +262,42 @@ void Uart_SendByte(uint8_t DataByte)
 	
 void itoa(char *buf, int i, int base)
 {
-	#define LEN	20
-	char *s;
-	int rem;
-	static char rev[LEN+1];
-
-	rev[LEN] = 0;
-	if (i == 0)
-	{
-		(buf)[0] = '0';
-		++(buf);
-		return;
-	}
-	s = &rev[LEN];
-	while (i)
-	{
-		rem = i % base;
-		if (rem < 10)
-			*--s = rem + '0';
-		else if (base == 16)
-			*--s = "abcdef"[rem - 10];
-		i /= base;
-	}
-	while (*s)
-	{
-		(buf)[0] = *s++;
-		++(buf);
-	}
+    #define LEN	20
+    char *s;
+    int rem;
+    static char rev[LEN+1];
+  
+    rev[LEN] = 0;
+    if (i == 0)
+    {
+      (buf)[0] = '0';
+      ++(buf);
+      return;
+    }
+    s = &rev[LEN];
+    while (i)
+    {
+      rem = i % base;
+      if (rem < 10)
+      {
+        *--s = rem + '0';
+      }
+      else if (base == 16)
+      {
+        *--s = "abcdef"[rem - 10];
+      }
+      i /= base;
+    }
+    while (*s)
+    {
+      (buf)[0] = *s++;
+      ++(buf);
+    }
 }
 
 void Uart_SendStr(unsigned char *tx_pData) 
 {
-    unsigned int i, nLen;
-
+    unsigned int i, nLen; 
     nLen = strlen(tx_pData);
     ClrWdt();
     for(i=0; i<nLen; i++)
@@ -478,8 +427,7 @@ void TempCheck(void)
 { 
     static uint8_t ChgTemp_cnt =0;
     static uint8_t DisTemp_cnt =0;  
-    
-    
+     
     Temp_Val = V_TS2_Val;//R_TS2_Val;
     if(WorkMode == CHARGE_MODE)//if(Bits_flag.Bit.Chg)
     {
@@ -645,8 +593,7 @@ void CurrentCheck(void)
         NAME   CC_READY  RSVD   DEVICE_XREADY   OVRD_ALERT  UV  OV  SCD   OCD
 */
 void VoltCheck(void)
-{ 
-  static uint8_t First_Run_Flag = 0;
+{  
   if(WorkMode == CHARGE_MODE)
   {
     if(Cell_Volt_Max >= CHG_OV_VAL_SET ||SYS_STAT.Bit.OV)
@@ -809,9 +756,7 @@ void ModeCheck_Backup(void)
 
 //==========================================================================
 void ModeCheck(void)
-{     
-  static uint8_t Afe_CC_Disable_Lock = 0;
-  uint8_t FET_Status = 0; 
+{       
   Check_Val = ADConverse(3); 
   if((Check_Val >= 130 && Check_Val < 160) || CC_Val >= 10)
   {  
