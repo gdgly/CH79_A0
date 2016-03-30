@@ -1,0 +1,189 @@
+###############################################################################
+#                                                                             #
+# IAR C/C++ Compiler V1.31.1.20058 [Evaluation] for STM825/Mar/2016  17:25:36 #
+# Copyright 2010-2012 IAR Systems AB.                                         #
+#                                                                             #
+#    Source file  =  D:\ProjectPath\STMPath\CH79_A0_2nd_Sampled_25pcs\CH79_A0 #
+#                    \sys\src\main.c                                          #
+#    Command line =  D:\ProjectPath\STMPath\CH79_A0_2nd_Sampled_25pcs\CH79_A0 #
+#                    \sys\src\main.c -e -Ohz --debug --code_model small       #
+#                    --data_model medium -o D:\ProjectPath\STMPath\CH79_A0_2n #
+#                    d_Sampled_25pcs\CH79_A0\Debug\Obj\ --dlib_config         #
+#                    "C:\Program Files\IAR Systems\Embedded Workbench 6.0     #
+#                    Evaluation\stm8\LIB\dlstm8smn.h" -lcN                    #
+#                    D:\ProjectPath\STMPath\CH79_A0_2nd_Sampled_25pcs\CH79_A0 #
+#                    \Debug\List\ -I D:\ProjectPath\STMPath\CH79_A0_2nd_Sampl #
+#                    ed_25pcs\CH79_A0/user/\ -I D:\ProjectPath\STMPath\CH79_A #
+#                    0_2nd_Sampled_25pcs\CH79_A0/user/src/\ -I                #
+#                    D:\ProjectPath\STMPath\CH79_A0_2nd_Sampled_25pcs\CH79_A0 #
+#                    /user/inc/\ -I D:\ProjectPath\STMPath\CH79_A0_2nd_Sample #
+#                    d_25pcs\CH79_A0/addon/\ -I D:\ProjectPath\STMPath\CH79_A #
+#                    0_2nd_Sampled_25pcs\CH79_A0/addon/src/\ -I               #
+#                    D:\ProjectPath\STMPath\CH79_A0_2nd_Sampled_25pcs\CH79_A0 #
+#                    /addon/inc/\ -I D:\ProjectPath\STMPath\CH79_A0_2nd_Sampl #
+#                    ed_25pcs\CH79_A0/sys/\ -I D:\ProjectPath\STMPath\CH79_A0 #
+#                    _2nd_Sampled_25pcs\CH79_A0/sys/inc/\ -I                  #
+#                    D:\ProjectPath\STMPath\CH79_A0_2nd_Sampled_25pcs\CH79_A0 #
+#                    /sys/src/\ -I D:\ProjectPath\STMPath\CH79_A0_2nd_Sampled #
+#                    _25pcs\CH79_A0/lib/\ -I D:\ProjectPath\STMPath\CH79_A0_2 #
+#                    nd_Sampled_25pcs\CH79_A0/lib/src/\ -I                    #
+#                    D:\ProjectPath\STMPath\CH79_A0_2nd_Sampled_25pcs\CH79_A0 #
+#                    /lib/inc/\ --vregs 16                                    #
+#    List file    =  D:\ProjectPath\STMPath\CH79_A0_2nd_Sampled_25pcs\CH79_A0 #
+#                    \Debug\List\main.lst                                     #
+#    Object file  =  D:\ProjectPath\STMPath\CH79_A0_2nd_Sampled_25pcs\CH79_A0 #
+#                    \Debug\Obj\main.o                                        #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+D:\ProjectPath\STMPath\CH79_A0_2nd_Sampled_25pcs\CH79_A0\sys\src\main.c
+      1          //===2016-03-25pm
+      2          #include "stm8s.h"  
+      3          #include "user.h"  
+      4          #include "macro_def.h"  
+      5          #include "iostm8s003f3.h"
+      6          #include "bq769x0.h" 
+      7          void main(void)
+      8          {  
+      9            uint8_t i = 0;
+     10            //-----------------------------
+     11            disableInterrupts();
+     12            SysInit(); 
+     13            PortInit(); 
+     14            LED1_ON();  
+     15            I2C_Model_Init();
+     16            Uart_Model_Init();
+     17            Var_Init();
+     18            VCC1_ON();
+     19            Timer2Init();
+     20            enableInterrupts(); 
+     21            while(0)
+     22            {
+     23              Uart_SendStr("\r\n SYS_STAT= ");  Uart_SendData(0x1234,16);
+     24              for(i =0 ;i< 200;i++)
+     25              {
+     26                nop();nop();nop();nop();nop();nop();
+     27                nop();nop();nop();nop();nop();nop(); 
+     28              }
+     29                //=============================DATA ·¢ËÍ¼Ä´æÆ÷µØÖ· I2C_SendDat()  
+     30              
+     31              I2C_Read(SYS_STAT_ADDR,&SYS_STAT_Last); 
+     32              //I2C_Write(CC_CFG_ADDR,CC_CFG_INIT_VAL);
+     33             
+     34              //PB4_XOR();
+     35              //PB5_XOR();
+     36            }
+     37            Delay_ms(50);    
+     38            Afe_Device_Init();
+     39            Soc_OCV_CorrectEn_Flag = 1; 
+     40            LowPower_MCU_Entry_Flag = 0; 
+     41            LED1_OFF();  
+     42            //Afe_ADC_Disable();  //100+uA
+     43            //Afe_Temp_Disable(); //100+uA
+     44            while(1)
+     45            {
+     46              ClrWdt();   
+     47              if(LowPower_MCU_Entry_Flag == 0)
+     48              { 
+     49                Afe_Get_SysStatus(); 
+     50                
+     51                /*  */
+     52                Uart_SendStr("\r\n SYS_STAT= ");  Uart_SendData(SYS_STAT.Byte,16); 
+     53                Uart_SendStr(" SYS_CTRL1 = ");    Uart_SendData(SYS_CTRL1.Byte,16); 
+     54                Uart_SendStr(" SYS_CTRL2 = ");    Uart_SendData(SYS_CTRL2.Byte,16);  
+     55                 
+     56                ModeCheck(); 
+     57                
+     58                ClearStatus();
+     59                
+     60                Afe_Volt_Val_Get();
+     61                
+     62                CurrentCheck();
+     63                
+     64                VoltCheck();
+     65                
+     66                TempCheck();
+     67                
+     68                CellBal_Cntrl();
+     69                
+     70                Afe_FET_ChgDis_Cntrl();
+     71                
+     72                Afe_AbnormalCheck();
+     73                
+     74                LedShow_Cntrl();     //LedShow_WorkMode();   // 
+     75                 
+     76                Uart_SendStr(" WorkMode= ");      Uart_SendData(WorkMode,16); 
+     77                Uart_SendStr(" Bits_flag = ");    Uart_SendData(Bits_flag.Byte,16); 
+     78                
+     79                Uart_SendStr(" Current_Val= ");   Uart_SendData((uint16_t)Current_Val,10);
+     80                Uart_SendStr(" Volt_Avg= ");      Uart_SendData(Cell_Volt_Avg,10); 
+     81                Uart_SendStr(" Max= ");           Uart_SendData(Cell_Volt_Max,10);
+     82                Uart_SendStr(" Min= ");           Uart_SendData(Cell_Volt_Min,10);
+     83                /*    
+     84                Uart_SendStr(" soc_rt= ");        Uart_SendData((uint16_t)SocCalc.soc_rt,10); 
+     85                Uart_SendStr(" ah= ");            Uart_SendData((uint16_t)SocReg.ah,10);
+     86                Uart_SendStr(" CellBal= ");       Uart_SendData((uint16_t)CellBalance_Selct,16);  
+     87                
+     88                Uart_SendStr("\r\n");
+     89                for(i =0;i<10;i++)
+     90                { 
+     91                  Uart_SendStr(" C_");
+     92                  Uart_SendData(i,10);  
+     93                  Uart_SendStr("= ");
+     94                  Uart_SendData(Cell_Volt[i],10);
+     95                }
+     96          
+     97                Uart_SendStr("\r\n");*/ 
+     98             
+     99              }
+    100              LowPower_Cntrl();
+    101            }    
+    102           
+    103          }
+    104           
+    105          
+    106          
+    107          
+    108          
+    109          
+    110          
+    111          
+    112          
+    113          
+    114          
+    115          
+    116          
+    117          
+
+   Section sizes:
+
+     Function/Label                Bytes
+     --------------                -----
+     _A_PA_ODR                        1
+     _A_PC_ODR                        1
+     main                           210
+     ?Subroutine2                     5
+     ?Subroutine1                     8
+     ?Subroutine0                     8
+     ?<Constant "\r\n SYS_STAT= ">   14
+     ?<Constant " SYS_CTRL1 = ">     14
+     ?<Constant " SYS_CTRL2 = ">     14
+     ?<Constant " WorkMode= ">       12
+     ?<Constant " Bits_flag = ">     14
+     ?<Constant " Current_Val= ">    15
+     ?<Constant " Volt_Avg= ">       12
+     ?<Constant " Max= ">             7
+     ?<Constant " Min= ">             7
+
+ 
+   2 bytes in section .near.noinit
+ 109 bytes in section .near.rodata
+ 231 bytes in section .near_func.text
+ 
+ 231 bytes of CODE  memory
+ 109 bytes of CONST memory
+   0 bytes of DATA  memory (+ 2 bytes shared)
+
+Errors: none
+Warnings: none

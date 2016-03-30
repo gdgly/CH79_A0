@@ -1,0 +1,2117 @@
+###############################################################################
+#                                                                             #
+# IAR C/C++ Compiler V1.31.1.20058 [Evaluation] for STM825/Mar/2016  17:21:58 #
+# Copyright 2010-2012 IAR Systems AB.                                         #
+#                                                                             #
+#    Source file  =  D:\ProjectPath\STMPath\CH79_A0_2nd_Sampled_25pcs\CH79_A0 #
+#                    \sys\src\user.c                                          #
+#    Command line =  D:\ProjectPath\STMPath\CH79_A0_2nd_Sampled_25pcs\CH79_A0 #
+#                    \sys\src\user.c -e -Ohz --debug --code_model small       #
+#                    --data_model medium -o D:\ProjectPath\STMPath\CH79_A0_2n #
+#                    d_Sampled_25pcs\CH79_A0\Debug\Obj\ --dlib_config         #
+#                    "C:\Program Files\IAR Systems\Embedded Workbench 6.0     #
+#                    Evaluation\stm8\LIB\dlstm8smn.h" -lcN                    #
+#                    D:\ProjectPath\STMPath\CH79_A0_2nd_Sampled_25pcs\CH79_A0 #
+#                    \Debug\List\ -I D:\ProjectPath\STMPath\CH79_A0_2nd_Sampl #
+#                    ed_25pcs\CH79_A0/user/\ -I D:\ProjectPath\STMPath\CH79_A #
+#                    0_2nd_Sampled_25pcs\CH79_A0/user/src/\ -I                #
+#                    D:\ProjectPath\STMPath\CH79_A0_2nd_Sampled_25pcs\CH79_A0 #
+#                    /user/inc/\ -I D:\ProjectPath\STMPath\CH79_A0_2nd_Sample #
+#                    d_25pcs\CH79_A0/addon/\ -I D:\ProjectPath\STMPath\CH79_A #
+#                    0_2nd_Sampled_25pcs\CH79_A0/addon/src/\ -I               #
+#                    D:\ProjectPath\STMPath\CH79_A0_2nd_Sampled_25pcs\CH79_A0 #
+#                    /addon/inc/\ -I D:\ProjectPath\STMPath\CH79_A0_2nd_Sampl #
+#                    ed_25pcs\CH79_A0/sys/\ -I D:\ProjectPath\STMPath\CH79_A0 #
+#                    _2nd_Sampled_25pcs\CH79_A0/sys/inc/\ -I                  #
+#                    D:\ProjectPath\STMPath\CH79_A0_2nd_Sampled_25pcs\CH79_A0 #
+#                    /sys/src/\ -I D:\ProjectPath\STMPath\CH79_A0_2nd_Sampled #
+#                    _25pcs\CH79_A0/lib/\ -I D:\ProjectPath\STMPath\CH79_A0_2 #
+#                    nd_Sampled_25pcs\CH79_A0/lib/src/\ -I                    #
+#                    D:\ProjectPath\STMPath\CH79_A0_2nd_Sampled_25pcs\CH79_A0 #
+#                    /lib/inc/\ --vregs 16                                    #
+#    List file    =  D:\ProjectPath\STMPath\CH79_A0_2nd_Sampled_25pcs\CH79_A0 #
+#                    \Debug\List\user.lst                                     #
+#    Object file  =  D:\ProjectPath\STMPath\CH79_A0_2nd_Sampled_25pcs\CH79_A0 #
+#                    \Debug\Obj\user.o                                        #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+D:\ProjectPath\STMPath\CH79_A0_2nd_Sampled_25pcs\CH79_A0\sys\src\user.c
+      1          
+      2          #include "stm8s.h" 
+      3          #include "user.h"
+      4          #include "macro_def.h"
+      5          #include "iostm8s003f3.h"
+      6          #include "bq769x0.h"
+      7          #include "string.h"
+      8          //==================================================================
+      9          //==================================================================
+     10          //==================================================================
+     11          #if 1
+     12          void PWM2_Init(void)
+     13          { 
+     14              CLK_PCKENR1 |= 0xA0; 
+     15              TIM2_CR1 =0;              //关闭TIM2
+     16              TIM2_IER = 0; 
+     17              TIM2_PSCR = 0;  
+     18              TIM2_ARRH = 0x07;
+     19              TIM2_ARRL = 0xCF;         //16M/(1999+1)=8KHz   //2MHz/(1999+1) = 1KHz 
+     20              TIM2_CR1 |= 0x80;         //使能ARP,边沿对齐，向上计数
+     21              TIM2_EGR |= 0x01;         //更新TIM1，使PSC有效
+     22              TIM2_EGR |= 0x20;         //重新初始化TIM1 
+     23              TIM2_CCR1H =0;           
+     24              TIM2_CCR1L =0; 
+     25              TIM2_CCMR1 =0X68;         //配置TIM2_CH1为PWM1模式输出 
+     26              TIM2_CCER1 =0x01;         //Enable TIM2_CH1 channel 
+     27              TIM2_CR1 |= 0x01;         //使能TIM2 
+     28          }
+     29          //==================================================================
+     30          //==================================================================
+     31          void PWM1_Init(void)
+     32          {
+     33              CLK_PCKENR1 |= 0x80;
+     34              TIM1_CR1 &= ~0x01;      //关闭TIM1 
+     35              TIM1_PSCRH = 0;
+     36              TIM1_PSCRL = 0;         //不分频2MHz 
+     37              TIM1_ARRH = 0x07;
+     38              TIM1_ARRL = 0xCF;      //2MHz/(1999+1) = 1KHz 
+     39              TIM1_CR1 |= 0x80;      //使能ARP,边沿对齐，向上计数
+     40              TIM1_EGR |= 0x01;      //更新TIM1，使PSC有效
+     41              TIM1_EGR |= 0x20;      //重新初始化TIM1 
+     42              
+     43              TIM1_CCR1H = 0;
+     44              TIM1_CCR1L = 0; 
+     45              TIM1_CCMR1 = 0x68;       //配置TIM1_CH1为PWM1模式输出
+     46              TIM1_CCER1 |= 0x01;      //Enable TIM1_CH1 channel
+     47              
+     48              TIM1_CCR2H = 0;
+     49              TIM1_CCR2L = 0;
+     50              TIM1_CCMR2 = 0x68;       //配置TIM1_CH2为PWM1模式输出
+     51              TIM1_CCER1 |= 0x10;      //Enable TIM1_CH2 channel
+     52              
+     53              //TIM1_CCR3H = 0x07;
+     54              //TIM1_CCR3L = 0xE6;       //占空比50% 
+     55              //TIM1_CCMR3 = 0x68;       //配置TIM1_CH3为PWM1模式输出
+     56              //TIM1_CCER2 |= 0x01;      //使能TIM1_CH3通道
+     57              
+     58              //TIM1_CCR4H = 0x03;
+     59              //TIM1_CCR4L = 0xE6;       //占空比50%
+     60              //TIM1_CCMR4 = 0x68;       //配置TIM1_CH4为PWM1模式输出 
+     61              //TIM1_CCER2 |= 0x10;      //Enable TIM1_CH4 channel 
+     62              
+     63              TIM1_BKR |= 0x80;          //
+     64              TIM1_CR1 |= 0x01;          //使能TIM1 
+     65          }
+     66          //==================================================================
+     67          //==================================================================
+     68          uint16_t ADC(int channel)
+     69          {
+     70              unsigned int value =0;
+     71              unsigned char tempH,tempL; 
+     72              //CLK_PCKENR2 |=0x08; 
+     73              ADC_CSR = channel;                // 清除EOC转换结束标志, select channel
+     74              nop();  nop(); nop(); nop(); 
+     75              ADC_CR1 |= 0x01;                  // 开始单次转换 
+     76              nop(); nop(); nop(); nop(); nop();
+     77              nop(); nop(); nop(); nop(); nop();
+     78              ADC_CR1 |= 0x01;                  // 开始单次转换
+     79              nop(); nop(); nop(); nop();
+     80              nop(); nop(); nop(); nop();
+     81              while(!(ADC_CSR & 0x80))nop();    // 等待单次转换完成 
+     82              tempL = ADC_DRL;                  //先 读低8位
+     83              tempH = ADC_DRH;                  // 再读高8位，设置数据左对齐
+     84              value=(tempH<<8)|tempL;
+     85              ADC_CSR &= ~(0x80);               // 清除EOC转换结束标志  
+     86              ADC_CR1 &= ~(0x01); 
+     87              return(value);  
+     88          }
+     89          //==================================================================
+     90          //==================================================================
+     91          uint16_t ADConverse(unsigned char channel)
+     92          { 
+     93              unsigned int value=0;
+     94              unsigned int max_value =0;
+     95              unsigned int min_value =0xEFFF;
+     96              unsigned char i;  
+     97              CLK_PCKENR2 |=0x08;  
+     98              for(i =0;i <100;i++)
+     99              {
+    100                nop();nop();
+    101              }
+    102              for(i=0;i<18;i++)
+    103              {
+    104                Adc_value[i] = ADC(channel); 
+    105              }
+    106              for(i =0;i<18;i++)
+    107              {
+    108                value +=Adc_value[i];
+    109                if(max_value <Adc_value[i])
+    110                  max_value =Adc_value[i];
+    111                 
+    112                if(min_value >Adc_value[i])
+    113                  min_value =Adc_value[i];
+    114              }
+    115              value =value -max_value -min_value;
+    116              value >>= 4; 
+    117              CLK_PCKENR2 &=~(0x08); 
+    118              return value; 
+    119          }
+    120          //================================================================================
+    121          //==================================================================
+    122          void SysInit(void)
+    123          { 
+    124              //-------system clock                                           
+    125              CLK_ECKR &= ~0x01;  // external RC Disable                                              
+    126              CLK_ICKR = 0x01;    // internal RC enable
+    127              while(!(CLK_ICKR & 0x02)); 
+    128              CLK_SWCR = 0;       // 禁止时钟切换及相关中断
+    129              CLK_CKDIVR = 0x02;  // 主频为Fmaster为Fhsi：16MHz, Fcpu为4MHz  0.25us
+    130              //CLK_PCKENR1 = 0;    // 禁止Fmaster 与外设连接
+    131              //CLK_PCKENR2 = 0;
+    132              /*
+    133              //------------------A/D conversion 
+    134              CLK_PCKENR2 |= 0x08;           //使能Fmaster与外设ADC模块连接 
+    135              ADC_CR1 = 0x00;               // ADC时钟=主时钟/2=8MHZ,单次转换模式Tad =1/8,未使能ADC
+    136              ADC_CR2 = 0x08;               // A/D 结果数据右对齐
+    137              ADC_CSR = 0x00;               // 清转换结束标志位EOC，
+    138              ADC_CR3 = 0x00;
+    139              ADC_TDRH = 0xFF;              //禁止施密特触发功能
+    140              ADC_TDRL = 0x00; 
+    141              nop(); nop();
+    142              //ADC_TDRL = 0x14;              // AIN2、AIN4 0b00010100 
+    143              CLK_PCKENR2 &=~(0x08);
+    144              */
+    145          }
+    146          //==================================================================
+    147          //==================================================================
+    148          //---------------WatchDog  LSI 128KHz/2 = 64KHz
+    149          /*
+    150              预分频系数    PR[2:0]   最短超时(RL[7:0]=0x00)    最长超时(RL[7:0]=0xFF)
+    151              /4            0         62.5 μs                  15.90 ms     
+    152              /8            1         125 μs                   31.90 ms     
+    153              /16           2         250 μs                   63.70 ms     
+    154              /32           3         500 μs                   127 ms     
+    155              /64           4         1.00 ms                   255 ms     
+    156              /128          5         2.00 ms                   510 ms     
+    157              /256          6         4.00 ms                   1.02 s     
+    158          */
+    159          /*  
+    160          void ClrWdt(void)
+    161          {
+    162              IWDG_KR = 0x55;   //解除保护
+    163              IWDG_RLR = 0xFF;  //刷新内容
+    164              IWDG_PR = 6; 
+    165              IWDG_KR = 0xAA;   //刷新及恢复保护
+    166              IWDG_KR = 0xCC;   //独立看门狗启动
+    167          } 
+    168          */
+    169          //==================================================================
+    170          //==================================================================
+    171          void PortInit(void)
+    172          { 
+    173            GPIO_Init(GPIOA, GPIO_PIN_3, GPIO_MODE_IN_PU_NO_IT);        // LOAD_DETECT
+    174            GPIO_Init(GPIOA, GPIO_PIN_2, GPIO_MODE_IN_FL_NO_IT);    // undifine
+    175            GPIO_Init(GPIOA, GPIO_PIN_1, GPIO_MODE_OUT_PP_HIGH_FAST);    // undifine
+    176            
+    177            //GPIO_Init(GPIOB, GPIO_PIN_5, GPIO_MODE_OUT_PP_LOW_FAST);           
+    178            //GPIO_Init(GPIOB, GPIO_PIN_4, GPIO_MODE_OUT_PP_LOW_FAST);       
+    179           
+    180            GPIO_Init(GPIOC, GPIO_PIN_7, GPIO_MODE_OUT_PP_LOW_FAST);//GPIO_MODE_IN_FL_NO_IT);//GPIO_MODE_IN_PU_NO_IT);        //ALERT 
+    181            GPIO_Init(GPIOC, GPIO_PIN_6, GPIO_MODE_OUT_PP_LOW_FAST);    //LOAD_DETECT_CTRL
+    182            GPIO_Init(GPIOC, GPIO_PIN_5, GPIO_MODE_OUT_PP_LOW_FAST);    //LED1
+    183            GPIO_Init(GPIOC, GPIO_PIN_4, GPIO_MODE_OUT_PP_LOW_FAST);    //LED2
+    184            GPIO_Init(GPIOC, GPIO_PIN_3, GPIO_MODE_OUT_PP_LOW_FAST);    //LED3 
+    185             
+    186            GPIO_Init(GPIOD, GPIO_PIN_6, GPIO_MODE_IN_PU_IT);          
+    187            GPIO_Init(GPIOD, GPIO_PIN_5, GPIO_MODE_OUT_PP_HIGH_FAST);          
+    188            GPIO_Init(GPIOD, GPIO_PIN_4, GPIO_MODE_IN_FL_NO_IT);//GPIO_MODE_OUT_PP_LOW_FAST);    //Wakeup_Afe
+    189            GPIO_Init(GPIOD, GPIO_PIN_3, GPIO_MODE_IN_FL_IT);//GPIO_MODE_IN_FL_NO_IT);//GPIO_MODE_IN_PU_NO_IT);//        //Signal_in
+    190            GPIO_Init(GPIOD, GPIO_PIN_2, GPIO_MODE_IN_FL_IT);//GPIO_MODE_IN_FL_NO_IT);//GPIO_MODE_IN_PU_NO_IT);          //CHG_DETECT
+    191          #if 0
+    192            CPU_CFG_GCR |=0x01;                                         //SWIN模式被禁用，SWIM引脚可被用作普通I/O口
+    193            GPIO_Init(GPIOD, GPIO_PIN_1, GPIO_MODE_OUT_PP_HIGH_FAST);   //MUC_DO3
+    194          #else
+    195            GPIO_Init(GPIOD, GPIO_PIN_1, GPIO_MODE_IN_PU_NO_IT);        //SWIN 
+    196          #endif
+    197            //EXTI_CR1 |=0x40;//上升沿触发//0x80;//下降沿触发
+    198            EXTI_SetExtIntSensitivity(EXTI_PORT_GPIOD, EXTI_SENSITIVITY_FALL_ONLY);//Signal_In下降沿触发
+    199          /*
+    200          	GPIO_MODE_IN_FL_NO_IT 无中断功能的浮动输入。  //ADC input
+    201          	
+    202          	GPIO_MODE_IN_PU_NO_IT 无中断功能的上拉输入。  //normal digit input
+    203          	
+    204          	GPIO_MODE_IN_FL_IT 带中断功能的浮动输入。  
+    205          	
+    206          	GPIO_MODE_IN_PU_IT 带中断功能的上拉输入。	
+    207          	
+    208          	GPIO_MODE_OUT_OD_LOW_FAST 高速开漏低电平输出，可工作到10MHz。  
+    209          	
+    210          	GPIO_MODE_OUT_PP_LOW_FAST 高速推挽低电平输出，可工作到10MHz。  
+    211          	
+    212          	GPIO_MODE_OUT_OD_LOW_SLOW 低速开漏低电平输出，可工作到2MHz。	//undefined port
+    213          	
+    214          	GPIO_MODE_OUT_PP_LOW_SLOW 低速推挽低电平输出，可工作到2MHz。	
+    215          	
+    216          	GPIO_MODE_OUT_OD_HIZ_FAST 高速开漏高阻态输出，可工作到10MHz。  
+    217          	
+    218          	GPIO_MODE_OUT_PP_HIGH_FAST 高速推挽高电平输出，可工作到10MHz。  
+    219          	
+    220          	GPIO_MODE_OUT_OD_HIZ_SLOW 低速开漏高阻态输出，可工作到2MHz。	
+    221          	
+    222          	GPIO_MODE_OUT_PP_HIGH_SLOW 低速推挽高电平输出，可工作到2MHz。
+    223          */
+    224          }
+    225          //==================================================================
+    226          void PortInit_Backup(void)
+    227          { 
+    228            GPIO_Init(GPIOA, GPIO_PIN_3, GPIO_MODE_IN_PU_NO_IT);        // LOAD_DETECT
+    229            GPIO_Init(GPIOA, GPIO_PIN_2, GPIO_MODE_OUT_PP_LOW_FAST);    // undifine
+    230            GPIO_Init(GPIOA, GPIO_PIN_1, GPIO_MODE_OUT_PP_LOW_FAST);    // undifine
+    231            
+    232            //GPIO_Init(GPIOB, GPIO_PIN_5, GPIO_MODE_IN_PU_NO_IT);           
+    233            //GPIO_Init(GPIOB, GPIO_PIN_4, GPIO_MODE_OUT_OD_HIZ_FAST);       
+    234           
+    235            GPIO_Init(GPIOC, GPIO_PIN_7, GPIO_MODE_OUT_PP_LOW_FAST);//GPIO_MODE_IN_FL_NO_IT);//GPIO_MODE_IN_PU_NO_IT);        //ALERT 
+    236            GPIO_Init(GPIOC, GPIO_PIN_6, GPIO_MODE_OUT_PP_LOW_FAST);    //undifine
+    237            GPIO_Init(GPIOC, GPIO_PIN_5, GPIO_MODE_OUT_PP_LOW_FAST);    //LED1
+    238            GPIO_Init(GPIOC, GPIO_PIN_4, GPIO_MODE_OUT_PP_LOW_FAST);    //LED2
+    239            GPIO_Init(GPIOC, GPIO_PIN_3, GPIO_MODE_OUT_PP_LOW_FAST);    //LED3 
+    240             
+    241            GPIO_Init(GPIOD, GPIO_PIN_6, GPIO_MODE_IN_PU_IT);          
+    242            GPIO_Init(GPIOD, GPIO_PIN_5, GPIO_MODE_OUT_PP_HIGH_FAST);          
+    243            GPIO_Init(GPIOD, GPIO_PIN_4, GPIO_MODE_OUT_PP_LOW_FAST);    //Wakeup_Afe
+    244            GPIO_Init(GPIOD, GPIO_PIN_3, GPIO_MODE_IN_FL_NO_IT);//GPIO_MODE_IN_PU_NO_IT);        //Signal_in
+    245            GPIO_Init(GPIOD, GPIO_PIN_2, GPIO_MODE_IN_FL_NO_IT);//GPIO_MODE_IN_PU_NO_IT);        //CHG_DETECT
+    246          #if 0
+    247            CPU_CFG_GCR |=0x01;                                         //SWIN模式被禁用，SWIM引脚可被用作普通I/O口
+    248            GPIO_Init(GPIOD, GPIO_PIN_1, GPIO_MODE_OUT_PP_HIGH_FAST);   //MUC_DO3
+    249          #else
+    250            GPIO_Init(GPIOD, GPIO_PIN_1, GPIO_MODE_IN_PU_NO_IT);        //SWIN 
+    251          #endif
+    252            //EXTI_CR1 |=0x40;//上升沿触发//0x80;//下降沿触发
+    253            EXTI_SetExtIntSensitivity(EXTI_PORT_GPIOD, EXTI_SENSITIVITY_FALL_ONLY);//Signal_In下降沿触发
+    254          /*
+    255          	GPIO_MODE_IN_FL_NO_IT 无中断功能的浮动输入。  //ADC input
+    256          	
+    257          	GPIO_MODE_IN_PU_NO_IT 无中断功能的上拉输入。  //normal digit input
+    258          	
+    259          	GPIO_MODE_IN_FL_IT 带中断功能的浮动输入。  
+    260          	
+    261          	GPIO_MODE_IN_PU_IT 带中断功能的上拉输入。	
+    262          	
+    263          	GPIO_MODE_OUT_OD_LOW_FAST 高速开漏低电平输出，可工作到10MHz。  
+    264          	
+    265          	GPIO_MODE_OUT_PP_LOW_FAST 高速推挽低电平输出，可工作到10MHz。  
+    266          	
+    267          	GPIO_MODE_OUT_OD_LOW_SLOW 低速开漏低电平输出，可工作到2MHz。	//undefined port
+    268          	
+    269          	GPIO_MODE_OUT_PP_LOW_SLOW 低速推挽低电平输出，可工作到2MHz。	
+    270          	
+    271          	GPIO_MODE_OUT_OD_HIZ_FAST 高速开漏高阻态输出，可工作到10MHz。  
+    272          	
+    273          	GPIO_MODE_OUT_PP_HIGH_FAST 高速推挽高电平输出，可工作到10MHz。  
+    274          	
+    275          	GPIO_MODE_OUT_OD_HIZ_SLOW 低速开漏高阻态输出，可工作到2MHz。	
+    276          	
+    277          	GPIO_MODE_OUT_PP_HIGH_SLOW 低速推挽高电平输出，可工作到2MHz。
+    278          */
+    279          }
+    280          //================================================================== 
+    281          /* 配置 UART1
+    282              - BaudRate = 9600 baud
+    283              - Word Length = 8 Bits
+    284              - One Stop Bit
+    285              - No parity
+    286              - Receive and transmit enabled
+    287              - UART1 Clock disabled
+    288          */
+    289          void Uart_Model_Init(void)
+    290          {
+    291              //UART1_DeInit(); 
+    292              //UART1_Init((uint32_t)9600, UART1_WORDLENGTH_8D, UART1_STOPBITS_1, UART1_PARITY_NO,UART1_SYNCMODE_CLOCK_DISABLE, UART1_MODE_TX_ENABLE);//UART1_MODE_TXRX_ENABLE
+    293              //================================================================== 
+    294              /*  */
+    295              CLK_PCKENR1 |= 0x0C;         // 使能fmaster与UART连接 
+    296              UART1_BRR2  =  0x02;         // 设置波特率9600
+    297              UART1_BRR1  =  0x68;         // 16M/9600 = 0x0682
+    298              UART1_CR1   =  0x00;          //UART使能，一个起始位，8个数据位，禁止奇偶校验，禁止中断
+    299              UART1_CR3   =  0x00;          //一个停止位    
+    300              UART1_CR2   =  0x08;//  send only //0x0C;           //发送及接收使能 
+    301              //UART1_CR2   |= 0x20;          //接收中断使能  
+    302          } 
+    303          void Uart_SendByte(uint8_t DataByte)      
+    304          {   
+    305              //===单线通讯时，发送数据时避免影响接收管脚，故发送数据时先禁止接收及其中断
+    306              //UART1_CR2 &= ~0x04;
+    307              //UART1_CR2 &= ~0x20; 
+    308              while(!UART1_SR_TXE);
+    309              UART1_DR = DataByte;    
+    310              nop(); nop(); nop();
+    311              while(!(UART1_SR &0x40)); 
+    312              //========数据发送完毕，使能接收及其中断
+    313              UART1_SR &= ~0x48;
+    314              //UART1_CR2 |= 0x24; 
+    315          }  
+    316          	
+    317          void itoa(char *buf, int i, int base)
+    318          {
+    319          	#define LEN	20
+    320          	char *s;
+    321          	int rem;
+    322          	static char rev[LEN+1];
+    323          
+    324          	rev[LEN] = 0;
+    325          	if (i == 0)
+    326          	{
+    327          		(buf)[0] = '0';
+    328          		++(buf);
+    329          		return;
+    330          	}
+    331          	s = &rev[LEN];
+    332          	while (i)
+    333          	{
+    334          		rem = i % base;
+    335          		if (rem < 10)
+    336          			*--s = rem + '0';
+    337          		else if (base == 16)
+    338          			*--s = "abcdef"[rem - 10];
+    339          		i /= base;
+    340          	}
+    341          	while (*s)
+    342          	{
+    343          		(buf)[0] = *s++;
+    344          		++(buf);
+    345          	}
+    346          }
+    347          
+    348          void Uart_SendStr(unsigned char *tx_pData) 
+    349          {
+    350              unsigned int i, nLen;
+    351          
+    352          	nLen = strlen(tx_pData);
+    353          	for(i=0; i<nLen; i++)
+    354          		Uart_SendByte(tx_pData[i]);
+    355          }
+    356          
+    357           
+    358          void Uart_SendData(unsigned int tx_data, int base) 
+    359          {
+    360            unsigned char buf[20] = {0};
+    361          
+    362            itoa((char *)buf, tx_data, base);
+    363            
+    364            if (base == 16)
+    365            {
+    366              Uart_SendStr((unsigned char *)"0x");
+    367            }
+    368            
+    369            Uart_SendStr(buf);
+    370          }
+    371          
+    372          
+    373          //==================================================================
+    374          void I2C_Model_Init(void)
+    375          { 
+    376            CLK_PCKENR1 |= 0x01;    // Fmaster 与外设I2C连接 
+    377            I2C_CR1 = 0;
+    378             
+    379            //I2C_ITR   = 0x01;    //使能错误中断
+    380            I2C_FREQR = 8;//输入时钟为8MHz
+    381            
+    382            I2C_TRISER = 9;
+    383             
+    384            //CRR的计算，确定I2C的通信频率f_SCL =1/(T_high + T_low), 100KHz -->T_hgih = T_low =5000ns
+    385            //I2C的输入频率f_CK = 1/T_CK, CRR = T_hgih /T_CK;
+    386            I2C_CCRL = 80;//40; // 上升沿及下降沿时间5000s, 
+    387            I2C_CCRH = 0;  // 标准模式100KHz,  
+    388               
+    389            I2C_CR1 |= 0x01;//I2C_CR1_PE;
+    390            
+    391            I2C_CR2 |= 0x04;
+    392          }
+    393          //================================================================== 
+    394          //=======================================================================
+    395          //======================================================================= 
+    396          //======================================================================= 
+    397          void Timer2Init(void)
+    398          { 
+    399              CLK_PCKENR1 |= 0x20;    // Fmaster 与外设TIM2连接
+    400              TIM2_CR1 = 0x84;        // TIM2_ARR寄存器通过缓冲预装载，使能计数器
+    401              TIM2_IER = 0x00;        // 禁止中断
+    402              //TIM2_EGR = 0x01;        // 允许产生更新事件 
+    403              TIM2_PSCR = 0x07;       // 计数器时钟=主时钟/8=16MHZ/128    8us// 相当于计数器周期为 
+    404              TIM2_CNTRH = 0;         //     
+    405              TIM2_CNTRL = 0;         //     
+    406              TIM2_ARRH = 0x04;       //     10ms
+    407              TIM2_ARRL = 0xE2;       //   
+    408              TIM2_IER |= 0x01;       // 使能更新中断，禁止触发中断  
+    409              TIM2_CR1 |= 0x01;        // TIM2_ARR寄存器通过缓冲预装载，使能计数器
+    410          } 
+    411          //=======================================================================
+    412          //==================================================================
+    413          //==================================================================
+    414          //--Fmaster = CK_PSC =16MHz, CK_PSC prescaler(128) to CK_CNT(8us)   TIM4_SR1.UIF更新中断标志符
+    415          void Timer4_Init_us(void)
+    416          {
+    417              CLK_PCKENR1 |= 0x10;    //Fmaster 与外设TIM4连接
+    418              TIM4_IER = 0x00;        // 禁止中断
+    419              TIM4_EGR = 0x01;        // 允许产生更新事件 
+    420              //TIM4_PSCR = 0x07;       // 计数器时钟=主时钟/128=16MHZ/128  // 相当于计数器周期为8uS
+    421              TIM4_PSCR = 0x00;       // 计数器时钟=主时钟/128=16MHZ/1  // 相当于计数器周期为0.0625uS
+    422              TIM4_CR1 = 0x15;        // TIM4_ARR寄存器通过缓冲预装载，使能计数器
+    423              TIM4_CNTR = 0;          //     
+    424              TIM4_ARR = 16;           // 0.0625*16 = 1us  // 6*8us = 200us  
+    425              TIM4_IER |= 0x01;       //更新中断使能，禁止触发中断 
+    426              TIM4_CR1 |= 0x01; 
+    427          } 
+    428          void Timer4_Init_ms(void)
+    429          {
+    430              CLK_PCKENR1 |= 0x10;    //Fmaster 与外设TIM4连接
+    431              TIM4_IER = 0x00;        // 禁止中断
+    432              TIM4_EGR = 0x01;        // 允许产生更新事件 
+    433              TIM4_PSCR = 0x07;       // 计数器时钟=主时钟/128=16MHZ/128  // 相当于计数器周期为8uS 
+    434              TIM4_CR1 = 0x15;        // TIM4_ARR寄存器通过缓冲预装载，使能计数器
+    435              TIM4_CNTR = 0;          //     
+    436              TIM4_ARR = 125;         // 125*8us = 1ms  
+    437              TIM4_IER |= 0x01;       //更新中断使能，禁止触发中断 
+    438              TIM4_CR1 |= 0x01; 
+    439          } 
+    440          void Timer4_Disable(void)
+    441          {
+    442              TIM4_CR1 &= ~0x01;
+    443              TIM4_IER &= ~0x01;
+    444              CLK_PCKENR1 &= ~0x10;    //Fmaster 与外设TIM4断开连接 
+    445          } 
+    446          void Delay_us(uint16_t Delay_time)
+    447          {
+    448            Delay_time_t = Delay_time;
+    449            Timer4_Init_us();
+    450            while(Delay_time_t > 0);  
+    451            Timer4_Disable();
+    452          }
+    453          void Delay_ms(uint16_t Delay_time)
+    454          {
+    455            Delay_time_t = Delay_time;
+    456            Timer4_Init_ms();
+    457            while(Delay_time_t > 0)
+    458            {
+    459              if(Delay_time_t >= 300)
+    460              {  
+    461                ;//ClrWdt(); 
+    462              } 
+    463            }
+    464            Timer4_Disable();
+    465          }
+    466            
+    467          //==================================================================
+    468          /*
+    469            The following equations show how to use the 14-bit ADC readings in TS1, TS2, and TS3 to determine the
+    470            resistance of the external 103AT thermistor:
+    471              VTSX = (ADC in Decimal) x 382 μV/LSB                     (4)
+    472              RTS = (10,000 × VTSX) ÷ (3.3 – VTSX)                   (5)
+    473          */
+    474          void TempCheck(void)
+    475          { 
+    476              static uint8_t ChgTemp_cnt =0;
+    477              static uint8_t DisTemp_cnt =0;  
+    478              
+    479              
+    480              Temp_Val = V_TS2_Val;//R_TS2_Val;
+    481              if(WorkMode == CHARGE_MODE)//if(Bits_flag.Bit.Chg)
+    482              {
+    483                 if((Temp_Val >ChgTempL_ON) || (Temp_Val < ChgTempH_ON) || (ChgTemp_cnt >= 10))
+    484                 {
+    485                   if((ChgTemp_cnt ++) >= 10)
+    486                   {
+    487                     ChgTemp_cnt = 10;
+    488                     Bits_flag.Bit.ChgTemp = 1;
+    489                   }
+    490                 }
+    491                 else
+    492                 {
+    493                   ChgTemp_cnt = 0;
+    494                 }
+    495                //==========================充电温度保护恢复
+    496                if(Bits_flag.Bit.ChgTemp && (Temp_Val < ChgTempL_OFF) && (Temp_Val >ChgTempH_OFF))
+    497                {
+    498                    ChgTemp_cnt = 0;
+    499                    Bits_flag.Bit.ChgTemp = 0;
+    500                } 
+    501              }
+    502              else if(WorkMode == DISCHARGE_MODE)//(Bits_flag.Bit.Dis)
+    503              {
+    504                ChgTemp_cnt = 0;
+    505                if((Temp_Val > DisTempL_ON) || (Temp_Val < DisTempH_ON) || (DisTemp_cnt >= 10)) 
+    506                {
+    507                  if((DisTemp_cnt ++) >= 10)
+    508                  {
+    509                    DisTemp_cnt = 10;
+    510                    Bits_flag.Bit.DisTemp = 1;
+    511                  }
+    512                }
+    513                else
+    514                {
+    515                  DisTemp_cnt = 0;
+    516                }  
+    517                //==========================放电温度保护恢复
+    518                if(Bits_flag.Bit.DisTemp && (Temp_Val < DisTempL_OFF) && (Temp_Val > DisTempH_OFF))
+    519                {
+    520                  DisTemp_cnt = 0;
+    521                  Bits_flag.Bit.DisTemp = 0;
+    522                } 
+    523              }   
+    524              //====================================================
+    525              
+    526            if(SYS_STAT.Bit.DEVICE_XREADY)// || SYS_STAT.Bit.OVRD_ALERT)
+    527            {
+    528              Bits_flag.Bit.AfeErr = 1;
+    529            } 
+    530          }
+    531          //================================================================== 
+    532          //==================================================================
+    533          /*      SYS_STAT (0x00)/RESET:0x00
+    534                  BIT        7      6           5             4       3   2    1     0
+    535                  NAME   CC_READY  RSVD   DEVICE_XREADY   OVRD_ALERT  UV  OV  SCD   OCD
+    536          */
+    537          void CurrentCheck(void)
+    538          {  
+    539            if(WorkMode == CHARGE_MODE)
+    540            {
+    541              if(Current_Val > ChgCurOv_Val_SET)
+    542              {
+    543                if(ChgCurOv_t >= ChgCurOv_t_SET)
+    544                {
+    545                  ChgCurOv_t = ChgCurOv_t_SET;
+    546                  Bits_flag.Bit.ChgCurOv = 1;
+    547                }
+    548              }
+    549              else
+    550              {
+    551                ChgCurOv_t = 0;
+    552              } 
+    553              /*
+    554              if(0)//(Bits_flag.Bit.ChgCurOv && ChgCurOv_Re_t >= ChgCurOv_Re_t_SET)
+    555              {
+    556                ChgCurOv_t = 0; 
+    557                ChgCurOv_Re_t = 0;
+    558                Bits_flag.Bit.ChgCurOv = 0;
+    559              } */
+    560            }
+    561            else if(WorkMode == DISCHARGE_MODE)//9A,  15A
+    562            {
+    563              if(SYS_STAT.Bit.OCD || Current_Val > DisCurOv_2_Val_SET || (DisCurOv_t1 >= DisCurOv_t1_SET) || (DisCurOv_t1 >= DisCurOv_t1_SET))
+    564              {
+    565                if(SYS_STAT.Bit.OCD || (DisCurOv_t2 >= DisCurOv_t2_SET) || (DisCurOv_t1 >= DisCurOv_t1_SET))
+    566                {
+    567                  DisCurOv_t1 = DisCurOv_t1_SET;
+    568                  DisCurOv_t2 = DisCurOv_t2_SET;
+    569                  Bits_flag.Bit.DisCurOv = 1;
+    570                } 
+    571              }
+    572              else if(Current_Val > DisCurOv_1_Val_SET)//9A
+    573              { 
+    574                DisCurOv_t2 = 0;
+    575                if(DisCurOv_t1 >= DisCurOv_t1_SET)
+    576                {
+    577                  DisCurOv_t1 = DisCurOv_t1_SET; 
+    578                  Bits_flag.Bit.DisCurOv = 1;
+    579                }  
+    580              }
+    581              else
+    582              {
+    583                DisCurOv_t1 = 0;
+    584                DisCurOv_t2 = 0;
+    585              }
+    586              /*
+    587              if(Current_Val > DisCurOv_Val_SET || SYS_STAT.Bit.OCD || (DisCurOv_t >= DisCurOv_t_SET))
+    588              {
+    589                if(SYS_STAT.Bit.OCD || (DisCurOv_t >= DisCurOv_t_SET))
+    590                {
+    591                  DisCurOv_t = DisCurOv_t_SET; 
+    592                  Bits_flag.Bit.DisCurOv = 1;
+    593                } 
+    594              }
+    595              else
+    596              {
+    597                DisCurOv_t = 0;
+    598              }
+    599              */
+    600              /*
+    601              if(0)//(Bits_flag.Bit.DisCurOv)// && DisCurOv_Re_t >= DisCurOv_Re_t_SET)
+    602              {
+    603                //clear the OV bit by writing "1"
+    604                if(SYS_STAT.Bit.OCD)
+    605                {
+    606                  SYS_STAT_Last |= 0x01;
+    607                  I2C_Write(SYS_STAT_ADDR,SYS_STAT_Last);
+    608                  SYS_STAT_Last &= ~0x01;
+    609                }
+    610                DisCurOv_t = 0;
+    611                DisCurOv_Re_t = 0;
+    612                Bits_flag.Bit.DisCurOv = 0;
+    613              }*/
+    614              
+    615              //==========================短路检测
+    616              //if(WorkMode != CHARGE_MODE)
+    617              {
+    618                if( SYS_STAT.Bit.SCD )
+    619                {  
+    620                   Bits_flag.Bit.DisCurShort = 1; 
+    621                }
+    622                /*
+    623                if(Bits_flag.Bit.DisCurShort && DisCurShort_Re_t >= DisCurShort_Re_t_SET)
+    624                { 
+    625                  SYS_STAT_Last |= 0x02;   //clear the SCD bit by writing "1" 
+    626                  I2C_Write(SYS_STAT_ADDR,SYS_STAT_Last); 
+    627                  SYS_STAT_Last &= ~0x02;
+    628                  DisCurOv_Re_t = 0;
+    629                  SYS_STAT.Bit.SCD = 0;
+    630                  Bits_flag.Bit.DisCurShort =0;
+    631                }
+    632                */
+    633              }
+    634            }
+    635            
+    636            
+    637          }
+    638          //==================================================================
+    639          //==================================================================
+    640          /*      SYS_STAT (0x00)/RESET:0x00
+    641                  BIT        7      6           5             4       3   2    1     0
+    642                  NAME   CC_READY  RSVD   DEVICE_XREADY   OVRD_ALERT  UV  OV  SCD   OCD
+    643          */
+    644          void VoltCheck(void)
+    645          { 
+    646            static uint8_t First_Run_Flag = 0;
+    647            if(WorkMode == CHARGE_MODE)
+    648            {
+    649              if(Cell_Volt_Max >= CHG_OV_VAL_SET ||SYS_STAT.Bit.OV)
+    650              { 
+    651                if((ChgOv_t >= ChgOv_t_SET) ||SYS_STAT.Bit.OV)
+    652                {
+    653                  ChgOv_t = ChgOv_t_SET;
+    654                  Bits_flag.Bit.ChgOv = 1;
+    655                }
+    656              }
+    657              else
+    658              {
+    659                ChgOv_t =0;
+    660              }
+    661              
+    662              if(Bits_flag.Bit.ChgOv && Cell_Volt_Max < CHG_OV_RE_VAL_SET)// Cell_Volt_Avg < CHG_OV_RE_VAL_SET &&
+    663              {
+    664                //clear the OV bit by writing "1"
+    665                if(SYS_STAT.Bit.OV)
+    666                {
+    667                  SYS_STAT_Last |= 0x04;
+    668                  I2C_Write(SYS_STAT_ADDR,SYS_STAT_Last);
+    669                  SYS_STAT_Last &= ~0x04;
+    670                }
+    671                ChgOv_t = 0;
+    672                SYS_STAT.Bit.OV = 0;
+    673                Bits_flag.Bit.ChgOv = 0;
+    674              }
+    675                
+    676            }
+    677            else// if(WorkMode == DISCHARGE_MODE)
+    678            {
+    679              if(Dis_First_Run_Flag ==0 && WorkMode == DISCHARGE_MODE)
+    680              { 
+    681                if((Cell_Volt_Avg < 3300) || (Cell_Volt_Min < 3300) || SYS_STAT.Bit.UV)
+    682                {
+    683                  if(Dis_First_Run_t >= 100)
+    684                  {
+    685                    Dis_First_Run_t = 100;
+    686                    Bits_flag.Bit.DisOv = 1;
+    687                    Dis_First_Run_Flag  = 1;
+    688                  }
+    689                }
+    690                else 
+    691                {
+    692                  if(Dis_First_Run_t >= 50)
+    693                  {
+    694                    Dis_First_Run_t = 100; 
+    695                    Bits_flag.Bit.DisOv = 0;
+    696                    Dis_First_Run_Flag  = 1;
+    697                    DisOv_t = 0;
+    698                    //clear the UV bit by writing "1"
+    699                    if(SYS_STAT.Bit.UV)
+    700                    {
+    701                      SYS_STAT_Last |= 0x08;
+    702                      I2C_Write(SYS_STAT_ADDR,SYS_STAT_Last);
+    703                      SYS_STAT_Last &= ~0x08;
+    704                    }
+    705                  }
+    706                } 
+    707              } 
+    708          
+    709              if((Cell_Volt_Avg < DIS_UV_VAL_SET) ||(Cell_Volt_Min < DIS_UV_MIN_VAL_SET) || SYS_STAT.Bit.UV)// 
+    710              {
+    711                if((DisOv_t >= DisOv_t_SET) || SYS_STAT.Bit.UV)
+    712                {
+    713                  DisOv_t = DisOv_t_SET;
+    714                  Bits_flag.Bit.DisOv = 1;
+    715                }
+    716              }
+    717              else
+    718              {
+    719                DisOv_t = 0;
+    720              }
+    721              /*
+    722              if(Bits_flag.Bit.DisOv && Cell_Volt_Min >= DIS_UV_RE_VAL_SET)//Cell_Volt_Avg >= DIS_UV_RE_VAL_SET && 
+    723              {
+    724                //clear the UV bit by writing "1"
+    725                if(SYS_STAT.Bit.UV)
+    726                {
+    727                  SYS_STAT_Last |= 0x08;
+    728                  I2C_Write(SYS_STAT_ADDR,SYS_STAT_Last);
+    729                  SYS_STAT_Last &= ~0x08;
+    730                }
+    731                DisOv_t = 0;
+    732                SYS_STAT.Bit.UV = 0;
+    733                Bits_flag.Bit.DisOv = 0;
+    734              }
+    735              */
+    736            }
+    737          } 
+    738          //==========================================================================
+    739          void ModeCheck_Backup(void)
+    740          {    
+    741            static uint8_t ExchangeMode_Cnt = 0;
+    742            uint8_t FET_Status = 0;
+    743            if(SYS_CTRL2.Bit.DSG_ON || SYS_CTRL2.Bit.CHG_ON)//SYS_CTRL2_Last << 6 )
+    744            {
+    745              FET_Status = 0;
+    746            }
+    747            else
+    748            {
+    749              FET_Status = 1;
+    750            }
+    751            
+    752            if(!IS_SIGNAL_IN())
+    753            {
+    754              if(ExchangeMode_Cnt > 0)
+    755              {
+    756                ExchangeMode_Cnt -= 1;
+    757              }
+    758              else 
+    759              { 
+    760                WorkMode = IDLE_MODE;
+    761              }
+    762            }
+    763            else
+    764            {
+    765              
+    766            if((WorkMode == IDLE_MODE && FET_Status == 1 && IS_CHG_DETECT()) || CC_Val >= 5)
+    767            { 
+    768              if(ExchangeMode_Cnt > 20)
+    769              {
+    770                ExchangeMode_Cnt -= 1;
+    771              }
+    772              else if(ExchangeMode_Cnt < 20)
+    773              {
+    774                ExchangeMode_Cnt += 1;
+    775              }
+    776              else
+    777              { 
+    778                ExchangeMode_Cnt = 20;
+    779                WorkMode = CHARGE_MODE;
+    780                DisOv_t = 0;  
+    781                DisCurOv_t = 0;  
+    782                DisCurOv_Re_t = 0; 
+    783                PowerOff_Delay_t = 0;
+    784              }
+    785            } 
+    786            //else if ((WorkMode == IDLE_MODE && FET_Status == 1 && (IS_LOAD_DETECT() || SYS_CTRL1.Bit.LOAD_PRESENT)) || Current_Val >= 2)//|| || IS_SIGNAL_IN()) IS_SIGNAL_IN() )//IS_LOAD_DETECT())
+    787            else if ((WorkMode == IDLE_MODE && FET_Status == 1 && IS_LOAD_DETECT()) || Current_Val >= 2)//|| || IS_SIGNAL_IN()) IS_SIGNAL_IN() )//IS_LOAD_DETECT())
+    788            { 
+    789              if(ExchangeMode_Cnt > 10)
+    790              {
+    791                ExchangeMode_Cnt -= 1;
+    792              }
+    793              else if(ExchangeMode_Cnt < 10)
+    794              {
+    795                ExchangeMode_Cnt += 1;
+    796              }
+    797              else
+    798              { 
+    799                ExchangeMode_Cnt = 10;
+    800                WorkMode = DISCHARGE_MODE;
+    801                ChgOv_t = 0; 
+    802                ChgCurOv_t = 0; 
+    803                ChgCurOv_Re_t = 0; 
+    804              }
+    805            } 
+    806            }/*
+    807            else if(WorkMode != IDLE_MODE && SYS_CTRL2.Bit.CHG_ON && SYS_CTRL2.Bit.DSG_ON)// 负载接上，小电流或无电流时，关闭CHG_ON，来检测LOAD_PRESENT
+    808            { 
+    809              SYS_CTRL2_Last &= ~0x03; 
+    810              I2C_Write(SYS_CTRL2_ADDR,SYS_CTRL2_Last);
+    811              Delay_ms(20);
+    812              I2C_Read(SYS_CTRL1_ADDR,&SYS_CTRL1_Last); 
+    813              SYS_CTRL1.Byte = SYS_CTRL1_Last;
+    814              if(SYS_CTRL1.Bit.LOAD_PRESENT) 
+    815              { 
+    816                SYS_CTRL2_Last |= 0x03; 
+    817                I2C_Write(SYS_CTRL2_ADDR,SYS_CTRL2_Last);
+    818              } 
+    819              else
+    820              {
+    821                ExchangeMode_Cnt = 0;
+    822                WorkMode = IDLE_MODE; 
+    823              } 
+    824            }
+    825            else 
+    826            {
+    827              if(ExchangeMode_Cnt > 0)
+    828              {
+    829                ExchangeMode_Cnt -= 1;
+    830              }
+    831              else 
+    832              { 
+    833                WorkMode = IDLE_MODE;
+    834              }
+    835            }  */
+    836            //===========================================
+    837            if(WorkMode == CHARGE_MODE)
+    838            {
+    839                Bits_flag.Bit.DisOv = 0;
+    840                Bits_flag.Bit.DisCurShort = 0;
+    841                Bits_flag.Bit.DisCurOv = 0;
+    842                Bits_flag.Bit.DisTemp = 0;
+    843            }
+    844            else
+    845            {
+    846                Bits_flag.Bit.ChgOv = 0;
+    847                Bits_flag.Bit.ChgCurOv = 0;
+    848                Bits_flag.Bit.ChgTemp = 0;
+    849            }
+    850          }  
+    851          
+    852          //==========================================================================
+    853          void ModeCheck(void)
+    854          {     
+    855            static uint8_t Afe_CC_Disable_Lock = 0;
+    856            uint8_t FET_Status = 0;
+    857            /*
+    858            if(SYS_CTRL2.Bit.DSG_ON || SYS_CTRL2.Bit.CHG_ON)//SYS_CTRL2_Last << 6 )
+    859            {
+    860              FET_Status = 0;
+    861            }
+    862            else
+    863            {
+    864              FET_Status = 1;
+    865            }
+    866            */
+    867            //if((FET_Status == 1 && IS_CHG_DETECT()) || CC_Val >= 10)
+    868            if(IS_CHG_DETECT() || CC_Val >= 10)
+    869            {  
+    870              if(ChgExchangeMode_Cnt >= 50)
+    871              { 
+    872                ChgExchangeMode_Cnt = 100;
+    873                DisExchangeMode_Cnt = 0;
+    874                IdleExchangeMode_Cnt = 0;
+    875                WorkMode = CHARGE_MODE;
+    876              }
+    877            } 
+    878            //else if ((FET_Status == 1 && (IS_LOAD_DETECT() || SYS_CTRL1.Bit.LOAD_PRESENT)) || Current_Val >= 20 || IS_SIGNAL_IN()) 
+    879            else if(IS_SIGNAL_IN()) // (FET_Status == 1 && (IS_LOAD_DETECT() || SYS_CTRL1.Bit.LOAD_PRESENT)) || Current_Val >= 20 || 
+    880            {  
+    881              if(DisExchangeMode_Cnt >= 100)
+    882              { 
+    883                IdleExchangeMode_Cnt = 0;
+    884                ChgExchangeMode_Cnt = 0;
+    885                DisExchangeMode_Cnt = 100; 
+    886                WorkMode = DISCHARGE_MODE;
+    887              }
+    888            }/* 
+    889            else if(WorkMode == DISCHARGE_MODE && SYS_CTRL2.Bit.CHG_ON && SYS_CTRL2.Bit.DSG_ON)// 负载接上，小电流或无电流时，关闭CHG_ON，来检测LOAD_PRESENT
+    890            { 
+    891              SYS_CTRL2_Last &= ~0x03; 
+    892              I2C_Write(SYS_CTRL2_ADDR,SYS_CTRL2_Last);
+    893              Delay_ms(20);
+    894              I2C_Read(SYS_CTRL1_ADDR,&SYS_CTRL1_Last); 
+    895              SYS_CTRL1.Byte = SYS_CTRL1_Last;
+    896              if(SYS_CTRL1.Bit.LOAD_PRESENT) 
+    897              { 
+    898                SYS_CTRL2_Last |= 0x03; 
+    899                I2C_Write(SYS_CTRL2_ADDR,SYS_CTRL2_Last);
+    900              } 
+    901              else
+    902              {
+    903                ExchangeMode_Cnt = 0;
+    904                WorkMode = IDLE_MODE;  
+    905              } 
+    906            } */
+    907            else 
+    908            { 
+    909              if(IdleExchangeMode_Cnt >= 100)
+    910              { 
+    911                IdleExchangeMode_Cnt = 100;
+    912                ChgExchangeMode_Cnt = 0;
+    913                DisExchangeMode_Cnt = 0;
+    914                WorkMode = IDLE_MODE;
+    915              }
+    916            }
+    917            
+    918            //=================================
+    919            if(WorkMode == IDLE_MODE)
+    920            {
+    921                Afe_CC_Disable();
+    922                Afe_CC_Disable_Lock = 0;
+    923            }
+    924            else
+    925            {
+    926              if(Afe_CC_Disable_Lock == 0)
+    927              {
+    928                Afe_CC_1Shot_Set(); 
+    929                Afe_CC_Disable_Lock = 1;
+    930              }
+    931            }
+    932          }
+    933          
+    934            //===========================================
+    935          void ClearStatus(void)
+    936          {
+    937            if(WorkMode == CHARGE_MODE)
+    938            {  
+    939              LowPower_MCU_Entry_Flag = 0;
+    940              Dis_First_Run_Flag = 0;
+    941              Dis_First_Run_t = 0;
+    942                DisOv_t = 0;  
+    943                //DisCurOv_t = 0;  
+    944                //DisCurOv_Re_t = 0; 
+    945                PowerOff_Delay_t = 0;
+    946                 
+    947                Bits_flag.Bit.DisTemp = 0;
+    948                //Bits_flag.Bit.DisCurShort = 0; 
+    949                
+    950                if(Bits_flag.Bit.DisOv || SYS_STAT.Bit.UV)
+    951                { 
+    952                  if(SYS_STAT.Bit.UV)  //clear the UV bit by writing "1"
+    953                  {
+    954                    SYS_STAT_Last |= 0x08;
+    955                    I2C_Write(SYS_STAT_ADDR,SYS_STAT_Last);
+    956                    SYS_STAT_Last &= ~0x08;
+    957                  }  
+    958                  Bits_flag.Bit.DisOv = 0;
+    959                }
+    960               /* if(Bits_flag.Bit.DisCurOv || SYS_STAT.Bit.OCD) 
+    961                { 
+    962                  if(SYS_STAT.Bit.OCD)  //clear the OV bit by writing "1"
+    963                  {
+    964                    SYS_STAT_Last |= 0x01;
+    965                    I2C_Write(SYS_STAT_ADDR,SYS_STAT_Last);
+    966                    SYS_STAT_Last &= ~0x01;
+    967                  }
+    968                  Bits_flag.Bit.DisCurOv = 0;
+    969                } */
+    970            }/*
+    971            else if(WorkMode == DISCHARGE_MODE)
+    972            {
+    973                ChgOv_t = 0; 
+    974                ChgCurOv_t = 0; 
+    975                ChgCurOv_Re_t = 0; 
+    976                 
+    977                Bits_flag.Bit.ChgCurOv = 0;
+    978                Bits_flag.Bit.ChgTemp = 0;
+    979                if(Bits_flag.Bit.ChgOv || SYS_STAT.Bit.OV)
+    980                { 
+    981                  if(SYS_STAT.Bit.OV)  //clear the UV bit by writing "1"
+    982                  {
+    983                    SYS_STAT_Last |= 0x04;
+    984                    I2C_Write(SYS_STAT_ADDR,SYS_STAT_Last);
+    985                    SYS_STAT_Last &= ~0x04;
+    986                  }  
+    987                  Bits_flag.Bit.ChgOv = 0;
+    988                }
+    989            }*/
+    990            else if(WorkMode == IDLE_MODE)
+    991            {   
+    992              Dis_First_Run_Flag = 0;
+    993              Dis_First_Run_t = 0;
+    994              //if(Bits_flag.Bit.ChgCurOv)// && ChgCurOv_Re_t >= ChgCurOv_Re_t_SET)
+    995              {
+    996                ChgCurOv_t = 0; 
+    997                DisCurOv_t1 = 0;
+    998                DisCurOv_t2 = 0;
+    999                ChgCurOv_Re_t = 0;
+   1000                Bits_flag.Bit.ChgCurOv = 0;
+   1001              } 
+   1002              //=========================================================
+   1003              DisCurShort_Re_t = 0;
+   1004              if(Bits_flag.Bit.DisCurShort  || SYS_STAT.Bit.SCD) 
+   1005              { 
+   1006                SYS_STAT_Last |= 0x02;
+   1007                I2C_Write(SYS_STAT_ADDR,SYS_STAT_Last); //clear the SCD bit by writing "1" 
+   1008                SYS_STAT_Last &= ~0x02;
+   1009                Afe_SCD_Set(SCD_THREHOLD_VAL_SET, SCD_DELAY_SET);
+   1010                DisCurOv_Re_t = 0;
+   1011                SYS_STAT.Bit.SCD = 0;
+   1012                Bits_flag.Bit.DisCurShort = 0;
+   1013              }
+   1014              //=========================================================
+   1015              if(Bits_flag.Bit.DisCurOv || SYS_STAT.Bit.OCD) 
+   1016              { 
+   1017                if(SYS_STAT.Bit.OCD)  //clear the OV bit by writing "1"
+   1018                {
+   1019                  SYS_STAT_Last |= 0x01;
+   1020                  I2C_Write(SYS_STAT_ADDR,SYS_STAT_Last);
+   1021                  SYS_STAT_Last &= ~0x01;
+   1022                  Afe_OCD_Set(OCD_THREHOLD_VAL_SET, OCD_DELAY_SET);
+   1023                }
+   1024                Bits_flag.Bit.DisCurOv = 0;
+   1025              } 
+   1026              //=========================================================
+   1027              DisCurOv_t = 0;
+   1028              DisCurOv_Re_t = 0;
+   1029              Bits_flag.Bit.ChgOv = 0;
+   1030              Bits_flag.Bit.ChgCurOv = 0;
+   1031              Bits_flag.Bit.ChgTemp = 0;
+   1032               
+   1033            }
+   1034            else
+   1035            { 
+   1036              LowPower_MCU_Entry_Flag = 0; 
+   1037            }
+   1038          }  
+   1039          //==========================================================================
+   1040            /*The ADC transfer function is a linear equation defined as follows:
+   1041              V(cell) = GAIN x ADC(cell) + OFFSET
+   1042              If the DEVICE_XREADY is set, the voltage register values from the device should not be used. If
+   1043            */ 
+   1044          void Afe_Volt_Val_Get(void)
+   1045          { 
+   1046            uint8_t i = 0;
+   1047            uint16_t volt_sum = 0;
+   1048            uint16_t volt_max = 0;
+   1049            uint16_t volt_min = 0xFFFF;
+   1050            //====================================250mS
+   1051            if(Cell_Volt_Sample_Cnt >= 26)
+   1052            {
+   1053              Cell_Volt_Sample_Cnt = 0;
+   1054              for(i =0;i< 20;i += 2)
+   1055              {  
+   1056                Adc_value[i/2] = Afe_Get_Adc((VC1_HI_ADDR + i)) & 0x3FFF; //VC1_HI_ADDR =0x0C
+   1057                Cell_Volt[i/2] = (uint16_t)((uint32_t)ADCGain_Val *Adc_value[i/2]/1000) + ADCOffset_Val;
+   1058                volt_sum += Cell_Volt[i/2];
+   1059                if(Cell_Volt[i/2] < volt_min)
+   1060                {
+   1061                   volt_min = Cell_Volt[i/2];
+   1062                }
+   1063                if(Cell_Volt[i/2] > volt_max)
+   1064                {
+   1065                   volt_max = Cell_Volt[i/2];
+   1066                }
+   1067              } 
+   1068              Cell_Volt_Tol = volt_sum; 
+   1069              Cell_Volt_Avg = Cell_Volt_Tol/10; 
+   1070              Cell_Volt_Max = volt_max; 
+   1071              Cell_Volt_Min = volt_min; 
+   1072                
+   1073            }
+   1074            //====================================250mS
+   1075            /*  Once converted to digital form, each cell voltage is added up and the summation result stored in the BAT
+   1076                registers. This 16-bit value has a nominal LSB of 1.532 mV. */
+   1077            //Pack_Volt = (uint16_t)((uint32_t)4 *ADCGain_Val *Afe_Get_Adc(BAT_HI_ADDR)/1000+(10 *ADCOffset_Val));
+   1078            //Pack_Volt = (uint16_t)((uint32_t)1532 *Afe_Get_Adc(BAT_HI_ADDR)/1000);
+   1079            
+   1080            //====================================250mS
+   1081            //Positive values are charge current; negative values are discharge current.
+   1082            //an average over the 250-ms integration period.
+   1083            /*Why does the CC value read not change when I set the CC_ONESHOT bit?
+   1084                  The CC_READY bit must be cleared before the CC_ONESHOT bit is set. Note also that the CC_EN bit
+   1085                  should be cleared or a CC conversion may already be in progress.
+   1086              The full scale range of the CC is ± 270 mV, with a max recommended input range of ± 200 mV, thus yielding an LSB of approximately 8.44 μV.
+   1087              The following equation shows how to convert the 16-bit CC reading into an analog voltage if no boardlevel calibration is performed:
+   1088              CC Reading (in μV) = [16-bit 2’s Complement Value] × (8.44 μV/LSB) 
+   1089            */
+   1090            if( SYS_STAT.Bit.CC_READY) //CC_Volt_Sample_Cnt >= 23 &&
+   1091            {
+   1092              CC_Volt_Sample_Cnt = 0;
+   1093              SYS_STAT.Bit.CC_READY = 0;
+   1094              CC_AD = Afe_Get_Adc(CC_HI_ADDR); 
+   1095              //CC_Val = (int32_t)CC_AD * 820/100; //mA (int32_t)
+   1096              CC_Val = (int32_t)820 * CC_AD /100; //mA (int32_t)
+   1097              //SYS_STAT_Last |= 0x80;
+   1098              //I2C_Write(SYS_STAT_ADDR,SYS_STAT_Last); 
+   1099              //SYS_STAT_Last &= ~0x80;
+   1100              Afe_CC_1Shot_Set();
+   1101              if(CC_Val < -32000)
+   1102              {
+   1103                CC_Val = -32000;
+   1104              }
+   1105              else if(CC_Val > 32000)
+   1106              {
+   1107                CC_Val = 32000;
+   1108              }
+   1109              Current_Val = CC_Val;
+   1110              if(CC_Val < 0)
+   1111              {
+   1112                Current_Val = -CC_Val;
+   1113              }
+   1114            }
+   1115            //====================================2S 
+   1116            if(Temp_Volt_Sample_Cnt >= 210)
+   1117            {
+   1118              //V_TS2_Val = (uint16_t)((uint32_t)(382 * ((uint16_t)adcval <<8 | tmpval))/1000);//mV
+   1119              V_TS2_Val = Afe_Get_Adc(TS2_HI_ADDR) &0x3FFF ;
+   1120              V_TS2_Val = (uint16_t)(((uint32_t)382 * V_TS2_Val /1000));  //mV
+   1121              V_TS2_Val = (uint16_t)(((uint32_t)1024 * V_TS2_Val /3300));  //mV
+   1122              //R_TS2_Val = (uint16_t)((uint32_t)10000 * V_TS2_Val)/(3300 - V_TS2_Val); 
+   1123            }
+   1124            //=====================================================================================
+   1125            
+   1126          }
+   1127           
+   1128          //==========================================================================
+   1129          /*
+   1130            turn on condition  :    >4.0V && deltaVolt >200mV
+   1131            turn off condition :   over charge assert the charging protection
+   1132          */ 
+   1133          void CellBal_Cntrl(void)
+   1134          {
+   1135            uint8_t i = 0;
+   1136            if(WorkMode == CHARGE_MODE)
+   1137            {
+   1138              if(Cell_Balance_Delay_t >= 100)
+   1139              {
+   1140                Cell_Balance_Delay_t = 0;
+   1141                if((Cell_Volt_Max >= CELLBALANCE_BEGIN_VAL) && ((Cell_Volt_Max - Cell_Volt_Min) >= CELLBALANCE_DELTA_VAL) && !Bits_flag.Bit.ChgOv && !Bits_flag.Bit.ChgTemp && !Bits_flag.Bit.ChgCurOv)
+   1142                {
+   1143                  CellBal_Cntrl_Lock = 1;
+   1144                  for(i =0; i <10; i++)
+   1145                  {
+   1146                    if(Cell_Volt[i] > CELLBALANCE_BEGIN_VAL && ((Cell_Volt[i] - Cell_Volt_Min) >= CELLBALANCE_DELTA_VAL))
+   1147                    {   
+   1148                      CellBalance_Cur_Selct |= (0x0001 << i); 
+   1149                    }
+   1150                    else
+   1151                    {
+   1152                      CellBalance_Cur_Selct &= ~(0x0001 << i);
+   1153                    }
+   1154                  }  
+   1155                  CellBalance_Selct = 0x0000;
+   1156                  //===================================
+   1157                  for(i =0; i <10; i++ )
+   1158                  {
+   1159                    if((CellBalance_Cur_Selct &(0x0001 <<i)))
+   1160                    {
+   1161                      CellBalance_Selct |=(0x0001 <<i);
+   1162                      if(4 != i)
+   1163                      {
+   1164                        i +=1; 
+   1165                      }
+   1166                    }  
+   1167                  } 
+   1168                  Afe_CellBalance_Enable(CellBalance_Selct);
+   1169                } 
+   1170                else if(CellBal_Cntrl_Lock ==1)
+   1171                { 
+   1172                  Afe_CellBalance_Disable();
+   1173                } 
+   1174              }
+   1175            }
+   1176            else if(CellBal_Cntrl_Lock ==1)
+   1177            {
+   1178                Afe_CellBalance_Disable();
+   1179            }
+   1180          }
+   1181           
+   1182          //==========================================================================
+   1183          /*
+   1184          1、充电模式：有异常时，电流异常（LED1及LED2闪烁，周期为1秒），温度异常（LED1、LED2及LED3闪烁，周期为1秒）
+   1185                       无异常时，低节电量LED常亮，高节电量的LED闪烁，T = 1s
+   1186                          0%----30%     LED1闪烁
+   1187                          30%---65%     LED1常亮、LED2闪烁
+   1188                          65%---90%     LED1、LED2常亮、LED3闪烁
+   1189                          90%           LED全亮
+   1190                       
+   1191          2、放电模式：有异常时，电流异常（LED1及LED2闪烁，周期为1秒），温度异常（LED1、LED2及LED3闪烁，周期为1秒）
+   1192                       无异常时，显示当前电量
+   1193                          15%           LED1闪烁 1Hz
+   1194                          15%---35%     LED1常亮
+   1195                          35%---85%     LED1、LED2常亮
+   1196                          85%           LED全亮
+   1197          */  
+   1198          void LedShow_Cntrl(void)
+   1199          {
+   1200            // soc 显示
+   1201            // 异常后，报警5s后，熄灭
+   1202            if(WorkMode == IDLE_MODE)
+   1203            {
+   1204              LED1_OFF();
+   1205              LED2_OFF(); 
+   1206              LED3_OFF(); 
+   1207            }
+   1208            else
+   1209            { 
+   1210              if(WorkMode == CHARGE_MODE)
+   1211              {
+   1212                /*
+   1213                if(Bits_flag.Bit.ChgCurOv)
+   1214                {
+   1215                  LED1_OFF();
+   1216                  if(LedFlash_t >= 50)
+   1217                  {
+   1218                    LED2_XOR();
+   1219                    LedFlash_t = 0;
+   1220                  } 
+   1221                  LED3_OFF();  
+   1222                }
+   1223                else if(Bits_flag.Bit.ChgTemp)
+   1224                {
+   1225                  LED1_OFF();
+   1226                  LED2_OFF();  
+   1227                  if(LedFlash_t >= 50)
+   1228                  {
+   1229                    LED3_XOR();
+   1230                    LedFlash_t = 0;
+   1231                  } 
+   1232                }
+   1233                else */
+   1234                if(Bits_flag.Bit.ChgOv )//|| SocCalc.soc_rt >= 90)
+   1235                {
+   1236                  LED1_OFF();
+   1237                  LED2_OFF(); 
+   1238                  LED3_ON(); 
+   1239                } 
+   1240                else if(SocCalc.soc_rt >= 80)  // 65%---90%     LED1、LED2常亮、LED3闪烁  
+   1241                {
+   1242                  LED1_OFF();
+   1243                  if(LedFlash_t < 50)
+   1244                  {
+   1245                    LED2_ON();
+   1246                    LED3_OFF(); 
+   1247                  } 
+   1248                  else if(LedFlash_t < 100)
+   1249                  {
+   1250                    LED2_OFF();
+   1251                    LED3_ON();
+   1252                  }
+   1253                  else
+   1254                  {
+   1255                    LedFlash_t = 0;
+   1256                  } 
+   1257                }
+   1258                else if(SocCalc.soc_rt >= 45 )//30%---65%     LED1常亮、LED2闪烁
+   1259                {
+   1260                  if(LedFlash_t < 50)
+   1261                  {
+   1262                    LED1_ON();
+   1263                    LED2_OFF(); 
+   1264                  } 
+   1265                  else if(LedFlash_t < 100)
+   1266                  {
+   1267                    LED1_OFF();
+   1268                    LED2_ON();
+   1269                  }
+   1270                  else
+   1271                  {
+   1272                    LedFlash_t = 0;
+   1273                  } 
+   1274                  LED3_OFF();
+   1275                }
+   1276                else //0%----30%     LED1闪烁
+   1277                { 
+   1278                  if(LedFlash_t >= 50)
+   1279                  {
+   1280                    LedFlash_t = 0;
+   1281                    LED1_XOR();
+   1282                  } 
+   1283                  LED2_OFF();
+   1284                  LED3_OFF();
+   1285                } 
+   1286              } 
+   1287              else if(WorkMode == DISCHARGE_MODE)
+   1288              { 
+   1289                /*
+   1290                if(Bits_flag.Bit.DisCurOv  || Bits_flag.Bit.DisCurShort)
+   1291                {
+   1292                  LED1_OFF();
+   1293                  if(LedFlash_t >= 50)
+   1294                  {
+   1295                    LED2_XOR();
+   1296                    LedFlash_t = 0;
+   1297                  } 
+   1298                  LED3_OFF();  
+   1299                }
+   1300                else if(Bits_flag.Bit.DisTemp)
+   1301                {
+   1302                  LED1_OFF();
+   1303                  LED2_OFF();  
+   1304                  if(LedFlash_t >= 50)
+   1305                  {
+   1306                    LED3_XOR();
+   1307                    LedFlash_t = 0;
+   1308                  } 
+   1309                }
+   1310                else */
+   1311                if(Bits_flag.Bit.DisOv)
+   1312                {
+   1313                  LED1_OFF();
+   1314                  LED2_OFF(); 
+   1315                  LED3_OFF(); 
+   1316                }
+   1317                else if(SocCalc.soc_rt >= 85)  //85%           LED全亮
+   1318                {
+   1319                  LED1_OFF();
+   1320                  LED2_OFF();
+   1321                  LED3_ON();
+   1322                }
+   1323                else if(SocCalc.soc_rt >= 35) //35%---85%     LED1、LED2常亮
+   1324                {
+   1325                  LED1_OFF();
+   1326                  LED2_ON();
+   1327                  LED3_OFF();
+   1328                }
+   1329                else if(SocCalc.soc_rt >= 15) //15%---35%     LED1常亮
+   1330                {
+   1331                  LED1_ON();
+   1332                  LED2_OFF();
+   1333                  LED3_OFF();
+   1334                }
+   1335                else                             //15%           LED1闪烁 1Hz
+   1336                {
+   1337                  if(LedFlash_t >= 100)
+   1338                  {
+   1339                    LedFlash_t = 0;
+   1340                    LED1_XOR();
+   1341                  }
+   1342                  LED2_OFF();
+   1343                  LED3_OFF();
+   1344                } 
+   1345              }
+   1346            }
+   1347          }
+   1348          
+   1349          void LedShow_WorkMode(void)
+   1350          {
+   1351            if(WorkMode == IDLE_MODE)
+   1352            {
+   1353              //LED1_XOR();
+   1354              LED1_ON();
+   1355              LED2_OFF(); 
+   1356              LED3_OFF(); 
+   1357            }
+   1358            else if(WorkMode == CHARGE_MODE)
+   1359            {
+   1360              LED1_OFF();
+   1361              //LED2_XOR(); 
+   1362              LED2_ON(); 
+   1363              LED3_OFF(); 
+   1364            }
+   1365            else if(WorkMode == DISCHARGE_MODE)
+   1366            {
+   1367              LED1_OFF();
+   1368              LED2_OFF(); 
+   1369              LED3_ON(); 
+   1370              //LED3_XOR(); 
+   1371            }
+   1372          }
+   1373          //==========================================================================
+   1374          void LowPower_Entry_MCU_Set(void)
+   1375          {   
+   1376            static uint8_t LowPower_Entry_Exit_Cnt = 0;
+   1377            if(WorkMode == IDLE_MODE && (LowPower_Entry_Delay_t >= 500 || LowPower_MCU_Entry_Flag == 1))
+   1378            { 
+   1379              //if(LowPower_MCU_Entry_Flag == 0)
+   1380              {
+   1381                 Afe_ADC_Disable(); Afe_Temp_Disable();  
+   1382              }
+   1383              CLK_PCKENR2 = CLK_PCKENR2_AWU;
+   1384              AWU_Init(AWU_TIMEBASE_1S); 
+   1385              CLK->ICKR |= CLK_ICKR_SWUAH;
+   1386              FLASH->CR1 |= 0x04;	  
+   1387              EXTI_SetExtIntSensitivity(EXTI_PORT_GPIOD, EXTI_SENSITIVITY_FALL_ONLY);//Signal_In下降沿触发
+   1388              ClrWdt();  
+   1389              LowPower_MCU_Entry_Flag = 1; 
+   1390              halt(); 
+   1391              ClrWdt();   
+   1392              Delay_ms(5); 
+   1393              //======================================
+   1394              if(LowPower_MCU_Entry_Flag == 1)
+   1395              {
+   1396                if((LowPower_Entry_Exit_Cnt ++) >= 100) 
+   1397                {
+   1398                  LowPower_MCU_Entry_Flag = 0;
+   1399                  LowPower_Entry_Exit_Cnt = 0;
+   1400                }
+   1401              }
+   1402              else
+   1403              {
+   1404                LowPower_Entry_Exit_Cnt = 0;
+   1405                CLK_PCKENR2 &= ~CLK_PCKENR2_AWU; 
+   1406                CLK->ICKR &= ~CLK_ICKR_SWUAH; 
+   1407                Afe_ADC_Enable(); Afe_Temp_Enable();Delay_ms(10); 
+   1408              } 
+   1409              //=============================================
+   1410              LowPower_Entry_Delay_t = 0; 
+   1411            }
+   1412          } 
+   1413          //==========================================================================
+   1414          void LowPower_Entry_MCU_Set_Backup(void)
+   1415          {   
+   1416            if(WorkMode == IDLE_MODE && LowPower_Entry_Delay_t >= 600 && !Bits_flag.Bit.DisOv)
+   1417            { 
+   1418              Afe_ADC_Disable();
+   1419              Afe_Temp_Disable();  
+   1420              CLK_PCKENR2 = CLK_PCKENR2_AWU;
+   1421              AWU_Init(AWU_TIMEBASE_12S);//AWU_TIMEBASE_30S); 
+   1422              CLK->ICKR |= CLK_ICKR_SWUAH;
+   1423              FLASH->CR1 |= 0x04;	  
+   1424              EXTI_SetExtIntSensitivity(EXTI_PORT_GPIOD, EXTI_SENSITIVITY_FALL_ONLY);//Signal_In下降沿触发
+   1425              LowPower_MCU_Entry_Flag = 1; 
+   1426              halt(); 
+   1427               
+   1428              LowPower_Entry_Delay_t = 0;
+   1429               
+   1430              Delay_ms(100); 
+   1431              CLK_PCKENR2 &= ~CLK_PCKENR2_AWU; 
+   1432              CLK->ICKR &= ~CLK_ICKR_SWUAH;
+   1433              //LowPower_Exit_MCU_Set();
+   1434              Afe_ADC_Enable(); 
+   1435              Afe_Temp_Enable();
+   1436            }
+   1437          } 
+   1438          void LowPower_Exit_MCU_Set(void)
+   1439          {   
+   1440          } 
+   1441          void LowPower_Powerdown_Enter(void)
+   1442          {
+   1443            if(PowerOff_Delay_t >= PowerOff_Delay_t_SET)
+   1444            {
+   1445              while(1)
+   1446              { 
+   1447                Afe_EnterShipMode(); 
+   1448                Delay_ms(1000);
+   1449              } 
+   1450            }  
+   1451          }
+   1452          //==============================================================================
+   1453          void LowPower_Cntrl(void)
+   1454          { 
+   1455            if(LowPower_MCU_Entry_Flag ==0)//(0)//
+   1456            {
+   1457              if(!SYS_CTRL1.Bit.ADC_EN) 
+   1458              { 
+   1459                Afe_ADC_Enable(); 
+   1460              }
+   1461              if(!SYS_CTRL1.Bit.TEMP_SEL )
+   1462              {
+   1463                Afe_Temp_Enable();
+   1464              }
+   1465            }
+   1466            if(WorkMode == CHARGE_MODE)
+   1467            {
+   1468              return;
+   1469            }
+   1470            if(Bits_flag.Bit.DisOv)  
+   1471            {
+   1472              if(!SYS_CTRL2.Bit.DSG_ON && !SYS_CTRL2.Bit.CHG_ON )  
+   1473              {
+   1474                LowPower_Powerdown_Enter();  
+   1475              }
+   1476            }
+   1477            else
+   1478            {
+   1479              LowPower_Entry_MCU_Set();  
+   1480            }
+   1481          }
+   1482          
+   1483          uint8_t CRC8_Caculate(uint8_t *ptr,uint8_t len)
+   1484          {
+   1485            uint8_t i;
+   1486          	
+   1487            uint8_t crc = 0;
+   1488          
+   1489            uint8_t key = 0x07; //_Poly_07
+   1490            while((len--) != 0)
+   1491          	
+   1492            {
+   1493          		
+   1494              for(i = 0x80; i != 0; i /= 2)
+   1495          		
+   1496              {
+   1497          			
+   1498                if((crc & 0x80) != 0)
+   1499          			
+   1500                {
+   1501          				
+   1502                  crc *= 2;
+   1503          				
+   1504                  crc ^= key;
+   1505          			
+   1506                }
+   1507          			
+   1508                else
+   1509          				
+   1510                {
+   1511                  crc *= 2;
+   1512          
+   1513                }
+   1514          			
+   1515                if((*ptr & i) != 0)
+   1516          				
+   1517                {
+   1518                  crc ^= key;
+   1519                }
+   1520          		
+   1521              }
+   1522          		
+   1523              ptr++;
+   1524          	
+   1525            }
+   1526            return (crc);
+   1527          
+   1528          } 
+   1529          
+   1530          
+   1531          //==========================================================================
+   1532          /*
+   1533          In a single-byte read transaction, the CRC is calculated after the second start and uses the slave address and data byte.
+   1534          */
+   1535          void I2C_Read(uint8_t addr,uint8_t *data)//slave device address 0x18
+   1536          {      
+   1537            uint16_t OverTimeDelay = OverTimeDelay_SET;
+   1538            uint8_t CRC_ReData,Retry_Cnt = 5; 
+   1539            Buf[0] = SLAVE_ADDR; 
+   1540            while(Retry_Cnt > 0)
+   1541            {
+   1542              //以下见stm8s中文数据手册P251（图96主设备发送模式发送序列图）  
+   1543              disableInterrupts(); 
+   1544              I2C->CR2 |= 0x04; //ack使能 
+   1545              //=============================发送起始位 I2C_Start() 
+   1546              while(I2C->SR3 & 0x02){if((OverTimeDelay --) == 0){OverTimeDelay = OverTimeDelay_SET;I2C_COM_ERROR_Flag = 1;break;}}    // 等待总线空闲   检测i2c-SR3 busy位        
+   1547              I2C->CR2 |= 0x01;        // 产生起始位     CR2 start位  
+   1548              
+   1549              //=============================发送器件地址 I2C_SendDAdr(0xD0)
+   1550              //EV5：SB=1，读SR1 然后将地址写入DR寄存器将清除该标志。  
+   1551              while(!(I2C->SR1 & 0x01));  //等待START发送完 E5  
+   1552              I2C->DR = (SLAVE_ADDR << 1) + 0x00;  //发送 器件地址(最后一位是0,表示发送) 
+   1553              
+   1554              while(!(I2C->SR1 & 0x02 == 0x02)){if((OverTimeDelay --) == 0){OverTimeDelay = OverTimeDelay_SET;break;}}// I2C_COM_ERROR_Flag = 1; //等特7位器件地址发送完并且收到ack,ADDR置1    
+   1555              //while(!(I2C->SR1 & 0x02));  //等特7位器件地址发送完并且收到ack,ADDR置1    
+   1556              //EV6:ADDR 在软件读取SR1后，对SR3寄存器读操作 将清除该位 
+   1557              I2C->SR1; //见P251 读SR1 (实验证明可以不要)  
+   1558              I2C->SR3; //然后读SR3 清  ADDR 
+   1559              
+   1560              if(I2C_COM_ERROR_Flag == 0)
+   1561              {
+   1562                //=============================DATA 发送寄存器地址 I2C_SendDat()  
+   1563                I2C->DR = (u8)(addr);      
+   1564                //EV8_2 TxE=1 ，BTF=1，产生停止条件时由硬件清除。   
+   1565                while(!(I2C->SR1 & 0x84));  //检测SR1: TXE1(数据寄存器为空"1") BTF(字节发送结束"1")位置(只有当stm8收到ack,TxE才会置1，其实这句相当于判断收到ack没有？)
+   1566                //在发送地址和清除ADDR 之后，I2C接口进入主设备接收模式。以下见stm8s中文数据手册P252（图97主设备接收模式接收序列图）  
+   1567                
+   1568                //=============================I2C_Start()        
+   1569                I2C->CR2 |= 0x01;  //产生重复起始位   
+   1570                //EV5：SB=1，读SR1 然后将地址写入DR寄存器将清除该标志。  
+   1571                while(!(I2C->SR1 & 0x01));  //等待START发送完     
+   1572                //ADDRESS (接收)   
+   1573                I2C->DR = (SLAVE_ADDR <<1) + 0x01;  //发送MLX90615器件地址(最后一位是1,表示接收)，发送完后自动发送ack(提前是CR2 ack位使能)      
+   1574                //EV6:ADDR 在软件读取SR1后，对SR3寄存器读操作 将清除改位   
+   1575                
+   1576                while(!(I2C->SR1 & 0x02 == 0x02)){if((OverTimeDelay --) == 0){OverTimeDelay = OverTimeDelay_SET;break;}} // I2C_COM_ERROR_Flag = 1;//等特7位器件地址发送完并且收到ack,ADDR置1    
+   1577                //while(!(I2C->SR1 & 0x02));  //等特7位器件地址发送完并且收到ack,ADDR置1  
+   1578                I2C->SR1; //见P251 读SR1 (实验证明可以不要)  
+   1579                I2C->SR3; //然后读SR3 清  ADDR   
+   1580                   Buf[0] = 0x31;  Buf[1] = 0;     Buf[2] = 0;           
+   1581                //测试EV7 RxNE=1（收到一个字节后RxNE置1） ，判断DR寄存器有数据    
+   1582                while(!(I2C->SR1 & 0x40));                                        
+   1583                Buf[1] = I2C->DR;//在接收模式下，收到完整字节后,自动发送ack(提前是CR2 ack位使能，不需要专门CR2 ack位置1)                                               
+   1584                 
+   1585               
+   1586                
+   1587                //测试EV7 RxNE=1（收到一个字节后RxNE置1） ，判断DR寄存器有数据    
+   1588                while(!(I2C->SR1 & 0x40));                                        
+   1589                Buf[2] = I2C->DR;//在接收模式下，收到完整字节后,自动发送ack(提前是CR2 ack位使能，不需要专门CR2 ack位置1)  
+   1590                  //EV7_1 ：RxNE=1 ，读DR寄存器清除该标志。设置ACK=0和STOP 请求。(在接收最后一个字节前)     
+   1591                I2C->SR3;
+   1592                I2C->DR; 
+   1593                I2C->CR2 &= ~0x04; //ack使能  
+   1594                I2C->CR2 |= 0x02;  //停止位产生stop      
+   1595                 
+   1596                enableInterrupts(); 
+   1597                //while((I2C->CR2 & I2C_CR2_STOP));
+   1598                CRC_ReData = CRC8_Caculate(Buf,2);
+   1599                /*Uart_SendByte(0x11);
+   1600                Uart_SendByte(Buf[0]);
+   1601                Uart_SendByte(Buf[1]);
+   1602                Uart_SendByte(Buf[2]);*/
+   1603                if(CRC_ReData == Buf[2])
+   1604                {
+   1605                  *data = Buf[1];
+   1606                  OverTimeDelay = 200; while((OverTimeDelay --) >0);
+   1607                  return;
+   1608                }
+   1609              }
+   1610              I2C_COM_ERROR_Flag = 0;
+   1611              Retry_Cnt -= 1;
+   1612            }
+   1613            enableInterrupts(); 
+   1614            //Uart_SendByte(0xDD);
+   1615            //Uart_SendByte(0xDD);
+   1616          }
+   1617          
+   1618          //==========================================================================
+   1619          /*
+   1620          In a single-byte write transaction, the CRC is calculated over the slave address, register address, and data.
+   1621          */
+   1622          void I2C_Write(uint8_t addr,uint8_t data )
+   1623          {     
+   1624            uint8_t Write_Retry_Cnt = 5,CRC_data = 0;
+   1625            uint16_t OverTimeDelay = OverTimeDelay_SET;
+   1626            Buf[0] = SLAVE_ADDR <<1 ;
+   1627            Buf[1] = addr;
+   1628            Buf[2] = data;
+   1629            CRC_data = CRC8_Caculate(Buf,3);//slave_addr + reg_addr + data + CRC
+   1630            I2C_COM_ERROR_Flag =0;
+   1631            
+   1632            while(Write_Retry_Cnt > 0)
+   1633            { 
+   1634              disableInterrupts();
+   1635              I2C_CR2 |= 0x04;
+   1636              //以下见stm8s中文数据手册P251（图96主设备发送模式发送序列图） 
+   1637              //=============================发送起始位 I2C_Start() 
+   1638              while(I2C->SR3 & 0x02) {if((OverTimeDelay --) == 0){OverTimeDelay = 500;I2C_COM_ERROR_Flag = 1;break;}}//   // 等待总线空闲   检测i2c-SR3 busy位
+   1639              //I2C_CR2 &= ~0x04;        
+   1640              I2C->CR2 |= 0x01;        // 产生起始位     CR2 start位    
+   1641              //=============================发送器件地址 I2C_SendDAdr(0xD0)
+   1642              //EV5：SB=1，读SR1 然后将地址写入DR寄存器将清除该标志。  
+   1643              while(!(I2C->SR1 & 0x01));// {if((OverTimeDelay --) == 0){OverTimeDelay = 50;I2C_COM_ERROR_Flag = 1;break;}} //等待START发送完 E5  
+   1644              
+   1645              I2C->DR = (SLAVE_ADDR <<1) + 0x00;  //发送 器件地址(最后一位是0,表示发送) 
+   1646              
+   1647              OverTimeDelay = 100; while((OverTimeDelay --) >0);OverTimeDelay = OverTimeDelay_SET;
+   1648              //while(!(I2C->SR1 & 0x02 == 0x02)) {if((OverTimeDelay --) == 0){OverTimeDelay = OverTimeDelay_SET;I2C_COM_ERROR_Flag = 0;break;}} // //等特7位器件地址发送完并且收到ack,ADDR置1    
+   1649              //EV6:ADDR 在软件读取SR1后，对SR3寄存器读操作 将清除该位 
+   1650              I2C->SR1;   
+   1651              I2C->SR3; //然后读SR3 清  ADDR 
+   1652              if(I2C_COM_ERROR_Flag == 0)
+   1653              {
+   1654                //I2C_CR2 |= 0x04;
+   1655                //=============================DATA 发送寄存器地址 I2C_SendDat()  
+   1656                I2C->DR = (u8)(addr);      
+   1657                //EV8_2 TxE=1 ，BTF=1，产生停止条件时由硬件清除。   
+   1658                while(!(I2C->SR1 & 0x84));//84//0x80  //检测SR1: TXE1(数据寄存器为空"1") BTF(字节发送结束"1")位置(只有当stm8收到ack,TxE才会置1，其实这句相当于判断收到ack没有？)
+   1659                 
+   1660                //============================= 发送数据  
+   1661                I2C->DR = data;  //发送MLX90615器件地址(最后一位是1,表示接收)，发送完后自动发送ack(提前是CR2 ack位使能)    
+   1662                while(!(I2C->SR1 & 0x84));  //检测SR1: TXE1(数据寄存器为空"1") BTF(字节发送结束"1")位置(只有当stm8收到ack,TxE才会置1，其实这句相当于判断收到ack没有？)
+   1663                //EV8_2：TxE=1，BTF=1，产生停止条件时由硬件清除。  
+   1664                
+   1665                //============================= 发送数据  
+   1666                I2C->DR = CRC_data;    
+   1667                while(!(I2C->SR1 & 0x84));  //检测SR1: TXE1(数据寄存器为空"1") BTF(字节发送结束"1")位置(只有当stm8收到ack,TxE才会置1，其实这句相当于判断收到ack没有？)
+   1668                //EV8_2：TxE=1，BTF=1，产生停止条件时由硬件清除。  
+   1669                
+   1670                I2C->DR;  //清除I2C_SR2的BTF位
+   1671                I2C->CR2 |= 0x02;  //停止位产生stop  //*注意： 发送停止位时，必须先清除I2C_SR2的BTF位  
+   1672                
+   1673                enableInterrupts();
+   1674                OverTimeDelay = 200; while((OverTimeDelay --) >0);
+   1675                if(I2C_COM_ERROR_Flag == 0)
+   1676                {  
+   1677                  return;
+   1678                }
+   1679              }
+   1680              I2C_COM_ERROR_Flag = 0;
+   1681              Write_Retry_Cnt -= 1; 
+   1682            } 
+   1683            enableInterrupts();
+   1684            //Uart_SendByte(0xCC);
+   1685            //Uart_SendByte(0xCC);
+   1686          }
+   1687           
+   1688          void I2C_Read_Backup(uint8_t addr,uint8_t *data)//slave device address 0x18
+   1689          {      
+   1690            uint16_t OverTimeDelay = 50;
+   1691            uint8_t CRC_ReData,Retry_Cnt = 5; 
+   1692            Buf[0] = SLAVE_ADDR; 
+   1693            while(Retry_Cnt > 0)
+   1694            {
+   1695              //以下见stm8s中文数据手册P251（图96主设备发送模式发送序列图） 
+   1696              
+   1697              I2C->CR2 |= 0x04; //ack使能 
+   1698              //=============================发送起始位 I2C_Start() 
+   1699              while(I2C->SR3 & 0x02);//{if((OverTimeDelay --) == 0){OverTimeDelay = 50;break;}}    // 等待总线空闲   检测i2c-SR3 busy位        
+   1700              I2C->CR2 |= 0x01;        // 产生起始位     CR2 start位  
+   1701              
+   1702              //=============================发送器件地址 I2C_SendDAdr(0xD0)
+   1703              //EV5：SB=1，读SR1 然后将地址写入DR寄存器将清除该标志。  
+   1704              while(!(I2C->SR1 & 0x01));  //等待START发送完 E5  
+   1705              I2C->DR = (SLAVE_ADDR << 1) + 0x00;  //发送 器件地址(最后一位是0,表示发送) 
+   1706              
+   1707              while(!(I2C->SR1 & 0x02 == 0x02)){if((OverTimeDelay --) == 0){OverTimeDelay = 50;break;}}  //等特7位器件地址发送完并且收到ack,ADDR置1    
+   1708              //while(!(I2C->SR1 & 0x02));  //等特7位器件地址发送完并且收到ack,ADDR置1    
+   1709              //EV6:ADDR 在软件读取SR1后，对SR3寄存器读操作 将清除该位 
+   1710              I2C->SR1; //见P251 读SR1 (实验证明可以不要)  
+   1711              I2C->SR3; //然后读SR3 清  ADDR 
+   1712              
+   1713              //=============================DATA 发送寄存器地址 I2C_SendDat()  
+   1714              I2C->DR = (u8)(addr);      
+   1715              //EV8_2 TxE=1 ，BTF=1，产生停止条件时由硬件清除。   
+   1716              while(!(I2C->SR1 & 0x84));  //检测SR1: TXE1(数据寄存器为空"1") BTF(字节发送结束"1")位置(只有当stm8收到ack,TxE才会置1，其实这句相当于判断收到ack没有？)
+   1717              //在发送地址和清除ADDR 之后，I2C接口进入主设备接收模式。以下见stm8s中文数据手册P252（图97主设备接收模式接收序列图）  
+   1718              
+   1719              //=============================I2C_Start()        
+   1720              I2C->CR2 |= 0x01;  //产生重复起始位   
+   1721              //EV5：SB=1，读SR1 然后将地址写入DR寄存器将清除该标志。  
+   1722              while(!(I2C->SR1 & 0x01));  //等待START发送完     
+   1723              //ADDRESS (接收)   
+   1724              I2C->DR = (SLAVE_ADDR <<1) + 0x01;  //发送MLX90615器件地址(最后一位是1,表示接收)，发送完后自动发送ack(提前是CR2 ack位使能)      
+   1725              //EV6:ADDR 在软件读取SR1后，对SR3寄存器读操作 将清除改位   
+   1726              
+   1727            while(!(I2C->SR1 & 0x02 == 0x02)){if((OverTimeDelay --) == 0){OverTimeDelay = 50;break;}}  //等特7位器件地址发送完并且收到ack,ADDR置1    
+   1728            //while(!(I2C->SR1 & 0x02));  //等特7位器件地址发送完并且收到ack,ADDR置1  
+   1729              I2C->SR1; //见P251 读SR1 (实验证明可以不要)  
+   1730              I2C->SR3; //然后读SR3 清  ADDR   
+   1731                 Buf[0] = 0x31;  Buf[1] = 0;     Buf[2] = 0;           
+   1732              //测试EV7 RxNE=1（收到一个字节后RxNE置1） ，判断DR寄存器有数据    
+   1733              while(!(I2C->SR1 & 0x40));                                        
+   1734              Buf[1] = I2C->DR;//在接收模式下，收到完整字节后,自动发送ack(提前是CR2 ack位使能，不需要专门CR2 ack位置1)                                               
+   1735               
+   1736             
+   1737              
+   1738              //测试EV7 RxNE=1（收到一个字节后RxNE置1） ，判断DR寄存器有数据    
+   1739              while(!(I2C->SR1 & 0x40));                                        
+   1740              Buf[2] = I2C->DR;//在接收模式下，收到完整字节后,自动发送ack(提前是CR2 ack位使能，不需要专门CR2 ack位置1)  
+   1741                //EV7_1 ：RxNE=1 ，读DR寄存器清除该标志。设置ACK=0和STOP 请求。(在接收最后一个字节前)     
+   1742              I2C->SR3;
+   1743              I2C->DR; 
+   1744              I2C->CR2 &= ~0x04; //ack使能  
+   1745              I2C->CR2 |= 0x02;  //停止位产生stop      
+   1746               
+   1747              //while((I2C->CR2 & I2C_CR2_STOP));
+   1748              CRC_ReData = CRC8_Caculate(Buf,2);
+   1749              /*Uart_SendByte(0x11);
+   1750              Uart_SendByte(Buf[0]);
+   1751              Uart_SendByte(Buf[1]);
+   1752              Uart_SendByte(Buf[2]);*/
+   1753              if(CRC_ReData == Buf[2])
+   1754              {
+   1755                *data = Buf[1];
+   1756                OverTimeDelay =100; while((OverTimeDelay --) >0);
+   1757                return;
+   1758              }
+   1759              Retry_Cnt -= 1;
+   1760            } 
+   1761            //Uart_SendByte(0xAA);
+   1762          }
+   1763          
+   1764          void I2C_Write_Backup(uint8_t addr,uint8_t data )
+   1765          {     
+   1766            uint8_t Write_Retry_Cnt = 5,CRC_data = 0;
+   1767            uint16_t OverTimeDelay = 50;
+   1768            Buf[0] = SLAVE_ADDR <<1 ;
+   1769            Buf[1] = addr;
+   1770            Buf[2] = data;
+   1771            CRC_data = CRC8_Caculate(Buf,3);//slave_addr + reg_addr + data + CRC
+   1772            
+   1773            while(Write_Retry_Cnt > 0)
+   1774            {
+   1775              I2C_CR2 |= 0x04;
+   1776              //以下见stm8s中文数据手册P251（图96主设备发送模式发送序列图） 
+   1777              //=============================发送起始位 I2C_Start() 
+   1778              while(I2C->SR3 & 0x02);// {if((OverTimeDelay --) == 0){OverTimeDelay = 50;I2C_COM_ERROR_Flag = 1;break;}}   // 等待总线空闲   检测i2c-SR3 busy位
+   1779              //I2C_CR2 &= ~0x04;        
+   1780              I2C->CR2 |= 0x01;        // 产生起始位     CR2 start位    
+   1781              //=============================发送器件地址 I2C_SendDAdr(0xD0)
+   1782              //EV5：SB=1，读SR1 然后将地址写入DR寄存器将清除该标志。  
+   1783              while(!(I2C->SR1 & 0x01));// {if((OverTimeDelay --) == 0){OverTimeDelay = 50;I2C_COM_ERROR_Flag = 1;break;}} //等待START发送完 E5  
+   1784              
+   1785              I2C->DR = (SLAVE_ADDR <<1) + 0x00;  //发送 器件地址(最后一位是0,表示发送) 
+   1786              while(!(I2C->SR1 & 0x02 == 0x02)) {if((OverTimeDelay --) == 0){OverTimeDelay = 50;I2C_COM_ERROR_Flag = 1;break;}}  //等特7位器件地址发送完并且收到ack,ADDR置1    
+   1787              //EV6:ADDR 在软件读取SR1后，对SR3寄存器读操作 将清除该位 
+   1788              I2C->SR1;   
+   1789              I2C->SR3; //然后读SR3 清  ADDR 
+   1790              
+   1791              //I2C_CR2 |= 0x04;
+   1792              //=============================DATA 发送寄存器地址 I2C_SendDat()  
+   1793              I2C->DR = (u8)(addr);      
+   1794              //EV8_2 TxE=1 ，BTF=1，产生停止条件时由硬件清除。   
+   1795              while(!(I2C->SR1 & 0x84));//84//0x80  //检测SR1: TXE1(数据寄存器为空"1") BTF(字节发送结束"1")位置(只有当stm8收到ack,TxE才会置1，其实这句相当于判断收到ack没有？)
+   1796               
+   1797              //============================= 发送数据  
+   1798              I2C->DR = data;  //发送MLX90615器件地址(最后一位是1,表示接收)，发送完后自动发送ack(提前是CR2 ack位使能)    
+   1799              while(!(I2C->SR1 & 0x84));  //检测SR1: TXE1(数据寄存器为空"1") BTF(字节发送结束"1")位置(只有当stm8收到ack,TxE才会置1，其实这句相当于判断收到ack没有？)
+   1800              //EV8_2：TxE=1，BTF=1，产生停止条件时由硬件清除。  
+   1801              
+   1802              //============================= 发送数据  
+   1803              I2C->DR = CRC_data;    
+   1804              while(!(I2C->SR1 & 0x84));  //检测SR1: TXE1(数据寄存器为空"1") BTF(字节发送结束"1")位置(只有当stm8收到ack,TxE才会置1，其实这句相当于判断收到ack没有？)
+   1805              //EV8_2：TxE=1，BTF=1，产生停止条件时由硬件清除。  
+   1806              
+   1807              I2C->DR;  //清除I2C_SR2的BTF位
+   1808              I2C->CR2 |= 0x02;  //停止位产生stop  //*注意： 发送停止位时，必须先清除I2C_SR2的BTF位  
+   1809              
+   1810              OverTimeDelay =100; while((OverTimeDelay --) >0);
+   1811              if(I2C_COM_ERROR_Flag == 1)
+   1812              {
+   1813                return;
+   1814              }
+   1815              I2C_COM_ERROR_Flag = 0;
+   1816              Write_Retry_Cnt -= 1; 
+   1817            }  
+   1818          }
+   1819           
+   1820          
+   1821          void Var_Init(void)
+   1822          { 
+   1823            uint8_t i = 0;
+   1824            
+   1825            
+   1826             
+   1827            ChgExchangeMode_Cnt = 100;
+   1828            DisExchangeMode_Cnt = 0;
+   1829            IdleExchangeMode_Cnt = 0;
+   1830            for(i =0; i <10; i++)
+   1831            {
+   1832              Adc_value[i] = 0;
+   1833              Cell_Volt[i] = 0;
+   1834            }
+   1835            Temp_Volt_Sample_Cnt = 0;
+   1836            Cell_Volt_Sample_Cnt = 0;
+   1837            I2C_COM_ERROR_Flag = 0;
+   1838            Current_Val = 0;
+   1839            ADCOffset_Val = 0;
+   1840            CC_Val = 0;
+   1841            Cell_Volt_Tol = 0;
+   1842            Cell_Volt_Avg = 0;
+   1843            Cell_Volt_Max = 0;
+   1844            Cell_Volt_Min = 0; 
+   1845            ADCGain_Val = 0; 
+   1846            Pack_Volt = 0;
+   1847            Temp_Val = 0;
+   1848            V_TS2_Val = 0; 
+   1849            R_TS2_Val = 0; 
+   1850            
+   1851            SYS_STAT_Last = 0;
+   1852            CELLBAL1_Last = 0;
+   1853            CELLBAL2_Last = 0;
+   1854            SYS_CTRL1_Last = 0;
+   1855            SYS_CTRL2_Last = 0; 
+   1856            PROTECT1_Last = 0;
+   1857            PROTECT2_Last = 0;
+   1858            PROTECT3_Last = 0;
+   1859            OV_TRIP_Last = 0;
+   1860            UV_TRIP_Last = 0;
+   1861            CC_CFG_Last = 0;
+   1862            
+   1863            
+   1864            ChgOv_t = 0;
+   1865            ChgCurOv_t = 0;
+   1866            ChgCurOv_Re_t = 0;  
+   1867            DisOv_t = 0;
+   1868            DisCurOv_t = 0;
+   1869            DisCurOv_t1 = 0;
+   1870            DisCurOv_t2 = 0;
+   1871            DisCurOv_Re_t = 0;
+   1872            DisCurShort_Re_t = 0;
+   1873            
+   1874            DEVICE_XREADY_Re_t = 0;
+   1875            
+   1876            CellBalance_Cur_Selct = 0;  
+   1877            LedFlash_t = 0;
+   1878            PowerOff_Delay_t = 0;
+   1879            Delay_time_t = 0;
+   1880            
+   1881            WorkMode = IDLE_MODE;
+   1882            
+   1883            SYS_STAT.Byte = 0;
+   1884            
+   1885            RevcComData.uintdata = 0;
+   1886            Bits_flag.Byte = 0;
+   1887            
+   1888            SocCalc.inAh = 0;
+   1889            SocCalc.inAh_bak = 0;
+   1890            SocCalc.totalInAh = 0;
+   1891            SocCalc.totalInAh_bak = 0;
+   1892            SocCalc.outAh = 0;
+   1893            SocCalc.outAh_bak = 0;
+   1894            SocCalc.totalOutAh = 0;
+   1895            SocCalc.totalOutAh_bak = 0;
+   1896            SocCalc.curAh = 0;
+   1897            SocCalc.ov_cnt = 0;
+   1898            SocCalc.uv_cnt = 0;
+   1899            SocCalc.stb_cnt = 0;
+   1900            SocCalc.soc_rt = 0; 
+   1901            
+   1902             
+   1903          }
+   1904          
+   1905          #endif
+
+   Section sizes:
+
+     Function/Label                Bytes
+     --------------                -----
+     _A_PA_IDR                        1
+     _A_PC_ODR                        1
+     _A_PD_IDR                        1
+     _A_CLK_ICKR                      1
+     _A_CLK_ECKR                      1
+     _A_CLK_SWCR                      1
+     _A_CLK_CKDIVR                    1
+     CLK_PCKENR1                      1
+     CLK_PCKENR2                      1
+     _A_I2C_CR1                       1
+     _A_I2C_CR2                       1
+     _A_I2C_FREQR                     1
+     I2C_CCRL                         1
+     _A_I2C_CCRH                      1
+     _A_I2C_TRISER                    1
+     _A_UART1_SR                      1
+     UART1_DR                         1
+     UART1_BRR1                       1
+     UART1_BRR2                       1
+     _A_UART1_CR1                     1
+     _A_UART1_CR2                     1
+     _A_UART1_CR3                     1
+     _A_TIM1_CR1                      1
+     _A_TIM1_EGR                      1
+     _A_TIM1_CCMR1                    1
+     _A_TIM1_CCMR2                    1
+     _A_TIM1_CCER1                    1
+     TIM1_PSCRH                       1
+     TIM1_PSCRL                       1
+     TIM1_ARRH                        1
+     TIM1_ARRL                        1
+     TIM1_CCR1H                       1
+     TIM1_CCR1L                       1
+     TIM1_CCR2H                       1
+     TIM1_CCR2L                       1
+     _A_TIM1_BKR                      1
+     _A_TIM2_CR1                      1
+     _A_TIM2_IER                      1
+     _A_TIM2_EGR                      1
+     _A_TIM2_CCMR1                    1
+     _A_TIM2_CCER1                    1
+     TIM2_CNTRH                       1
+     TIM2_CNTRL                       1
+     _A_TIM2_PSCR                     1
+     TIM2_ARRH                        1
+     TIM2_ARRL                        1
+     TIM2_CCR1H                       1
+     TIM2_CCR1L                       1
+     _A_TIM4_CR1                      1
+     _A_TIM4_IER                      1
+     _A_TIM4_EGR                      1
+     TIM4_CNTR                        1
+     _A_TIM4_PSCR                     1
+     TIM4_ARR                         1
+     _A_ADC_CSR                       1
+     _A_ADC_CR1                       1
+     ADC_DRH                          1
+     ADC_DRL                          1
+     PWM2_Init                       61
+     PWM1_Init                       77
+     ADC                             47
+     ?Subroutine27                   15
+     ?Subroutine3                     7
+     ADConverse                     122
+     SysInit                         22
+     PortInit                        33
+     ?Subroutine38                    6
+     ?Subroutine37                    8
+     ?Subroutine36                   10
+     ?Subroutine44                    6
+     ?Subroutine19                   21
+     ?Subroutine17                   56
+     ?Subroutine43                    6
+     ?Subroutine42                   11
+     PortInit_Backup                 37
+     ?Subroutine39                    6
+     Uart_Model_Init                 29
+     Uart_SendByte                   25
+     itoa                           110
+     rev                             21
+     Uart_SendStr                    35
+     Uart_SendData                   57
+     I2C_Model_Init                  33
+     Timer2Init                      41
+     Timer4_Init_us                  18
+     ?Subroutine23                    9
+     ?Subroutine22                    9
+     ?Subroutine20                   13
+     Timer4_Init_ms                  18
+     Timer4_Disable                  13
+     Delay_us                        14
+     Delay_ms                        14
+     ?Subroutine25                    6
+     TempCheck                      167
+     ChgTemp_cnt                      1
+     DisTemp_cnt                      1
+     ?Subroutine21                    6
+     ??Subroutine46_0                 6
+     CurrentCheck                   136
+     VoltCheck                      216
+     ?Subroutine6                     9
+     ?Subroutine33                    6
+     ?Subroutine2                     8
+     ModeCheck_Backup               173
+     ?Subroutine7                    10
+     ExchangeMode_Cnt                 1
+     ModeCheck                      111
+     ?Subroutine0                    13
+     Afe_CC_Disable_Lock              1
+     ClearStatus                    187
+     ?Subroutine34                   10
+     Afe_Volt_Val_Get               367
+     ?Subroutine35                    8
+     CellBal_Cntrl                  197
+     ?Subroutine29                   10
+     ?Subroutine4                     7
+     ?Subroutine1                     8
+     LedShow_Cntrl                  167
+     ?Subroutine32                    5
+     ?Subroutine31                    9
+     ?Subroutine30                    9
+     LedShow_WorkMode                37
+     LowPower_Entry_MCU_Set          91
+     ?Subroutine28                   11
+     ?Subroutine26                   14
+     ?Subroutine24                   20
+     LowPower_Entry_Exit_Cnt          1
+     LowPower_Entry_MCU_Set_Backup   45
+     LowPower_Exit_MCU_Set            1
+     LowPower_Powerdown_Enter        20
+     LowPower_Cntrl                  45
+     CRC8_Caculate                   66
+     ?Subroutine16                    5
+     ?Subroutine15                    5
+     ?Subroutine12                    6
+     ?Subroutine9                     2
+     ??Subroutine45_0                 6
+     ?Subroutine41                    9
+     ?Subroutine5                    10
+     I2C_Read                       155
+     ?Subroutine18                   11
+     ?Subroutine14                    7
+     ?Subroutine40                    7
+     ?Subroutine13                   11
+     ?Subroutine11                   21
+     ?Subroutine10                   16
+     I2C_Write                      116
+     ?Subroutine8                    32
+     I2C_Read_Backup                137
+     I2C_Write_Backup               101
+     Var_Init                       243
+     ?<Constant "abcdef">             7
+     ?<Constant {0}>                 20
+     ?<Constant "0x">                 3
+
+ 
+    26 bytes in section .near.bss
+    58 bytes in section .near.noinit
+    30 bytes in section .near.rodata
+ 4 090 bytes in section .near_func.text
+ 
+ 4 090 bytes of CODE  memory
+    30 bytes of CONST memory
+    26 bytes of DATA  memory (+ 58 bytes shared)
+
+Errors: none
+Warnings: 3

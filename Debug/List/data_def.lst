@@ -1,0 +1,327 @@
+###############################################################################
+#                                                                             #
+# IAR C/C++ Compiler V1.31.1.20058 [Evaluation] for STM825/Mar/2016  16:25:17 #
+# Copyright 2010-2012 IAR Systems AB.                                         #
+#                                                                             #
+#    Source file  =  D:\ProjectPath\STMPath\CH79_A0_2nd_Sampled_25pcs\CH79_A0 #
+#                    \sys\src\data_def.c                                      #
+#    Command line =  D:\ProjectPath\STMPath\CH79_A0_2nd_Sampled_25pcs\CH79_A0 #
+#                    \sys\src\data_def.c -e -Ohz --debug --code_model small   #
+#                    --data_model medium -o D:\ProjectPath\STMPath\CH79_A0_2n #
+#                    d_Sampled_25pcs\CH79_A0\Debug\Obj\ --dlib_config         #
+#                    "C:\Program Files\IAR Systems\Embedded Workbench 6.0     #
+#                    Evaluation\stm8\LIB\dlstm8smn.h" -lcN                    #
+#                    D:\ProjectPath\STMPath\CH79_A0_2nd_Sampled_25pcs\CH79_A0 #
+#                    \Debug\List\ -I D:\ProjectPath\STMPath\CH79_A0_2nd_Sampl #
+#                    ed_25pcs\CH79_A0/user/\ -I D:\ProjectPath\STMPath\CH79_A #
+#                    0_2nd_Sampled_25pcs\CH79_A0/user/src/\ -I                #
+#                    D:\ProjectPath\STMPath\CH79_A0_2nd_Sampled_25pcs\CH79_A0 #
+#                    /user/inc/\ -I D:\ProjectPath\STMPath\CH79_A0_2nd_Sample #
+#                    d_25pcs\CH79_A0/addon/\ -I D:\ProjectPath\STMPath\CH79_A #
+#                    0_2nd_Sampled_25pcs\CH79_A0/addon/src/\ -I               #
+#                    D:\ProjectPath\STMPath\CH79_A0_2nd_Sampled_25pcs\CH79_A0 #
+#                    /addon/inc/\ -I D:\ProjectPath\STMPath\CH79_A0_2nd_Sampl #
+#                    ed_25pcs\CH79_A0/sys/\ -I D:\ProjectPath\STMPath\CH79_A0 #
+#                    _2nd_Sampled_25pcs\CH79_A0/sys/inc/\ -I                  #
+#                    D:\ProjectPath\STMPath\CH79_A0_2nd_Sampled_25pcs\CH79_A0 #
+#                    /sys/src/\ -I D:\ProjectPath\STMPath\CH79_A0_2nd_Sampled #
+#                    _25pcs\CH79_A0/lib/\ -I D:\ProjectPath\STMPath\CH79_A0_2 #
+#                    nd_Sampled_25pcs\CH79_A0/lib/src/\ -I                    #
+#                    D:\ProjectPath\STMPath\CH79_A0_2nd_Sampled_25pcs\CH79_A0 #
+#                    /lib/inc/\ --vregs 16                                    #
+#    List file    =  D:\ProjectPath\STMPath\CH79_A0_2nd_Sampled_25pcs\CH79_A0 #
+#                    \Debug\List\data_def.lst                                 #
+#    Object file  =  D:\ProjectPath\STMPath\CH79_A0_2nd_Sampled_25pcs\CH79_A0 #
+#                    \Debug\Obj\data_def.o                                    #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+D:\ProjectPath\STMPath\CH79_A0_2nd_Sampled_25pcs\CH79_A0\sys\src\data_def.c
+      1          //#include "stdio.h"
+      2          #include "macro_def.h"
+      3          #include "bq769x0.h"
+      4           
+      5          unsigned char Buf[3] ={0,0,0};
+      6          
+      7          
+      8          unsigned char Dis_First_Run_Flag = 0;
+      9          unsigned char Dis_First_Run_t = 0;
+     10              
+     11          unsigned char ChgExchangeMode_Cnt;
+     12          unsigned char DisExchangeMode_Cnt;
+     13          unsigned char IdleExchangeMode_Cnt;
+     14          unsigned char I2C_COM_ERROR_Flag;
+     15          unsigned long Current_Val;
+     16          signed long  CC_Val;
+     17          signed int int16_CC_AD;
+     18          signed int CC_AD;
+     19          
+     20          //unsigned int CC_Val;
+     21          //unsigned int Current_Val;
+     22          signed char  ADCOffset_Val;
+     23          
+     24          unsigned int Adc_value[10];
+     25          unsigned int Cell_Volt[10];
+     26          unsigned int Cell_Volt_Tol;
+     27          unsigned int Cell_Volt_Avg;
+     28          unsigned int Cell_Volt_Max;
+     29          unsigned int Cell_Volt_Min; 
+     30          unsigned int ADCGain_Val; 
+     31          unsigned int Pack_Volt;
+     32          unsigned int Temp_Val;
+     33          unsigned int V_TS2_Val; 
+     34          unsigned int R_TS2_Val;  
+     35          
+     36          unsigned char     SYS_STAT_Last;
+     37          unsigned char     CELLBAL1_Last;
+     38          unsigned char     CELLBAL2_Last;
+     39          unsigned char     SYS_CTRL1_Last;
+     40          unsigned char     SYS_CTRL2_Last; 
+     41          unsigned char     PROTECT1_Last;
+     42          unsigned char     PROTECT2_Last;
+     43          unsigned char     PROTECT3_Last;
+     44          unsigned char     PROTECT1_Last_Copy;
+     45          unsigned char     PROTECT2_Last_Copy;
+     46          unsigned char     PROTECT3_Last_Copy;
+     47          unsigned char     OV_TRIP_Last; 
+     48          unsigned char     UV_TRIP_Last;
+     49          unsigned char     CC_CFG_Last;
+     50          
+     51          unsigned int Temp_Volt_Sample_Cnt;
+     52          unsigned int Cell_Volt_Sample_Cnt;
+     53          unsigned int CC_Volt_Sample_Cnt;
+     54          unsigned int ChgOv_t;
+     55          unsigned int ChgCurOv_t;
+     56          unsigned int ChgCurOv_Re_t;   
+     57          unsigned int DisOv_t;  
+     58          unsigned int DisCurOv_t; 
+     59          unsigned int DisCurOv_t1; 
+     60          unsigned int DisCurOv_t2; 
+     61          unsigned int DisCurOv_Re_t; 
+     62          unsigned int DisCurShort_Re_t; 
+     63          
+     64          unsigned int DEVICE_XREADY_Re_t; 
+     65          
+     66          unsigned int CellBalance_Cur_Selct;  
+     67          unsigned int LedFlash_t; 
+     68          unsigned int PowerOff_Delay_t;
+     69          unsigned int Delay_time_t;
+     70          
+     71          unsigned char Soc_OCV_CorrectEn_Flag = 0;
+     72          unsigned char CellBal_Cntrl_Lock = 0;
+     73          unsigned int CellBalance_Selct = 0;
+     74          unsigned char Init_Soc_Flag =0;
+     75          unsigned char LowPower_MCU_Entry_Flag = 0;
+     76          unsigned int LowPower_Entry_Delay_t = 0;
+     77          unsigned int Cell_Balance_Delay_t = 0;
+     78          enum  em_workmode
+     79          {
+     80             IDLE_MODE 	    =0x00,
+     81             CHARGE_MODE 	    =0x01,
+     82             DISCHARGE_MODE   =0x02
+     83          }WorkMode;
+     84           
+     85           union  SYS_STATUS_ST//#define   SYS_STAT  0x00__IO     
+     86          {
+     87            uint8_t Byte;  
+     88            struct
+     89            {
+     90              uint8_t OCD           :1; 
+     91              uint8_t SCD    	  :1;  
+     92              uint8_t OV    	  :1; 
+     93              uint8_t UV    	  :1;		 
+     94              uint8_t OVRD_ALERT	  :1;	 
+     95              uint8_t DEVICE_XREADY :1;		 
+     96              uint8_t RSVD 	  :1;	
+     97              uint8_t CC_READY 	  :1;	
+     98            }Bit;
+     99          }SYS_STAT; 
+    100          
+    101          union  SYS_CTRL1_ST 
+    102          {
+    103            uint8_t Byte;  
+    104            struct
+    105            {
+    106              uint8_t SHUT_B 	  :1;		 
+    107              uint8_t SHUT_A 	  :1;		 
+    108              uint8_t RSVD          :1;		 
+    109              uint8_t TEMP_SEL	  :1;
+    110              uint8_t ADC_EN    	  :1;	 
+    111              uint8_t RSVD1    	  :1; 
+    112              uint8_t RSVD2    	  :1; 
+    113              uint8_t LOAD_PRESENT  :1; 
+    114            }Bit;
+    115          }SYS_CTRL1; 
+    116           
+    117          union  SYS_CTRL2_ST      
+    118          {
+    119            uint8_t Byte;  
+    120            struct
+    121            {
+    122              uint8_t CHG_ON 	  :1;		 
+    123              uint8_t DSG_ON 	  :1;		 
+    124              uint8_t RSVD          :1;		 
+    125              uint8_t RSVD1	  :1;
+    126              uint8_t RSVD2    	  :1;	 
+    127              uint8_t CC_ONESHOT    :1; 
+    128              uint8_t CC_EN    	  :1; 
+    129              uint8_t DELAY_DIS     :1; 
+    130            }Bit;
+    131          }SYS_CTRL2; 
+    132                   
+    133          union UINT_UCHAR
+    134          {
+    135              unsigned int uintdata;
+    136              unsigned char uchardata[2];
+    137          } RevcComData;
+    138          
+    139          //------------------------------------------------------------------
+    140          union STATUS_FLAG
+    141          {
+    142            unsigned char Byte;
+    143            struct FLAG_BITS
+    144            {
+    145              //unsigned char Chg             : 1;
+    146              unsigned char ChgOv           : 1;
+    147              unsigned char ChgCurOv        : 1;
+    148              unsigned char ChgTemp         : 1; 
+    149              //unsigned char Dis             : 1;
+    150              unsigned char DisOv           : 1;
+    151              unsigned char DisTemp         : 1;  
+    152              unsigned char DisCurOv        : 1; 
+    153              unsigned char DisCurShort     : 1;  
+    154              //unsigned char KEY_on          : 1; 
+    155              unsigned char AfeErr          : 1; 
+    156            }Bit;
+    157          } Bits_flag;
+    158           
+    159          struct X_SOC
+    160          {
+    161              uint8_t 	soc;                	        // soc
+    162              uint32_t 	ah;               	 	// 剩余容量
+    163                   //uint16_t 	vlt_pack;          		// 实时总电压mV
+    164              uint16_t 	curr;              		// 实时电流mA
+    165              //uint8_t 	curr_dir;          		// 电流方向0为放电1为充电。
+    166              uint16_t 	min_cell_vlt;      		// 单体最低/高电压mV
+    167              uint16_t 	max_cell_vlt;
+    168              int8_t 	min_cell_temp;      	        // 电池最低/高温度drg
+    169              //int8_t 	max_cell_temp;
+    170              uint16_t 	min_cell_temp_vlt;
+    171              uint16_t	min_cell_dchg_vlt; 		// 最低放电电压
+    172              uint16_t 	max_cell_chg_vlt;  		// 最高充电电压
+    173              uint16_t 	rated_cap;     			// 额定容量
+    174              uint8_t 	temp_corr;     		 	// 执行温度修正标志，1执行，0不执行。
+    175          }SocReg;
+    176          
+    177          struct X_SOC_CALC
+    178          {
+    179              uint32_t inAh;     		// 充入的电量
+    180              uint32_t inAh_bak;
+    181              uint32_t totalInAh;
+    182              uint32_t totalInAh_bak;
+    183              uint32_t outAh;        	// 放出的电量
+    184              uint32_t outAh_bak;
+    185              uint32_t totalOutAh;
+    186              uint32_t totalOutAh_bak;
+    187              uint32_t curAh;
+    188              uint8_t  ov_cnt;    		// 过冲计时
+    189              uint8_t  uv_cnt;    		// 过放计时
+    190              uint32_t stb_cnt; 	                // 静置计时
+    191              uint8_t  soc_rt;
+    192          }SocCalc;
+    193          
+    194          //SocCalc.soc_rt
+    195          
+    196          
+    197          
+    198          
+    199          
+    200          
+    201          
+    202          
+    203          
+    204          
+    205          
+
+   Section sizes:
+
+     Function/Label          Bytes
+     --------------          -----
+     Buf                        3
+     Dis_First_Run_Flag         1
+     Dis_First_Run_t            1
+     ChgExchangeMode_Cnt        1
+     DisExchangeMode_Cnt        1
+     IdleExchangeMode_Cnt       1
+     I2C_COM_ERROR_Flag         1
+     Current_Val                4
+     CC_Val                     4
+     int16_CC_AD                2
+     CC_AD                      2
+     ADCOffset_Val              1
+     Adc_value                 20
+     Cell_Volt                 20
+     Cell_Volt_Tol              2
+     Cell_Volt_Avg              2
+     Cell_Volt_Max              2
+     Cell_Volt_Min              2
+     ADCGain_Val                2
+     Pack_Volt                  2
+     Temp_Val                   2
+     V_TS2_Val                  2
+     R_TS2_Val                  2
+     SYS_STAT_Last              1
+     CELLBAL1_Last              1
+     CELLBAL2_Last              1
+     SYS_CTRL1_Last             1
+     SYS_CTRL2_Last             1
+     PROTECT1_Last              1
+     PROTECT2_Last              1
+     PROTECT3_Last              1
+     PROTECT1_Last_Copy         1
+     PROTECT2_Last_Copy         1
+     PROTECT3_Last_Copy         1
+     OV_TRIP_Last               1
+     UV_TRIP_Last               1
+     CC_CFG_Last                1
+     Temp_Volt_Sample_Cnt       2
+     Cell_Volt_Sample_Cnt       2
+     CC_Volt_Sample_Cnt         2
+     ChgOv_t                    2
+     ChgCurOv_t                 2
+     ChgCurOv_Re_t              2
+     DisOv_t                    2
+     DisCurOv_t                 2
+     DisCurOv_t1                2
+     DisCurOv_t2                2
+     DisCurOv_Re_t              2
+     DisCurShort_Re_t           2
+     DEVICE_XREADY_Re_t         2
+     CellBalance_Cur_Selct      2
+     LedFlash_t                 2
+     PowerOff_Delay_t           2
+     Delay_time_t               2
+     Soc_OCV_CorrectEn_Flag     1
+     CellBal_Cntrl_Lock         1
+     CellBalance_Selct          2
+     Init_Soc_Flag              1
+     LowPower_MCU_Entry_Flag    1
+     LowPower_Entry_Delay_t     2
+     Cell_Balance_Delay_t       2
+     WorkMode                   1
+     SYS_STAT                   1
+     SYS_CTRL1                  1
+     SYS_CTRL2                  1
+     RevcComData                2
+     Bits_flag                  1
+     SocReg                    21
+     SocCalc                   43
+
+ 
+ 209 bytes in section .near.bss
+ 
+ 209 bytes of DATA memory
+
+Errors: none
+Warnings: none
