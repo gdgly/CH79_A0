@@ -1,4 +1,5 @@
 //===2016-03-25pm
+//===C-version
 #include "stm8s.h"  
 #include "user.h"  
 #include "macro_def.h"  
