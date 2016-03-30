@@ -1,6 +1,6 @@
  
 #include "type.h"
-#define ClrWdt()   nop()
+//#define ClrWdt()   nop()
 #define   PB4_XOR()    //PB_ODR_ODR4 = ~PB_ODR_ODR4
 #define   PB5_XOR()    //PB_ODR_ODR5 = ~PB_ODR_ODR5
 //==================================
