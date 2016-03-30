@@ -5,6 +5,8 @@
 #include "macro_def.h"  
 #include "iostm8s003f3.h"
 #include "bq769x0.h" 
+
+//#define Uart_Model_Enable
 void main(void)
 {  
   uint8_t i = 0;
@@ -14,7 +16,9 @@ void main(void)
   PortInit();            // MCU管脚配置
   LED1_ON();             // 复位后亮LED1，在完成AFE IC初始化之后，熄灭
   I2C_Model_Init();      // 启用MCU的IIC模块
-  //Uart_Model_Init();   // 启用MCU的UART模块
+#ifdef Uart_Model_Enable
+  Uart_Model_Init();   // 启用MCU的UART模块
+#endif
   Var_Init();            // 初始化各变量值
   //VCC1_ON();           // C-version 没有定义管脚
   Timer2Init();          // 设置TIMER 2为基准时间的定时器
@@ -33,12 +37,12 @@ void main(void)
     if(LowPower_MCU_Entry_Flag == 0)   // 如果MCU不处于低功耗运行模式
     { 
       Afe_Get_SysStatus();             // AFE IC 状态检测，包括充放电MOS管开关状态、电流采样结束状态、AFE IC（错误、过流、短路、过充、过放）异常状态
-      
-      /* 
+     
+#ifdef Uart_Model_Enable
       Uart_SendStr("\r\n SYS_STAT= ");  Uart_SendData(SYS_STAT.Byte,16); 
       Uart_SendStr(" SYS_CTRL1 = ");    Uart_SendData(SYS_CTRL1.Byte,16); 
       Uart_SendStr(" SYS_CTRL2 = ");    Uart_SendData(SYS_CTRL2.Byte,16);  
-      */
+#endif
       
       ModeCheck();         // 充电、放电、空载工作模式检测
       
@@ -59,7 +63,8 @@ void main(void)
       Afe_AbnormalCheck();          // AFE IC 内部异常检测
       
       LedShow_Cntrl();     //LedShow_WorkMode();   // 工作电量指示灯显示
-      /*    
+       
+#ifdef Uart_Model_Enable  
       Uart_SendStr(" WorkMode= ");      Uart_SendData(WorkMode,16); 
       Uart_SendStr(" Bits_flag = ");    Uart_SendData(Bits_flag.Byte,16); 
       
@@ -71,8 +76,7 @@ void main(void)
       Uart_SendStr(" soc_rt= ");        Uart_SendData((uint16_t)SocCalc.soc_rt,10); 
       Uart_SendStr(" ah= ");            Uart_SendData((uint16_t)SocReg.ah,10);
       Uart_SendStr(" CellBal= ");       Uart_SendData((uint16_t)CellBalance_Selct,16);  
-      
-      Uart_SendStr("\r\n");
+      /* 
       for(i =0;i<10;i++)
       { 
         Uart_SendStr(" C_");
@@ -82,6 +86,8 @@ void main(void)
       }
 
       Uart_SendStr("\r\n");*/ 
+      Uart_SendStr("\r\n");
+#endif
    
     }
     LowPower_Cntrl();        // 低功耗控制管理

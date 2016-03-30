@@ -1045,17 +1045,17 @@ void CellBal_Cntrl(void)
 /*
 1、充电模式：有异常时，电流异常（LED1及LED2闪烁，周期为1秒），温度异常（LED1、LED2及LED3闪烁，周期为1秒）
              无异常时，低节电量LED常亮，高节电量的LED闪烁，T = 1s
-                0%----30%     LED1闪烁
-                30%---65%     LED1常亮、LED2闪烁
-                65%---90%     LED1、LED2常亮、LED3闪烁
-                90%           LED全亮
+                0%----50%     LED1闪烁
+                50%---70%     LED1常亮、LED2闪烁
+                70%---99%     LED1、LED2常亮、LED3闪烁
+                过充          LED全亮
              
 2、放电模式：有异常时，电流异常（LED1及LED2闪烁，周期为1秒），温度异常（LED1、LED2及LED3闪烁，周期为1秒）
              无异常时，显示当前电量
-                15%           LED1闪烁 1Hz
-                15%---35%     LED1常亮
-                35%---85%     LED1、LED2常亮
-                85%           LED全亮
+                10%           LED1闪烁 1Hz
+                10%---30%     LED1常亮
+                30%---50%     LED1、LED2常亮
+                50%           LED全亮
 */  
 void LedShow_Cntrl(void)
 {
@@ -1099,7 +1099,7 @@ void LedShow_Cntrl(void)
         LED2_OFF(); 
         LED3_ON(); 
       } 
-      else if(SocCalc.soc_rt >= 80)  // 65%---90%     LED1、LED2常亮、LED3闪烁  
+      else if(SocCalc.soc_rt >= 70)  // 65%---90%     LED1、LED2常亮、LED3闪烁  
       {
         LED1_OFF();
         if(LedFlash_t < 50)
@@ -1117,7 +1117,7 @@ void LedShow_Cntrl(void)
           LedFlash_t = 0;
         } 
       }
-      else if(SocCalc.soc_rt >= 45 )//30%---65%     LED1常亮、LED2闪烁
+      else if(SocCalc.soc_rt >= 50 )//30%---65%     LED1常亮、LED2闪烁
       {
         if(LedFlash_t < 50)
         {
@@ -1176,25 +1176,25 @@ void LedShow_Cntrl(void)
         LED2_OFF(); 
         LED3_OFF(); 
       }
-      else if(SocCalc.soc_rt >= 85)  //85%           LED全亮
+      else if(SocCalc.soc_rt >= 50)  //50%           LED全亮
       {
         LED1_OFF();
         LED2_OFF();
         LED3_ON();
       }
-      else if(SocCalc.soc_rt >= 35) //35%---85%     LED1、LED2常亮
+      else if(SocCalc.soc_rt >= 30) //30%---50%     LED1、LED2常亮
       {
         LED1_OFF();
         LED2_ON();
         LED3_OFF();
       }
-      else if(SocCalc.soc_rt >= 15) //15%---35%     LED1常亮
+      else if(SocCalc.soc_rt >= 10) //10%---30%     LED1常亮
       {
         LED1_ON();
         LED2_OFF();
         LED3_OFF();
       }
-      else                             //15%           LED1闪烁 1Hz
+      else                             //10%           LED1闪烁 1Hz
       {
         if(LedFlash_t >= 100)
         {

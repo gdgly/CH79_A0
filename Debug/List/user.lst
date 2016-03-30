@@ -1,6 +1,6 @@
 ###############################################################################
 #                                                                             #
-# IAR C/C++ Compiler V1.31.1.20058 [Evaluation] for STM830/Mar/2016  20:47:56 #
+# IAR C/C++ Compiler V1.31.1.20058 [Evaluation] for STM830/Mar/2016  20:58:24 #
 # Copyright 2010-2012 IAR Systems AB.                                         #
 #                                                                             #
 #    Source file  =  D:\ProjectPath\GitPath\CH79_A0\sys\src\user.c            #
@@ -1076,17 +1076,17 @@ D:\ProjectPath\GitPath\CH79_A0\sys\src\user.c
    1045          /*
    1046          1、充电模式：有异常时，电流异常（LED1及LED2闪烁，周期为1秒），温度异常（LED1、LED2及LED3闪烁，周期为1秒）
    1047                       无异常时，低节电量LED常亮，高节电量的LED闪烁，T = 1s
-   1048                          0%----30%     LED1闪烁
-   1049                          30%---65%     LED1常亮、LED2闪烁
-   1050                          65%---90%     LED1、LED2常亮、LED3闪烁
-   1051                          90%           LED全亮
+   1048                          0%----50%     LED1闪烁
+   1049                          50%---70%     LED1常亮、LED2闪烁
+   1050                          70%---99%     LED1、LED2常亮、LED3闪烁
+   1051                          过充          LED全亮
    1052                       
    1053          2、放电模式：有异常时，电流异常（LED1及LED2闪烁，周期为1秒），温度异常（LED1、LED2及LED3闪烁，周期为1秒）
    1054                       无异常时，显示当前电量
-   1055                          15%           LED1闪烁 1Hz
-   1056                          15%---35%     LED1常亮
-   1057                          35%---85%     LED1、LED2常亮
-   1058                          85%           LED全亮
+   1055                          10%           LED1闪烁 1Hz
+   1056                          10%---30%     LED1常亮
+   1057                          30%---50%     LED1、LED2常亮
+   1058                          50%           LED全亮
    1059          */  
    1060          void LedShow_Cntrl(void)
    1061          {
@@ -1130,7 +1130,7 @@ D:\ProjectPath\GitPath\CH79_A0\sys\src\user.c
    1099                  LED2_OFF(); 
    1100                  LED3_ON(); 
    1101                } 
-   1102                else if(SocCalc.soc_rt >= 80)  // 65%---90%     LED1、LED2常亮、LED3闪烁  
+   1102                else if(SocCalc.soc_rt >= 70)  // 65%---90%     LED1、LED2常亮、LED3闪烁  
    1103                {
    1104                  LED1_OFF();
    1105                  if(LedFlash_t < 50)
@@ -1148,7 +1148,7 @@ D:\ProjectPath\GitPath\CH79_A0\sys\src\user.c
    1117                    LedFlash_t = 0;
    1118                  } 
    1119                }
-   1120                else if(SocCalc.soc_rt >= 45 )//30%---65%     LED1常亮、LED2闪烁
+   1120                else if(SocCalc.soc_rt >= 50 )//30%---65%     LED1常亮、LED2闪烁
    1121                {
    1122                  if(LedFlash_t < 50)
    1123                  {
@@ -1207,25 +1207,25 @@ D:\ProjectPath\GitPath\CH79_A0\sys\src\user.c
    1176                  LED2_OFF(); 
    1177                  LED3_OFF(); 
    1178                }
-   1179                else if(SocCalc.soc_rt >= 85)  //85%           LED全亮
+   1179                else if(SocCalc.soc_rt >= 50)  //50%           LED全亮
    1180                {
    1181                  LED1_OFF();
    1182                  LED2_OFF();
    1183                  LED3_ON();
    1184                }
-   1185                else if(SocCalc.soc_rt >= 35) //35%---85%     LED1、LED2常亮
+   1185                else if(SocCalc.soc_rt >= 30) //30%---50%     LED1、LED2常亮
    1186                {
    1187                  LED1_OFF();
    1188                  LED2_ON();
    1189                  LED3_OFF();
    1190                }
-   1191                else if(SocCalc.soc_rt >= 15) //15%---35%     LED1常亮
+   1191                else if(SocCalc.soc_rt >= 10) //10%---30%     LED1常亮
    1192                {
    1193                  LED1_ON();
    1194                  LED2_OFF();
    1195                  LED3_OFF();
    1196                }
-   1197                else                             //15%           LED1闪烁 1Hz
+   1197                else                             //10%           LED1闪烁 1Hz
    1198                {
    1199                  if(LedFlash_t >= 100)
    1200                  {
@@ -1919,7 +1919,7 @@ D:\ProjectPath\GitPath\CH79_A0\sys\src\user.c
      PWM2_Init                       61
      PWM1_Init                       77
      ADC                             47
-     ?Subroutine30                   15
+     ?Subroutine34                   15
      ?Subroutine4                     7
      ADConverse                     122
      SysInit                         60
@@ -1952,7 +1952,7 @@ D:\ProjectPath\GitPath\CH79_A0\sys\src\user.c
      ChgTemp_cnt                      1
      DisTemp_cnt                      1
      CurrentCheck                   138
-     ?Subroutine31                   12
+     ?Subroutine30                   12
      VoltCheck                      216
      ?Subroutine8                     9
      ?Subroutine3                     9
@@ -1965,10 +1965,10 @@ D:\ProjectPath\GitPath\CH79_A0\sys\src\user.c
      Afe_CC_Disable_Lock              1
      ModeCheck                       73
      ClearStatus                    187
-     ?Subroutine33                   10
+     ?Subroutine32                   10
      Afe_Volt_Val_Get               367
-     ?Subroutine34                    8
-     ?Subroutine32                    6
+     ?Subroutine33                    8
+     ?Subroutine31                    6
      CellBal_Cntrl                  197
      ?Subroutine29                   10
      ?Subroutine6                     7
