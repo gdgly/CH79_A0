@@ -156,7 +156,7 @@ void SysInit(void)
     /128          5         2.00 ms                   510 ms     
     /256          6         4.00 ms                   1.02 s     
 */
-/*  
+/*  */
 void ClrWdt(void)
 {
     IWDG_KR = 0x55;   //解除保护
@@ -165,7 +165,7 @@ void ClrWdt(void)
     IWDG_KR = 0xAA;   //刷新及恢复保护
     IWDG_KR = 0xCC;   //独立看门狗启动
 } 
-*/
+
 //==================================================================
 //==================================================================
 void PortInit(void)
@@ -348,10 +348,12 @@ void itoa(char *buf, int i, int base)
 void Uart_SendStr(unsigned char *tx_pData) 
 {
     unsigned int i, nLen;
-
-	nLen = strlen(tx_pData);
-	for(i=0; i<nLen; i++)
-		Uart_SendByte(tx_pData[i]);
+    ClrWdt();
+    nLen = strlen(tx_pData);
+    for(i=0; i<nLen; i++)
+    {
+      Uart_SendByte(tx_pData[i]);
+    }
 }
 
  

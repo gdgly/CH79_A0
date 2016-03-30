@@ -2,9 +2,9 @@
 #include "stm8s.h"  
 #include "user.h"  
 #include "macro_def.h"  
-#include "iostm8s003f3.h"
-#include "bq769x0.h" 
-void main(void)
+#include "iostm8s003f3.h"  
+#include "bq769x0.h"  
+void main(void)  
 {  
   uint8_t i = 0;
   //-----------------------------
@@ -13,30 +13,14 @@ void main(void)
   PortInit(); 
   LED1_ON();  
   I2C_Model_Init();
-  Uart_Model_Init();
+  //Uart_Model_Init();
   Var_Init();
   VCC1_ON();
   Timer2Init();
-  enableInterrupts(); 
-  while(0)
-  {
-    Uart_SendStr("\r\n SYS_STAT= ");  Uart_SendData(0x1234,16);
-    for(i =0 ;i< 200;i++)
-    {
-      nop();nop();nop();nop();nop();nop();
-      nop();nop();nop();nop();nop();nop(); 
-    }
-      //=============================DATA ·¢ËÍ¼Ä´æÆ÷µØÖ· I2C_SendDat()  
-    
-    I2C_Read(SYS_STAT_ADDR,&SYS_STAT_Last); 
-    //I2C_Write(CC_CFG_ADDR,CC_CFG_INIT_VAL);
-   
-    //PB4_XOR();
-    //PB5_XOR();
-  }
+  enableInterrupts();  
   Delay_ms(50);    
   Afe_Device_Init();
-  Soc_OCV_CorrectEn_Flag = 1; 
+  Soc_OCV_CorrectEn_Flag  = 1; 
   LowPower_MCU_Entry_Flag = 0; 
   LED1_OFF();  
   //Afe_ADC_Disable();  //100+uA
@@ -48,11 +32,11 @@ void main(void)
     { 
       Afe_Get_SysStatus(); 
       
-      /*  */
+      /*  
       Uart_SendStr("\r\n SYS_STAT= ");  Uart_SendData(SYS_STAT.Byte,16); 
       Uart_SendStr(" SYS_CTRL1 = ");    Uart_SendData(SYS_CTRL1.Byte,16); 
       Uart_SendStr(" SYS_CTRL2 = ");    Uart_SendData(SYS_CTRL2.Byte,16);  
-       
+       */
       ModeCheck(); 
       
       ClearStatus();
@@ -72,7 +56,7 @@ void main(void)
       Afe_AbnormalCheck();
       
       LedShow_Cntrl();     //LedShow_WorkMode();   // 
-       
+      /*    
       Uart_SendStr(" WorkMode= ");      Uart_SendData(WorkMode,16); 
       Uart_SendStr(" Bits_flag = ");    Uart_SendData(Bits_flag.Byte,16); 
       
@@ -80,7 +64,7 @@ void main(void)
       Uart_SendStr(" Volt_Avg= ");      Uart_SendData(Cell_Volt_Avg,10); 
       Uart_SendStr(" Max= ");           Uart_SendData(Cell_Volt_Max,10);
       Uart_SendStr(" Min= ");           Uart_SendData(Cell_Volt_Min,10);
-      /*    
+       
       Uart_SendStr(" soc_rt= ");        Uart_SendData((uint16_t)SocCalc.soc_rt,10); 
       Uart_SendStr(" ah= ");            Uart_SendData((uint16_t)SocReg.ah,10);
       Uart_SendStr(" CellBal= ");       Uart_SendData((uint16_t)CellBalance_Selct,16);  
