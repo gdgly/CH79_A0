@@ -13,6 +13,8 @@
 //==================================
 #define   E2PROM_ADDR_BASE      0x004000
 #define   E2PROM_ADDR_END       0x00407F
+#define   ADJUST_ADDR           0x004000
+#define   SOC_ADDR              0x004004  
 //========================================= 
 #define   OV_DELAY_SET          1                   //  单位：S, AFE（硬件）过充保护延时时间, 有效范围:[1,2,4,8]
 #define   UV_DELAY_SET          1                   //  单位：S, AFE（硬件）过放保护延时时间, 有效范围:[1,4,8,16]

@@ -99,6 +99,7 @@ void LowPower_Powerdown_Enter(void);
   void SOCSmooth(void);
 
   void SOC_Init(void); 
+  void SOC_SavedtoEEPROM(void);
   void ChgDis_AbnormalCheck(void);
 
 

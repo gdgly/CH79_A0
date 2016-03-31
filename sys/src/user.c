@@ -686,76 +686,7 @@ void VoltCheck(void)
     }
     */
   }
-}  
-//==========================================================================
-void ModeCheck_Backup(void)
-{     
-  static uint8_t Afe_CC_Disable_Lock = 0; 
-  if(IS_CHG_DETECT() || CC_Val >= 10)
-  {  
-    if(ChgExchangeMode_Cnt >= 50)
-    { 
-      ChgExchangeMode_Cnt = 100;
-      DisExchangeMode_Cnt = 0;
-      IdleExchangeMode_Cnt = 0;
-      WorkMode = CHARGE_MODE;
-    }
-  }  
-  else if(IS_SIGNAL_IN())  
-  {  
-    if(DisExchangeMode_Cnt >= 100)
-    { 
-      IdleExchangeMode_Cnt = 0;
-      ChgExchangeMode_Cnt = 0;
-      DisExchangeMode_Cnt = 100; 
-      WorkMode = DISCHARGE_MODE;
-    }
-  }/* 
-  else if(WorkMode == DISCHARGE_MODE && SYS_CTRL2.Bit.CHG_ON && SYS_CTRL2.Bit.DSG_ON)// 负载接上，小电流或无电流时，关闭CHG_ON，来检测LOAD_PRESENT
-  { 
-    SYS_CTRL2_Last &= ~0x03; 
-    I2C_Write(SYS_CTRL2_ADDR,SYS_CTRL2_Last);
-    Delay_ms(20);
-    I2C_Read(SYS_CTRL1_ADDR,&SYS_CTRL1_Last); 
-    SYS_CTRL1.Byte = SYS_CTRL1_Last;
-    if(SYS_CTRL1.Bit.LOAD_PRESENT) 
-    { 
-      SYS_CTRL2_Last |= 0x03; 
-      I2C_Write(SYS_CTRL2_ADDR,SYS_CTRL2_Last);
-    } 
-    else
-    {
-      ExchangeMode_Cnt = 0;
-      WorkMode = IDLE_MODE;  
-    } 
-  } */
-  else 
-  { 
-    if(IdleExchangeMode_Cnt >= 100)
-    { 
-      IdleExchangeMode_Cnt = 100;
-      ChgExchangeMode_Cnt = 0;
-      DisExchangeMode_Cnt = 0;
-      WorkMode = IDLE_MODE;
-    }
-  }
-  
-  //=================================
-  if(WorkMode == IDLE_MODE)
-  {
-      Afe_CC_Disable();
-      Afe_CC_Disable_Lock = 0;
-  }
-  else
-  {
-    if(Afe_CC_Disable_Lock == 0)
-    {
-      Afe_CC_1Shot_Set(); 
-      Afe_CC_Disable_Lock = 1;
-    }
-  }
-}
-
+}   
 //==========================================================================
 void ModeCheck(void)
 {       
@@ -1157,7 +1088,7 @@ void LedShow_Cntrl(void)
       {
         LED1_OFF();
         LED2_ON();
-        LED3_OFF(); 
+        LED3_OFF();
         if(LedFlash_t >= 100)
         {
           LedFlash_t = 0;
@@ -1374,6 +1305,8 @@ void LowPower_Powerdown_Enter(void)
   uint8_t i = 0;
   if(AfeErr_t >= 2000 || (LedFlash_Off_t >= 450))//PowerOff_Delay_t >= PowerOff_Delay_t_SET && 
   {
+    SOC_SavedtoEEPROM();
+    Delay_ms(10);
     while(1)
     {   
       Afe_EnterShipMode(); 
@@ -1798,23 +1731,55 @@ void I2C_Write_Backup(uint8_t addr,uint8_t data )
       return;
     }
     I2C_COM_ERROR_Flag = 0;
-    Write_Retry_Cnt -= 1; 
+    Write_Retry_Cnt -= 1;
   }  
 }
- 
+//===========================================================
 void SOC_Init(void)
 {
   uint8_t result = 0;
-  //result = FLASH_ReadByte();
+  uint8_t Soc_Tmp = 0;
+  result = FLASH_ReadByte(ADJUST_ADDR);
+  
+  if(result == 0xAA)//判断校验地址中数据是否为0xAA, Y: EEPROM 中保存有SOC数据;  N: EEPROM 中保存有SOC数据
+  {
+    FLASH_Unlock(FLASH_MEMTYPE_DATA);       // 解锁EEPROM
+    FLASH_ProgramByte(ADJUST_ADDR,0x00);    // 清除校验地址中数据 
+    FLASH_Lock(FLASH_MEMTYPE_DATA);         // 加锁EEPROM
+    Soc_Tmp = FLASH_ReadByte(SOC_ADDR);     // 读取SOC数据
+     
+    SocReg.soc = Soc_Tmp; //SocReg.ah = SocCalc.curAh; // 计算SOC。 
+    SocCalc.curAh = ((uint32_t)SocReg.rated_cap * Soc_Tmp) / 100;
+    SocReg.ah = SocCalc.curAh;
+    SocCalc.soc_rt = SocReg.soc;
+    Soc_OCV_CorrectEn_Flag = 0;  // 上电允许SOC的OCV校准  
+  }
+  else
+  {
+    Soc_OCV_CorrectEn_Flag = 1;  // 上电允许SOC的OCV校准
+  } 
+}
+void SOC_SavedtoEEPROM(void)
+{   
+  FLASH_Unlock(FLASH_MEMTYPE_DATA);               // 解锁EEPROM
+  FLASH_ProgramByte(SOC_ADDR,SocCalc.soc_rt);     // 保存SOC到EEPROM 
+  FLASH_Lock(FLASH_MEMTYPE_DATA);                 // 加锁EEPROM
+  if(SocCalc.soc_rt == FLASH_ReadByte(SOC_ADDR))  // 读取数据 ?= 写入数据
+  {
+    FLASH_Unlock(FLASH_MEMTYPE_DATA);             // 解锁EEPROM
+    FLASH_ProgramByte(ADJUST_ADDR,0xAA);          // 写入保存SOC成功标志符
+    FLASH_Lock(FLASH_MEMTYPE_DATA);               // 加锁EEPROM
+  } 
 }
 //======================================
 void Var_Init(void)
 { 
   uint8_t i = 0;
    
+  LowPower_MCU_Entry_Flag = 0; // MCU运行于低功耗状态标识符
   LedFlash_Off_t = 0;
-  ChgExchangeMode_Cnt = 100;
-  DisExchangeMode_Cnt = 0;
+  ChgExchangeMode_Cnt  = 100;
+  DisExchangeMode_Cnt  = 0;
   IdleExchangeMode_Cnt = 0;
   for(i =0; i <10; i++)
   {
@@ -1823,8 +1788,8 @@ void Var_Init(void)
   }
   Temp_Volt_Sample_Cnt = 0;
   Cell_Volt_Sample_Cnt = 0;
-  I2C_COM_ERROR_Flag = 0;
-  Current_Val = 0;
+  I2C_COM_ERROR_Flag   = 0;
+  Current_Val   = 0;
   ADCOffset_Val = 0;
   CC_Val = 0;
   Cell_Volt_Tol = 0;
@@ -1888,7 +1853,6 @@ void Var_Init(void)
   SocCalc.stb_cnt = 0;
   SocCalc.soc_rt = 0; 
   
-   
 }
 
 #endif

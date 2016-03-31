@@ -1,6 +1,6 @@
 ###############################################################################
 #                                                                             #
-# IAR C/C++ Compiler V1.31.1.20058 [Evaluation] for STM831/Mar/2016  14:44:11 #
+# IAR C/C++ Compiler V1.31.1.20058 [Evaluation] for STM831/Mar/2016  16:17:05 #
 # Copyright 2010-2012 IAR Systems AB.                                         #
 #                                                                             #
 #    Source file  =  D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_A0\sys\s #
@@ -50,89 +50,89 @@ D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_A0\sys\src\main.c
      11          {  
      12            uint8_t i = 0;
      13            //-----------------------------
-     14            disableInterrupts();   // 关闭MCU全局变量
-     15            SysInit();             // 系统初始化，MCU时钟配置、ADC模块初始化
-     16            PortInit();            // MCU管脚配置
-     17            LED1_ON();             // 复位后亮LED1，在完成AFE IC初始化之后，熄灭
-     18            I2C_Model_Init();      // 启用MCU的IIC模块
+     14            disableInterrupts();        // 关闭MCU全局变量
+     15            SysInit();                  // 系统初始化，MCU时钟配置、ADC模块初始化
+     16            PortInit();                 // MCU管脚配置
+     17            LED1_ON();                  // 复位后亮LED1，在完成AFE IC初始化之后，熄灭
+     18            I2C_Model_Init();           // 启用MCU的IIC模块
      19          #ifdef Uart_Model_Enable
-     20            Uart_Model_Init();   // 启用MCU的UART模块
+     20            Uart_Model_Init();          // 启用MCU的UART模块
      21          #endif
-     22            Var_Init();            // 初始化各变量值
-     23            //VCC1_ON();           // C-version 没有定义管脚
-     24            Timer2Init();          // 设置TIMER 2为基准时间的定时器
-     25            enableInterrupts();    // 打开MCU全局中断
-     26            Delay_ms(50);          // 延时50mS，MCU稳定
-     27            ClrWdt();              // 启用看门狗
-     28            Afe_Device_Init();     // 初始化AFE IC，包括开启ADC、电流检测模块、设置过放过充电芯电压值、放电过流、短路保护等参数
-     29            Soc_OCV_CorrectEn_Flag = 1;  // 上电允许SOC的OCV校准
-     30            LowPower_MCU_Entry_Flag = 0; // MCU运行于低功耗状态标识符
-     31            LED1_OFF();                  // 关闭LED1
-     32            //Afe_ADC_Disable();         // 100+uA
-     33            //Afe_Temp_Disable();        // 100+uA
-     34            while(1)
-     35            {
-     36              ClrWdt();                          // 刷新看门狗 1S未刷新复位 
-     37              
-     38              Afe_Get_SysStatus();               // AFE IC 状态检测，包括充放电MOS管开关状态、电流采样结束状态、AFE IC（错误、过流、短路、过充、过放）异常状态
-     39             
-     40          #ifdef Uart_Model_Enable
-     41              Uart_SendStr("\r\n");
-     42              Uart_SendStr("\r\n SYS_STAT = ");  Uart_SendData(SYS_STAT.Byte,16); 
-     43              Uart_SendStr(" SYS_CTRL1 = ");     Uart_SendData(SYS_CTRL1.Byte,16); 
-     44              Uart_SendStr(" SYS_CTRL2 = ");     Uart_SendData(SYS_CTRL2.Byte,16);  
-     45          #endif
+     22            Var_Init();                 // 初始化各变量值 
+     23            Timer2Init();               // 设置TIMER 2为基准时间的定时器
+     24            enableInterrupts();         // 打开MCU全局中断
+     25            Delay_ms(50);               // 延时50mS，MCU稳定
+     26            ClrWdt();                   // 启用看门狗
+     27            Afe_Device_Init();          // 初始化AFE IC，包括开启ADC、电流检测模块、设置过放过充电芯电压值、放电过流、短路保护等参数 
+     28            LED1_OFF();                 // 关闭LED1
+     29            SOC_Init();                 // 利用EEPROM中保存数据或OCV初始化SOC数据
+     30            //Afe_ADC_Disable();        // 100+uA
+     31            //Afe_Temp_Disable();       // 100+uA
+     32            while(1)
+     33            {
+     34              ClrWdt();                          // 刷新看门狗 1.02S未刷新系统复位 
+     35              
+     36              Afe_Get_SysStatus();               // AFE IC 状态检测，包括充放电MOS管开关状态、电流采样结束状态、AFE IC（错误、过流、短路、过充、过放）异常状态
+     37             
+     38          #ifdef Uart_Model_Enable
+     39              Uart_SendStr("\r\n");
+     40              Uart_SendStr("\r\n SYS_STAT = ");  Uart_SendData(SYS_STAT.Byte,16); 
+     41              Uart_SendStr(" SYS_CTRL1 = ");     Uart_SendData(SYS_CTRL1.Byte,16); 
+     42              Uart_SendStr(" SYS_CTRL2 = ");     Uart_SendData(SYS_CTRL2.Byte,16);  
+     43          #endif
+     44              
+     45              ModeCheck();         // 充电、放电、空载工作模式检测
      46              
-     47              ModeCheck();         // 充电、放电、空载工作模式检测
+     47              ClearStatus();       // 各工作模式下的变量清零处理
      48              
-     49              ClearStatus();       // 各工作模式下的变量清零处理
+     49              Afe_Volt_Val_Get();  // AFE IC 温度值、电芯电压值、电流值采样
      50              
-     51              Afe_Volt_Val_Get();  // AFE IC 温度值、电芯电压值、电流值采样
+     51              CurrentCheck();      // 电流异常检测
      52              
-     53              CurrentCheck();      // 电流异常检测
+     53              VoltCheck();         // 电压异常检测
      54              
-     55              VoltCheck();         // 电压异常检测
+     55              TempCheck();         // 温度异常检测
      56              
-     57              TempCheck();         // 温度异常检测
+     57              CellBal_Cntrl();     // 充电均衡控制管理
      58              
-     59              CellBal_Cntrl();     // 充电均衡控制管理
-     60              
-     61              ChgDis_AbnormalCheck();         // 充放电状态下出现电流异常
-     62               
-     63              Afe_FET_ChgDis_Cntrl();         // 充放电MOS管控制管理
+     59              ChgDis_AbnormalCheck();         // 充放电状态下出现电流异常
+     60               
+     61              Afe_FET_ChgDis_Cntrl();         // 充放电MOS管控制管理
+     62              
+     63              //Afe_AbnormalCheck();          // AFE IC 内部异常检测
      64              
-     65              //Afe_AbnormalCheck();          // AFE IC 内部异常检测
-     66              
-     67              LedShow_Cntrl();     //LedShow_WorkMode();   // 工作电量指示灯显示
-     68               
-     69          #ifdef Uart_Model_Enable  
-     70              Uart_SendStr(" WorkMode= ");      Uart_SendData(WorkMode,16); 
-     71              Uart_SendStr(" Bits_flag = ");    Uart_SendData(Bits_flag.Byte,16); 
-     72              
-     73              Uart_SendStr(" Current_Val= ");   Uart_SendData((uint16_t)Current_Val,10);
-     74              Uart_SendStr(" Volt_Avg= ");      Uart_SendData(Cell_Volt_Avg,10); 
-     75              Uart_SendStr(" Max= ");           Uart_SendData(Cell_Volt_Max,10);
-     76              Uart_SendStr(" Min= ");           Uart_SendData(Cell_Volt_Min,10);
-     77               
-     78              Uart_SendStr(" soc_rt= ");        Uart_SendData((uint16_t)SocCalc.soc_rt,10); 
-     79              Uart_SendStr(" ah= ");            Uart_SendData((uint16_t)SocReg.ah,10);
-     80              Uart_SendStr(" CellBal= ");       Uart_SendData((uint16_t)CellBalance_Selct,16);  
-     81              /* 
-     82              for(i =0;i<10;i++)
-     83              { 
-     84                Uart_SendStr(" C_");
-     85                Uart_SendData(i,10);  
-     86                Uart_SendStr("= ");
-     87                Uart_SendData(Cell_Volt[i],10);
-     88              } 
-     89              */ 
-     90          #endif
-     91              
-     92              LowPower_Cntrl();        // 低功耗控制管理
-     93            }    
-     94           
-     95          }
-     96           
+     65              LedShow_Cntrl();     // LedShow_WorkMode();   // 工作电量指示灯显示
+     66               
+     67          #ifdef Uart_Model_Enable  
+     68              
+     69              Uart_SendStr(" WorkMode= ");      Uart_SendData(WorkMode,16); 
+     70              Uart_SendStr(" Bits_flag = ");    Uart_SendData(Bits_flag.Byte,16); 
+     71              
+     72              Uart_SendStr(" Current_Val= ");   Uart_SendData((uint16_t)Current_Val,10);
+     73              Uart_SendStr(" Volt_Avg= ");      Uart_SendData(Cell_Volt_Avg,10);
+     74              Uart_SendStr(" Max= ");           Uart_SendData(Cell_Volt_Max,10);
+     75              Uart_SendStr(" Min= ");           Uart_SendData(Cell_Volt_Min,10);
+     76               
+     77              Uart_SendStr(" soc_rt= ");        Uart_SendData((uint16_t)SocCalc.soc_rt,10); 
+     78              Uart_SendStr(" ah= ");            Uart_SendData((uint16_t)SocReg.ah,10);
+     79              Uart_SendStr(" CellBal= ");       Uart_SendData((uint16_t)CellBalance_Selct,16);  
+     80              /* 
+     81              for(i =0;i<10;i++)
+     82              { 
+     83                Uart_SendStr(" C_");
+     84                Uart_SendData(i,10);
+     85                Uart_SendStr("= ");
+     86                Uart_SendData(Cell_Volt[i],10);
+     87              } 
+     88              */ 
+     89          #endif
+     90              
+     91              LowPower_Cntrl();        // 低功耗控制管理
+     92            }    
+     93           
+     94          }
+     95           
+     96          
      97          
      98          
      99          
@@ -145,20 +145,19 @@ D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_A0\sys\src\main.c
     106          
     107          
     108          
-    109          
 
    Section sizes:
 
      Function/Label Bytes
      -------------- -----
      _A_PC_ODR         1
-     main             86
+     main             81
 
  
   1 byte  in section .near.noinit
- 86 bytes in section .near_func.text
+ 81 bytes in section .near_func.text
  
- 86 bytes of CODE memory
+ 81 bytes of CODE memory
   0 bytes of DATA memory (+ 1 byte shared)
 
 Errors: none
