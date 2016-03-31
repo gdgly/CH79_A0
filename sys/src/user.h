@@ -98,6 +98,9 @@ void LowPower_Powerdown_Enter(void);
   void SOCCorrectTemp(void);
   void SOCSmooth(void);
 
+  void SOC_Init(void); 
+  void ChgDis_AbnormalCheck(void);
+
 
 
   extern unsigned char Dis_First_Run_Flag;
@@ -156,9 +159,11 @@ void LowPower_Powerdown_Enter(void);
   extern unsigned int DisCurShort_Re_t; 
 
   extern unsigned int DEVICE_XREADY_Re_t; 
+  extern unsigned int AfeErr_t; 
 
   extern unsigned int CellBalance_Cur_Selct; 
   extern unsigned int LedFlash_t; 
+  extern unsigned int LedFlash_Off_t; 
   extern unsigned int PowerOff_Delay_t;
   extern unsigned int Delay_time_t;
   
@@ -181,17 +186,14 @@ void LowPower_Powerdown_Enter(void);
   {
     unsigned char Byte;
     struct FLAG_BITS
-    {
-      //unsigned char Chg             : 1;
+    { 
       unsigned char ChgOv           : 1;
       unsigned char ChgCurOv        : 1;
-      unsigned char ChgTemp         : 1; 
-      //unsigned char Dis             : 1;
+      unsigned char ChgTemp         : 1;  
       unsigned char DisOv           : 1;
       unsigned char DisTemp         : 1;  
       unsigned char DisCurOv        : 1; 
-      unsigned char DisCurShort     : 1;  
-      //unsigned char KEY_on          : 1; 
+      unsigned char DisCurShort     : 1;   
       unsigned char AfeErr          : 1; 
     }Bit;
   } Bits_flag;

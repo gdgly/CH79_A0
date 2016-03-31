@@ -33,63 +33,62 @@ void main(void)
   //Afe_Temp_Disable();        // 100+uA
   while(1)
   {
-    ClrWdt();                          // 刷新看门狗 1S未刷新复位
-    if(LowPower_MCU_Entry_Flag == 0)   // 如果MCU不处于低功耗运行模式
-    { 
-      Afe_Get_SysStatus();             // AFE IC 状态检测，包括充放电MOS管开关状态、电流采样结束状态、AFE IC（错误、过流、短路、过充、过放）异常状态
-     
-#ifdef Uart_Model_Enable
-      Uart_SendStr("\r\n SYS_STAT= ");  Uart_SendData(SYS_STAT.Byte,16); 
-      Uart_SendStr(" SYS_CTRL1 = ");    Uart_SendData(SYS_CTRL1.Byte,16); 
-      Uart_SendStr(" SYS_CTRL2 = ");    Uart_SendData(SYS_CTRL2.Byte,16);  
-#endif
-      
-      ModeCheck();         // 充电、放电、空载工作模式检测
-      
-      ClearStatus();       // 各工作模式下的变量清零处理
-      
-      Afe_Volt_Val_Get();  // AFE IC 温度值、电芯电压值、电流值采样
-      
-      CurrentCheck();      // 电流异常检测
-      
-      VoltCheck();         // 电压异常检测
-      
-      TempCheck();         // 温度异常检测
-      
-      CellBal_Cntrl();     // 充电均衡控制管理
-      
-      Afe_FET_ChgDis_Cntrl();       // 充放电MOS管控制管理
-      
-      Afe_AbnormalCheck();          // AFE IC 内部异常检测
-      
-      LedShow_Cntrl();     //LedShow_WorkMode();   // 工作电量指示灯显示
-       
-#ifdef Uart_Model_Enable  
-      Uart_SendStr(" WorkMode= ");      Uart_SendData(WorkMode,16); 
-      Uart_SendStr(" Bits_flag = ");    Uart_SendData(Bits_flag.Byte,16); 
-      
-      Uart_SendStr(" Current_Val= ");   Uart_SendData((uint16_t)Current_Val,10);
-      Uart_SendStr(" Volt_Avg= ");      Uart_SendData(Cell_Volt_Avg,10); 
-      Uart_SendStr(" Max= ");           Uart_SendData(Cell_Volt_Max,10);
-      Uart_SendStr(" Min= ");           Uart_SendData(Cell_Volt_Min,10);
-       
-      Uart_SendStr(" soc_rt= ");        Uart_SendData((uint16_t)SocCalc.soc_rt,10); 
-      Uart_SendStr(" ah= ");            Uart_SendData((uint16_t)SocReg.ah,10);
-      Uart_SendStr(" CellBal= ");       Uart_SendData((uint16_t)CellBalance_Selct,16);  
-      /* 
-      for(i =0;i<10;i++)
-      { 
-        Uart_SendStr(" C_");
-        Uart_SendData(i,10);  
-        Uart_SendStr("= ");
-        Uart_SendData(Cell_Volt[i],10);
-      }
-
-      Uart_SendStr("\r\n");*/ 
-      Uart_SendStr("\r\n");
-#endif
+    ClrWdt();                          // 刷新看门狗 1S未刷新复位 
+    
+    Afe_Get_SysStatus();               // AFE IC 状态检测，包括充放电MOS管开关状态、电流采样结束状态、AFE IC（错误、过流、短路、过充、过放）异常状态
    
-    }
+#ifdef Uart_Model_Enable
+    Uart_SendStr("\r\n");
+    Uart_SendStr("\r\n SYS_STAT = ");  Uart_SendData(SYS_STAT.Byte,16); 
+    Uart_SendStr(" SYS_CTRL1 = ");     Uart_SendData(SYS_CTRL1.Byte,16); 
+    Uart_SendStr(" SYS_CTRL2 = ");     Uart_SendData(SYS_CTRL2.Byte,16);  
+#endif
+    
+    ModeCheck();         // 充电、放电、空载工作模式检测
+    
+    ClearStatus();       // 各工作模式下的变量清零处理
+    
+    Afe_Volt_Val_Get();  // AFE IC 温度值、电芯电压值、电流值采样
+    
+    CurrentCheck();      // 电流异常检测
+    
+    VoltCheck();         // 电压异常检测
+    
+    TempCheck();         // 温度异常检测
+    
+    CellBal_Cntrl();     // 充电均衡控制管理
+    
+    ChgDis_AbnormalCheck();         // 充放电状态下出现电流异常
+     
+    Afe_FET_ChgDis_Cntrl();         // 充放电MOS管控制管理
+    
+    //Afe_AbnormalCheck();          // AFE IC 内部异常检测
+    
+    LedShow_Cntrl();     //LedShow_WorkMode();   // 工作电量指示灯显示
+     
+#ifdef Uart_Model_Enable  
+    Uart_SendStr(" WorkMode= ");      Uart_SendData(WorkMode,16); 
+    Uart_SendStr(" Bits_flag = ");    Uart_SendData(Bits_flag.Byte,16); 
+    
+    Uart_SendStr(" Current_Val= ");   Uart_SendData((uint16_t)Current_Val,10);
+    Uart_SendStr(" Volt_Avg= ");      Uart_SendData(Cell_Volt_Avg,10); 
+    Uart_SendStr(" Max= ");           Uart_SendData(Cell_Volt_Max,10);
+    Uart_SendStr(" Min= ");           Uart_SendData(Cell_Volt_Min,10);
+     
+    Uart_SendStr(" soc_rt= ");        Uart_SendData((uint16_t)SocCalc.soc_rt,10); 
+    Uart_SendStr(" ah= ");            Uart_SendData((uint16_t)SocReg.ah,10);
+    Uart_SendStr(" CellBal= ");       Uart_SendData((uint16_t)CellBalance_Selct,16);  
+    /* 
+    for(i =0;i<10;i++)
+    { 
+      Uart_SendStr(" C_");
+      Uart_SendData(i,10);  
+      Uart_SendStr("= ");
+      Uart_SendData(Cell_Volt[i],10);
+    } 
+    */ 
+#endif
+    
     LowPower_Cntrl();        // 低功耗控制管理
   }    
  

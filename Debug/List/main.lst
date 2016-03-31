@@ -1,34 +1,42 @@
 ###############################################################################
 #                                                                             #
-# IAR C/C++ Compiler V1.31.1.20058 [Evaluation] for STM830/Mar/2016  20:52:26 #
+# IAR C/C++ Compiler V1.31.1.20058 [Evaluation] for STM831/Mar/2016  14:44:11 #
 # Copyright 2010-2012 IAR Systems AB.                                         #
 #                                                                             #
-#    Source file  =  D:\ProjectPath\GitPath\CH79_A0\sys\src\main.c            #
-#    Command line =  D:\ProjectPath\GitPath\CH79_A0\sys\src\main.c -e -Ohz    #
-#                    --debug --code_model small --data_model medium -o        #
-#                    D:\ProjectPath\GitPath\CH79_A0\Debug\Obj\ --dlib_config  #
-#                    "C:\Program Files\IAR Systems\Embedded Workbench 6.0     #
+#    Source file  =  D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_A0\sys\s #
+#                    rc\main.c                                                #
+#    Command line =  D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_A0\sys\s #
+#                    rc\main.c -e -Ohz --debug --code_model small             #
+#                    --data_model medium -o D:\ProjectPath\STMPath\CH79_A0_3n #
+#                    d_Changed\CH79_A0\Debug\Obj\ --dlib_config "C:\Program   #
+#                    Files\IAR Systems\Embedded Workbench 6.0                 #
 #                    Evaluation\stm8\LIB\dlstm8smn.h" -lcN                    #
-#                    D:\ProjectPath\GitPath\CH79_A0\Debug\List\ -I            #
-#                    D:\ProjectPath\GitPath\CH79_A0/user/\ -I                 #
-#                    D:\ProjectPath\GitPath\CH79_A0/user/src/\ -I             #
-#                    D:\ProjectPath\GitPath\CH79_A0/user/inc/\ -I             #
-#                    D:\ProjectPath\GitPath\CH79_A0/addon/\ -I                #
-#                    D:\ProjectPath\GitPath\CH79_A0/addon/src/\ -I            #
-#                    D:\ProjectPath\GitPath\CH79_A0/addon/inc/\ -I            #
-#                    D:\ProjectPath\GitPath\CH79_A0/sys/\ -I                  #
-#                    D:\ProjectPath\GitPath\CH79_A0/sys/inc/\ -I              #
-#                    D:\ProjectPath\GitPath\CH79_A0/sys/src/\ -I              #
-#                    D:\ProjectPath\GitPath\CH79_A0/lib/\ -I                  #
-#                    D:\ProjectPath\GitPath\CH79_A0/lib/src/\ -I              #
-#                    D:\ProjectPath\GitPath\CH79_A0/lib/inc/\ --vregs 16      #
-#    List file    =  D:\ProjectPath\GitPath\CH79_A0\Debug\List\main.lst       #
-#    Object file  =  D:\ProjectPath\GitPath\CH79_A0\Debug\Obj\main.o          #
+#                    D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_A0\Debug #
+#                    \List\ -I D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH7 #
+#                    9_A0/user/\ -I D:\ProjectPath\STMPath\CH79_A0_3nd_Change #
+#                    d\CH79_A0/user/src/\ -I D:\ProjectPath\STMPath\CH79_A0_3 #
+#                    nd_Changed\CH79_A0/user/inc/\ -I                         #
+#                    D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_A0/addon #
+#                    /\ -I D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_A0 #
+#                    /addon/src/\ -I D:\ProjectPath\STMPath\CH79_A0_3nd_Chang #
+#                    ed\CH79_A0/addon/inc/\ -I D:\ProjectPath\STMPath\CH79_A0 #
+#                    _3nd_Changed\CH79_A0/sys/\ -I                            #
+#                    D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_A0/sys/i #
+#                    nc/\ -I D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_ #
+#                    A0/sys/src/\ -I D:\ProjectPath\STMPath\CH79_A0_3nd_Chang #
+#                    ed\CH79_A0/lib/\ -I D:\ProjectPath\STMPath\CH79_A0_3nd_C #
+#                    hanged\CH79_A0/lib/src/\ -I                              #
+#                    D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_A0/lib/i #
+#                    nc/\ --vregs 16                                          #
+#    List file    =  D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_A0\Debug #
+#                    \List\main.lst                                           #
+#    Object file  =  D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_A0\Debug #
+#                    \Obj\main.o                                              #
 #                                                                             #
 #                                                                             #
 ###############################################################################
 
-D:\ProjectPath\GitPath\CH79_A0\sys\src\main.c
+D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_A0\sys\src\main.c
       1          //===2016-03-25pm
       2          //===C-version-git-control
       3          #include "stm8s.h"  
@@ -64,68 +72,68 @@ D:\ProjectPath\GitPath\CH79_A0\sys\src\main.c
      33            //Afe_Temp_Disable();        // 100+uA
      34            while(1)
      35            {
-     36              ClrWdt();                          // 刷新看门狗 1S未刷新复位
-     37              if(LowPower_MCU_Entry_Flag == 0)   // 如果MCU不处于低功耗运行模式
-     38              { 
-     39                Afe_Get_SysStatus();             // AFE IC 状态检测，包括充放电MOS管开关状态、电流采样结束状态、AFE IC（错误、过流、短路、过充、过放）异常状态
-     40               
-     41          #ifdef Uart_Model_Enable
-     42                Uart_SendStr("\r\n SYS_STAT= ");  Uart_SendData(SYS_STAT.Byte,16); 
-     43                Uart_SendStr(" SYS_CTRL1 = ");    Uart_SendData(SYS_CTRL1.Byte,16); 
-     44                Uart_SendStr(" SYS_CTRL2 = ");    Uart_SendData(SYS_CTRL2.Byte,16);  
+     36              ClrWdt();                          // 刷新看门狗 1S未刷新复位 
+     37              
+     38              Afe_Get_SysStatus();               // AFE IC 状态检测，包括充放电MOS管开关状态、电流采样结束状态、AFE IC（错误、过流、短路、过充、过放）异常状态
+     39             
+     40          #ifdef Uart_Model_Enable
+     41              Uart_SendStr("\r\n");
+     42              Uart_SendStr("\r\n SYS_STAT = ");  Uart_SendData(SYS_STAT.Byte,16); 
+     43              Uart_SendStr(" SYS_CTRL1 = ");     Uart_SendData(SYS_CTRL1.Byte,16); 
+     44              Uart_SendStr(" SYS_CTRL2 = ");     Uart_SendData(SYS_CTRL2.Byte,16);  
      45          #endif
-     46                
-     47                ModeCheck();         // 充电、放电、空载工作模式检测
-     48                
-     49                ClearStatus();       // 各工作模式下的变量清零处理
-     50                
-     51                Afe_Volt_Val_Get();  // AFE IC 温度值、电芯电压值、电流值采样
-     52                
-     53                CurrentCheck();      // 电流异常检测
-     54                
-     55                VoltCheck();         // 电压异常检测
-     56                
-     57                TempCheck();         // 温度异常检测
-     58                
-     59                CellBal_Cntrl();     // 充电均衡控制管理
-     60                
-     61                Afe_FET_ChgDis_Cntrl();       // 充放电MOS管控制管理
-     62                
-     63                Afe_AbnormalCheck();          // AFE IC 内部异常检测
-     64                
-     65                LedShow_Cntrl();     //LedShow_WorkMode();   // 工作电量指示灯显示
-     66                 
-     67          #ifdef Uart_Model_Enable  
-     68                Uart_SendStr(" WorkMode= ");      Uart_SendData(WorkMode,16); 
-     69                Uart_SendStr(" Bits_flag = ");    Uart_SendData(Bits_flag.Byte,16); 
-     70                
-     71                Uart_SendStr(" Current_Val= ");   Uart_SendData((uint16_t)Current_Val,10);
-     72                Uart_SendStr(" Volt_Avg= ");      Uart_SendData(Cell_Volt_Avg,10); 
-     73                Uart_SendStr(" Max= ");           Uart_SendData(Cell_Volt_Max,10);
-     74                Uart_SendStr(" Min= ");           Uart_SendData(Cell_Volt_Min,10);
-     75                 
-     76                Uart_SendStr(" soc_rt= ");        Uart_SendData((uint16_t)SocCalc.soc_rt,10); 
-     77                Uart_SendStr(" ah= ");            Uart_SendData((uint16_t)SocReg.ah,10);
-     78                Uart_SendStr(" CellBal= ");       Uart_SendData((uint16_t)CellBalance_Selct,16);  
-     79                /* 
-     80                for(i =0;i<10;i++)
-     81                { 
-     82                  Uart_SendStr(" C_");
-     83                  Uart_SendData(i,10);  
-     84                  Uart_SendStr("= ");
-     85                  Uart_SendData(Cell_Volt[i],10);
-     86                }
-     87          
-     88                Uart_SendStr("\r\n");*/ 
-     89                Uart_SendStr("\r\n");
+     46              
+     47              ModeCheck();         // 充电、放电、空载工作模式检测
+     48              
+     49              ClearStatus();       // 各工作模式下的变量清零处理
+     50              
+     51              Afe_Volt_Val_Get();  // AFE IC 温度值、电芯电压值、电流值采样
+     52              
+     53              CurrentCheck();      // 电流异常检测
+     54              
+     55              VoltCheck();         // 电压异常检测
+     56              
+     57              TempCheck();         // 温度异常检测
+     58              
+     59              CellBal_Cntrl();     // 充电均衡控制管理
+     60              
+     61              ChgDis_AbnormalCheck();         // 充放电状态下出现电流异常
+     62               
+     63              Afe_FET_ChgDis_Cntrl();         // 充放电MOS管控制管理
+     64              
+     65              //Afe_AbnormalCheck();          // AFE IC 内部异常检测
+     66              
+     67              LedShow_Cntrl();     //LedShow_WorkMode();   // 工作电量指示灯显示
+     68               
+     69          #ifdef Uart_Model_Enable  
+     70              Uart_SendStr(" WorkMode= ");      Uart_SendData(WorkMode,16); 
+     71              Uart_SendStr(" Bits_flag = ");    Uart_SendData(Bits_flag.Byte,16); 
+     72              
+     73              Uart_SendStr(" Current_Val= ");   Uart_SendData((uint16_t)Current_Val,10);
+     74              Uart_SendStr(" Volt_Avg= ");      Uart_SendData(Cell_Volt_Avg,10); 
+     75              Uart_SendStr(" Max= ");           Uart_SendData(Cell_Volt_Max,10);
+     76              Uart_SendStr(" Min= ");           Uart_SendData(Cell_Volt_Min,10);
+     77               
+     78              Uart_SendStr(" soc_rt= ");        Uart_SendData((uint16_t)SocCalc.soc_rt,10); 
+     79              Uart_SendStr(" ah= ");            Uart_SendData((uint16_t)SocReg.ah,10);
+     80              Uart_SendStr(" CellBal= ");       Uart_SendData((uint16_t)CellBalance_Selct,16);  
+     81              /* 
+     82              for(i =0;i<10;i++)
+     83              { 
+     84                Uart_SendStr(" C_");
+     85                Uart_SendData(i,10);  
+     86                Uart_SendStr("= ");
+     87                Uart_SendData(Cell_Volt[i],10);
+     88              } 
+     89              */ 
      90          #endif
-     91             
-     92              }
-     93              LowPower_Cntrl();        // 低功耗控制管理
-     94            }    
-     95           
-     96          }
-     97           
+     91              
+     92              LowPower_Cntrl();        // 低功耗控制管理
+     93            }    
+     94           
+     95          }
+     96           
+     97          
      98          
      99          
     100          
@@ -138,20 +146,19 @@ D:\ProjectPath\GitPath\CH79_A0\sys\src\main.c
     107          
     108          
     109          
-    110          
 
    Section sizes:
 
      Function/Label Bytes
      -------------- -----
      _A_PC_ODR         1
-     main             91
+     main             86
 
  
   1 byte  in section .near.noinit
- 91 bytes in section .near_func.text
+ 86 bytes in section .near_func.text
  
- 91 bytes of CODE memory
+ 86 bytes of CODE memory
   0 bytes of DATA memory (+ 1 byte shared)
 
 Errors: none

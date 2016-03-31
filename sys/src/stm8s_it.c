@@ -159,8 +159,8 @@ INTERRUPT_HANDLER(EXTI_PORTD_IRQHandler, 6)
   /**/ 
   //LED1_ON();
   AWU->CSR |= 0x00;
-  LowPower_MCU_Entry_Flag = 0;
-  LowPower_Entry_Delay_t = 0;
+  //LowPower_MCU_Entry_Flag = 0;
+  //LowPower_Entry_Delay_t = 0;
 }
 
 /**
@@ -339,10 +339,17 @@ INTERRUPT_HANDLER(TIM1_CAP_COM_IRQHandler, 12)
     }
   } 
   //======================================== 
-  if(LedFlash_t < MAX_UINT16_T_NUM)
+  if(WorkMode != IDLE_MODE)
   {
-    LedFlash_t += 1;
-  } 
+    if(LedFlash_t < MAX_UINT16_T_NUM)
+    {
+      LedFlash_t += 1;
+    } 
+  }
+  else
+  {
+    LedFlash_t = 0;
+  }
   //=======================================
   if(Temp_Volt_Sample_Cnt < MAX_UINT16_T_NUM)
   {  
@@ -467,10 +474,14 @@ INTERRUPT_HANDLER(TIM1_CAP_COM_IRQHandler, 12)
     {
       DEVICE_XREADY_Re_t += 1;
     }
+    if(AfeErr_t < MAX_UINT16_T_NUM)
+    {
+      AfeErr_t += 1;
+    }
   }
   else
   {
-    DEVICE_XREADY_Re_t = 0;
+    DEVICE_XREADY_Re_t = 0; 
   }
   //=======================================
   if(WorkMode ==IDLE_MODE)
@@ -483,15 +494,12 @@ INTERRUPT_HANDLER(TIM1_CAP_COM_IRQHandler, 12)
     {
       PowerOff_Delay_t += 1;
     }
-  }
-  /*
-  else
-  {
-    PowerOff_Delay_t = 0;
-    LowPower_MCU_Entry_Flag = 0;
-    LowPower_Entry_Delay_t = 0;
-  }
-  */
+    if(LedFlash_Off_t < MAX_UINT16_T_NUM)
+    {
+      LedFlash_Off_t += 1;
+    }
+    
+  } 
 }
 
 /**

@@ -63,9 +63,11 @@ unsigned int DisCurOv_Re_t;
 unsigned int DisCurShort_Re_t; 
 
 unsigned int DEVICE_XREADY_Re_t; 
+unsigned int AfeErr_t; 
 
 unsigned int CellBalance_Cur_Selct;  
 unsigned int LedFlash_t; 
+unsigned int LedFlash_Off_t; 
 unsigned int PowerOff_Delay_t;
 unsigned int Delay_time_t;
 

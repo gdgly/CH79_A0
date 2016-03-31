@@ -54,10 +54,14 @@
 
 #define   OverTimeDelay_SET     50                //
 //================================== 
-#define   IS_SIGNAL_IN()        PD_IDR_IDR3 == 0
+//#define   IS_SIGNAL_IN()        PD_IDR_IDR3 == 0
+#define   IS_FAULT_ON()         PD_IDR_IDR3 == 1
+#define   IS_FAULT_OFF()        PD_IDR_IDR3 == 0
 #define   IS_CHG_DETECT()       PD_IDR_IDR2 == 0
-//#define   IS_LOAD_DETECT()      PA_IDR_IDR3 == 0
-#define   IS_ALERT()            PC_IDR_IDR7 == 1
+//#define   IS_LOAD_DETECT()    PA_IDR_IDR3 == 0
+//#define   IS_ALERT()          PC_IDR_IDR7 == 1
+#define   ALERT_PIN_HIGH()      PC_ODR_ODR7 = 1
+#define   ALERT_PIN_LOW()       PC_ODR_ODR7 = 0
 
 #define   VCC1_ON()             PA_ODR_ODR1 = 1
 

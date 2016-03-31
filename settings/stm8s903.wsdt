@@ -12,7 +12,7 @@
           
           
           
-        <Column0>236</Column0><Column1>27</Column1><Column2>27</Column2><Column3>27</Column3></ColumnWidths>
+        <Column0>168</Column0><Column1>27</Column1><Column2>27</Column2><Column3>27</Column3></ColumnWidths>
       </Workspace>
       <Build>
         
@@ -37,7 +37,7 @@
             <Factory>Workspace</Factory>
             <Session>
               
-            <NodeDict><ExpandedNode>stm8s903</ExpandedNode><ExpandedNode>stm8s903/Document</ExpandedNode><ExpandedNode>stm8s903/addon</ExpandedNode><ExpandedNode>stm8s903/lib</ExpandedNode><ExpandedNode>stm8s903/sys</ExpandedNode><ExpandedNode>stm8s903/sys/soc.c</ExpandedNode></NodeDict></Session>
+            <NodeDict><ExpandedNode>stm8s903</ExpandedNode><ExpandedNode>stm8s903/Document</ExpandedNode><ExpandedNode>stm8s903/addon</ExpandedNode><ExpandedNode>stm8s903/lib</ExpandedNode><ExpandedNode>stm8s903/sys</ExpandedNode><ExpandedNode>stm8s903/sys/stm8s_flash.c</ExpandedNode></NodeDict></Session>
           </Tab>
         </Tabs>
         
@@ -63,14 +63,14 @@
       
       
       
-    <Pane><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\sys\src\data_def.c</Filename><XPos>0</XPos><YPos>12</YPos><SelStart>512</SelStart><SelEnd>512</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\sys\src\user.h</Filename><XPos>0</XPos><YPos>108</YPos><SelStart>3643</SelStart><SelEnd>3643</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\sys\src\stm8s_awu.c</Filename><XPos>0</XPos><YPos>87</YPos><SelStart>3372</SelStart><SelEnd>3372</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\sys\src\soc.c</Filename><XPos>0</XPos><YPos>155</YPos><SelStart>4665</SelStart><SelEnd>4665</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\sys\src\stm8s_it.c</Filename><XPos>0</XPos><YPos>472</YPos><SelStart>11201</SelStart><SelEnd>11201</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\sys\src\stm8s_awu.h</Filename><XPos>0</XPos><YPos>36</YPos><SelStart>2385</SelStart><SelEnd>2400</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\sys\src\Afe_bq769x0_user.c</Filename><XPos>0</XPos><YPos>165</YPos><SelStart>4078</SelStart><SelEnd>4078</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\sys\src\user.c</Filename><XPos>0</XPos><YPos>1298</YPos><SelStart>37326</SelStart><SelEnd>37326</SelEnd></Tab><ActiveTab>7</ActiveTab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\sys\src\macro_def.h</Filename><XPos>0</XPos><YPos>51</YPos><SelStart>3524</SelStart><SelEnd>3524</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\sys\src\main.c</Filename><XPos>0</XPos><YPos>84</YPos><SelStart>3139</SelStart><SelEnd>3139</SelEnd></Tab></Pane><ActivePane>0</ActivePane><Sizes><Pane><X>1000000</X><Y>1000000</Y></Pane></Sizes><SplitMode>1</SplitMode></Editor>
+    <Pane><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\sys\src\data_def.c</Filename><XPos>0</XPos><YPos>54</YPos><SelStart>1680</SelStart><SelEnd>1688</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\sys\src\user.h</Filename><XPos>0</XPos><YPos>156</YPos><SelStart>5054</SelStart><SelEnd>5054</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\sys\src\stm8s_awu.c</Filename><XPos>0</XPos><YPos>87</YPos><SelStart>3372</SelStart><SelEnd>3372</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\sys\src\soc.c</Filename><XPos>0</XPos><YPos>155</YPos><SelStart>4665</SelStart><SelEnd>4665</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\sys\src\stm8s_it.c</Filename><XPos>0</XPos><YPos>468</YPos><SelStart>11027</SelStart><SelEnd>11027</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\sys\src\stm8s_awu.h</Filename><XPos>0</XPos><YPos>36</YPos><SelStart>2385</SelStart><SelEnd>2400</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\sys\src\Afe_bq769x0_user.c</Filename><XPos>0</XPos><YPos>21</YPos><SelStart>909</SelStart><SelEnd>909</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\sys\src\user.c</Filename><XPos>0</XPos><YPos>1129</YPos><SelStart>33212</SelStart><SelEnd>33212</SelEnd></Tab><ActiveTab>7</ActiveTab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\sys\src\macro_def.h</Filename><XPos>0</XPos><YPos>49</YPos><SelStart>3339</SelStart><SelEnd>3350</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\sys\src\main.c</Filename><XPos>0</XPos><YPos>54</YPos><SelStart>2053</SelStart><SelEnd>2053</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\sys\src\stm8s_flash.c</Filename><XPos>0</XPos><YPos>178</YPos><SelStart>6915</SelStart><SelEnd>6929</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\sys\src\stm8s_flash.h</Filename><XPos>0</XPos><YPos>246</YPos><SelStart>11767</SelStart><SelEnd>11767</SelEnd></Tab></Pane><ActivePane>0</ActivePane><Sizes><Pane><X>1000000</X><Y>1000000</Y></Pane></Sizes><SplitMode>1</SplitMode></Editor>
     <Positions>
       
       
       
       
       
-    <Top><Row0><Sizes><Toolbar-00ee2588><key>iaridepm.enu1</key></Toolbar-00ee2588></Sizes></Row0></Top><Left><Row0><Sizes><Wnd0><Rect><Top>-2</Top><Left>-2</Left><Bottom>391</Bottom><Right>327</Right><x>-2</x><y>-2</y><xscreen>63</xscreen><yscreen>96</yscreen><sizeHorzCX>46120</sizeHorzCX><sizeHorzCY>139942</sizeHorzCY><sizeVertCX>240849</sizeVertCX><sizeVertCY>572886</sizeVertCY></Rect></Wnd0></Sizes></Row0></Left><Right><Row0><Sizes/></Row0></Right><Bottom><Row0><Sizes><Wnd1><Rect><Top>-2</Top><Left>-2</Left><Bottom>250</Bottom><Right>1368</Right><x>-2</x><y>-2</y><xscreen>1370</xscreen><yscreen>252</yscreen><sizeHorzCX>1002928</sizeHorzCX><sizeHorzCY>367347</sizeHorzCY><sizeVertCX>46120</sizeVertCX><sizeVertCY>139942</sizeVertCY></Rect></Wnd1></Sizes></Row0></Bottom><Float><Sizes/></Float></Positions>
+    <Top><Row0><Sizes><Toolbar-01f92500><key>iaridepm.enu1</key></Toolbar-01f92500></Sizes></Row0></Top><Left><Row0><Sizes><Wnd0><Rect><Top>-2</Top><Left>-2</Left><Bottom>415</Bottom><Right>259</Right><x>-2</x><y>-2</y><xscreen>50</xscreen><yscreen>87</yscreen><sizeHorzCX>36603</sizeHorzCX><sizeHorzCY>126822</sizeHorzCY><sizeVertCX>191069</sizeVertCX><sizeVertCY>607872</sizeVertCY></Rect></Wnd0></Sizes></Row0></Left><Right><Row0><Sizes/></Row0></Right><Bottom><Row0><Sizes><Wnd1><Rect><Top>-2</Top><Left>-2</Left><Bottom>226</Bottom><Right>1368</Right><x>-2</x><y>-2</y><xscreen>1370</xscreen><yscreen>228</yscreen><sizeHorzCX>1002928</sizeHorzCX><sizeHorzCY>332362</sizeHorzCY><sizeVertCX>36603</sizeVertCX><sizeVertCY>126822</sizeVertCY></Rect></Wnd1></Sizes></Row0></Bottom><Float><Sizes/></Float></Positions>
   </Desktop>
 </Workspace>
 

@@ -1557,6 +1557,9 @@
       <name>$PROJ_DIR$\sys\src\stm8s_clk.c</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\sys\src\stm8s_flash.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\sys\src\stm8s_gpio.c</name>
     </file>
     <file>

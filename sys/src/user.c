@@ -759,21 +759,21 @@ void ModeCheck_Backup(void)
 //==========================================================================
 void ModeCheck(void)
 {       
+  //工作模式的检测是依据外部Triger端的电压大小来判定
   Check_Val = ADConverse(3); 
   if((Check_Val >= 130 && Check_Val < 160) || CC_Val >= 10)
   {  
-    if(ChgExchangeMode_Cnt >= 50)
+    if(ChgExchangeMode_Cnt >= 30)
     { 
       ChgExchangeMode_Cnt  = 100;
       DisExchangeMode_Cnt  = 0;
       IdleExchangeMode_Cnt = 0;
       WorkMode = CHARGE_MODE;
     }
-  }  
-  //else if(IS_SIGNAL_IN()) // (FET_Status == 1 && (IS_LOAD_DETECT() || SYS_CTRL1.Bit.LOAD_PRESENT)) || Current_Val >= 20 || 
-  else if((Check_Val >= 220 && Check_Val < 630)) 
+  }   
+  else if((Check_Val >= 220 && Check_Val < 630) || SYS_CTRL1.Bit.LOAD_PRESENT) 
   {  
-    if(DisExchangeMode_Cnt >= 100)
+    if(DisExchangeMode_Cnt >= 30)
     { 
       IdleExchangeMode_Cnt = 0;
       ChgExchangeMode_Cnt = 0;
@@ -953,20 +953,17 @@ void Afe_Volt_Val_Get(void)
   {
     CC_Volt_Sample_Cnt = 0;
     SYS_STAT.Bit.CC_READY = 0;
-    CC_AD = Afe_Get_Adc(CC_HI_ADDR); 
-    //CC_Val = (int32_t)CC_AD * 820/100; //mA (int32_t)
+    CC_AD = Afe_Get_Adc(CC_HI_ADDR);  
     CC_Val = (int32_t)820 * CC_AD /100; //mA (int32_t)
-    //SYS_STAT_Last |= 0x80;
-    //I2C_Write(SYS_STAT_ADDR,SYS_STAT_Last); 
-    //SYS_STAT_Last &= ~0x80;
+     
     Afe_CC_1Shot_Set();
-    if(CC_Val < -32000)
+    if(CC_Val < -320000)
     {
-      CC_Val = -32000;
+      CC_Val = -320000;
     }
-    else if(CC_Val > 32000)
+    else if(CC_Val > 320000)
     {
-      CC_Val = 32000;
+      CC_Val = 320000;
     }
     Current_Val = CC_Val;
     if(CC_Val < 0)
@@ -1052,24 +1049,123 @@ void CellBal_Cntrl(void)
              
 2、放电模式：有异常时，电流异常（LED1及LED2闪烁，周期为1秒），温度异常（LED1、LED2及LED3闪烁，周期为1秒）
              无异常时，显示当前电量
-                10%           LED1闪烁 1Hz
+                10%           LED1闪烁 0.5Hz
                 10%---30%     LED1常亮
                 30%---50%     LED1、LED2常亮
                 50%           LED全亮
 */  
 void LedShow_Cntrl(void)
 {
+  static uint8_t FlowLedCnt = 0;
+  static uint8_t FlowLed_Finish_Flag = 0;
   // soc 显示
   // 异常后，报警5s后，熄灭
-  if(WorkMode == IDLE_MODE)
-  {
-    LED1_OFF();
-    LED2_OFF(); 
-    LED3_OFF(); 
+  if(WorkMode == IDLE_MODE)// ==流水显示方式
+  {  
+    FlowLedCnt = 0;
+    FlowLed_Finish_Flag = 0; 
+    if(LedFlash_Off_t < 100)
+    {
+      LED1_ON();
+      LED2_ON();
+      LED3_ON();  
+    }  
+    else if(LedFlash_Off_t < 200)
+    {
+      LED1_ON();
+      LED2_ON();
+      LED3_OFF();  
+    }  
+    else if(LedFlash_Off_t < 300)
+    {
+      LED1_ON();
+      LED2_OFF();
+      LED3_OFF();  
+    }  
+    else  
+    {
+      LED1_OFF();
+      LED2_OFF();
+      LED3_OFF();  
+    }   
   }
   else
   { 
-    if(WorkMode == CHARGE_MODE)
+    LedFlash_Off_t = 0;
+    if(FlowLed_Finish_Flag ==0)
+    {
+      if(FlowLedCnt ==0)
+      {
+        LED1_ON();
+        LED2_OFF();
+        LED3_OFF(); 
+        if(LedFlash_t >= 100)
+        {
+          LedFlash_t = 0;
+          FlowLedCnt = 1;
+        }  
+      }
+      else if(FlowLedCnt ==1)
+      {
+        LED1_OFF();
+        LED2_ON();
+        LED3_OFF(); 
+        if(LedFlash_t >= 100)
+        {
+          LedFlash_t = 0;
+          FlowLedCnt = 2;
+        }  
+      }
+      else if(FlowLedCnt ==2)
+      {
+        LED1_OFF();
+        LED2_ON();
+        LED3_OFF(); 
+        if(LedFlash_t >= 100)
+        {
+          LedFlash_t = 0;
+          FlowLedCnt = 3;
+          FlowLed_Finish_Flag = 1;
+        }  
+      }
+    }
+    else if(Bits_flag.Bit.AfeErr)
+    {
+      if(FlowLedCnt ==0)
+      {
+        LED1_ON();
+        LED2_OFF();
+        LED3_OFF(); 
+        if(LedFlash_t >= 100)
+        {
+          LedFlash_t = 0;
+          FlowLedCnt = 1;
+        }  
+      }
+      else if(FlowLedCnt ==1)
+      {
+        LED1_OFF();
+        LED2_ON();
+        LED3_OFF(); 
+        if(LedFlash_t >= 100)
+        {
+          LedFlash_t = 0;
+          FlowLedCnt = 2;
+        }  
+      }
+      else if(FlowLedCnt ==2)
+      {
+        LED1_OFF();
+        LED2_ON();
+        LED3_OFF(); 
+        if(LedFlash_t >= 100)
+        {
+          LedFlash_t = 0;
+          FlowLedCnt = 0;
+        }  
+      }
+    }
+    else if(WorkMode == CHARGE_MODE)
     {
       /*
       if(Bits_flag.Bit.ChgCurOv)
@@ -1093,7 +1189,7 @@ void LedShow_Cntrl(void)
         } 
       }
       else */
-      if(Bits_flag.Bit.ChgOv )//|| SocCalc.soc_rt >= 90)
+      if(Bits_flag.Bit.ChgOv || Cell_Volt_Max >= 4100) 
       {
         LED1_OFF();
         LED2_OFF(); 
@@ -1272,35 +1368,11 @@ void LowPower_Entry_MCU_Set(void)
     LowPower_Entry_Delay_t = 0; 
   }
 } 
-//==========================================================================
-void LowPower_Entry_MCU_Set_Backup(void)
-{   
-  if(WorkMode == IDLE_MODE && LowPower_Entry_Delay_t >= 600 && !Bits_flag.Bit.DisOv)
-  { 
-    Afe_ADC_Disable();
-    Afe_Temp_Disable();  
-    CLK_PCKENR2 = CLK_PCKENR2_AWU;
-    AWU_Init(AWU_TIMEBASE_12S);//AWU_TIMEBASE_30S); 
-    CLK->ICKR |= CLK_ICKR_SWUAH;
-    FLASH->CR1 |= 0x04;	  
-    EXTI_SetExtIntSensitivity(EXTI_PORT_GPIOD, EXTI_SENSITIVITY_FALL_ONLY);//Signal_In下降沿触发
-    LowPower_MCU_Entry_Flag = 1; 
-    halt(); 
-     
-    LowPower_Entry_Delay_t = 0;
-    
-    Delay_ms(100); 
-    CLK_PCKENR2 &= ~CLK_PCKENR2_AWU; 
-    CLK->ICKR &= ~CLK_ICKR_SWUAH; 
-    //LowPower_Exit_MCU_Set(); 
-    Afe_ADC_Enable(); 
-    Afe_Temp_Enable(); 
-  }
-}  
+//========================================================================== 
 void LowPower_Powerdown_Enter(void)
 {
   uint8_t i = 0;
-  if(PowerOff_Delay_t >= PowerOff_Delay_t_SET)
+  if(AfeErr_t >= 2000 || (LedFlash_Off_t >= 450))//PowerOff_Delay_t >= PowerOff_Delay_t_SET && 
   {
     while(1)
     {   
@@ -1320,7 +1392,7 @@ void LowPower_Powerdown_Enter(void)
 //==============================================================================
 void LowPower_Cntrl(void)
 {  
-  if(WorkMode == IDLE_MODE)
+  if(WorkMode == IDLE_MODE || AfeErr_t >= 2000)
   {
     if(!SYS_CTRL2.Bit.DSG_ON && !SYS_CTRL2.Bit.CHG_ON )  
     {
@@ -1730,13 +1802,17 @@ void I2C_Write_Backup(uint8_t addr,uint8_t data )
   }  
 }
  
-
+void SOC_Init(void)
+{
+  uint8_t result = 0;
+  //result = FLASH_ReadByte();
+}
+//======================================
 void Var_Init(void)
 { 
   uint8_t i = 0;
-  
-  
    
+  LedFlash_Off_t = 0;
   ChgExchangeMode_Cnt = 100;
   DisExchangeMode_Cnt = 0;
   IdleExchangeMode_Cnt = 0;

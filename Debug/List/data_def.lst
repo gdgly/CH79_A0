@@ -1,34 +1,42 @@
 ###############################################################################
 #                                                                             #
-# IAR C/C++ Compiler V1.31.1.20058 [Evaluation] for STM830/Mar/2016  14:49:18 #
+# IAR C/C++ Compiler V1.31.1.20058 [Evaluation] for STM831/Mar/2016  14:44:10 #
 # Copyright 2010-2012 IAR Systems AB.                                         #
 #                                                                             #
-#    Source file  =  D:\ProjectPath\GitPath\CH79_A0\sys\src\data_def.c        #
-#    Command line =  D:\ProjectPath\GitPath\CH79_A0\sys\src\data_def.c -e     #
-#                    -Ohz --debug --code_model small --data_model medium -o   #
-#                    D:\ProjectPath\GitPath\CH79_A0\Debug\Obj\ --dlib_config  #
-#                    "C:\Program Files\IAR Systems\Embedded Workbench 6.0     #
+#    Source file  =  D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_A0\sys\s #
+#                    rc\data_def.c                                            #
+#    Command line =  D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_A0\sys\s #
+#                    rc\data_def.c -e -Ohz --debug --code_model small         #
+#                    --data_model medium -o D:\ProjectPath\STMPath\CH79_A0_3n #
+#                    d_Changed\CH79_A0\Debug\Obj\ --dlib_config "C:\Program   #
+#                    Files\IAR Systems\Embedded Workbench 6.0                 #
 #                    Evaluation\stm8\LIB\dlstm8smn.h" -lcN                    #
-#                    D:\ProjectPath\GitPath\CH79_A0\Debug\List\ -I            #
-#                    D:\ProjectPath\GitPath\CH79_A0/user/\ -I                 #
-#                    D:\ProjectPath\GitPath\CH79_A0/user/src/\ -I             #
-#                    D:\ProjectPath\GitPath\CH79_A0/user/inc/\ -I             #
-#                    D:\ProjectPath\GitPath\CH79_A0/addon/\ -I                #
-#                    D:\ProjectPath\GitPath\CH79_A0/addon/src/\ -I            #
-#                    D:\ProjectPath\GitPath\CH79_A0/addon/inc/\ -I            #
-#                    D:\ProjectPath\GitPath\CH79_A0/sys/\ -I                  #
-#                    D:\ProjectPath\GitPath\CH79_A0/sys/inc/\ -I              #
-#                    D:\ProjectPath\GitPath\CH79_A0/sys/src/\ -I              #
-#                    D:\ProjectPath\GitPath\CH79_A0/lib/\ -I                  #
-#                    D:\ProjectPath\GitPath\CH79_A0/lib/src/\ -I              #
-#                    D:\ProjectPath\GitPath\CH79_A0/lib/inc/\ --vregs 16      #
-#    List file    =  D:\ProjectPath\GitPath\CH79_A0\Debug\List\data_def.lst   #
-#    Object file  =  D:\ProjectPath\GitPath\CH79_A0\Debug\Obj\data_def.o      #
+#                    D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_A0\Debug #
+#                    \List\ -I D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH7 #
+#                    9_A0/user/\ -I D:\ProjectPath\STMPath\CH79_A0_3nd_Change #
+#                    d\CH79_A0/user/src/\ -I D:\ProjectPath\STMPath\CH79_A0_3 #
+#                    nd_Changed\CH79_A0/user/inc/\ -I                         #
+#                    D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_A0/addon #
+#                    /\ -I D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_A0 #
+#                    /addon/src/\ -I D:\ProjectPath\STMPath\CH79_A0_3nd_Chang #
+#                    ed\CH79_A0/addon/inc/\ -I D:\ProjectPath\STMPath\CH79_A0 #
+#                    _3nd_Changed\CH79_A0/sys/\ -I                            #
+#                    D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_A0/sys/i #
+#                    nc/\ -I D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_ #
+#                    A0/sys/src/\ -I D:\ProjectPath\STMPath\CH79_A0_3nd_Chang #
+#                    ed\CH79_A0/lib/\ -I D:\ProjectPath\STMPath\CH79_A0_3nd_C #
+#                    hanged\CH79_A0/lib/src/\ -I                              #
+#                    D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_A0/lib/i #
+#                    nc/\ --vregs 16                                          #
+#    List file    =  D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_A0\Debug #
+#                    \List\data_def.lst                                       #
+#    Object file  =  D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_A0\Debug #
+#                    \Obj\data_def.o                                          #
 #                                                                             #
 #                                                                             #
 ###############################################################################
 
-D:\ProjectPath\GitPath\CH79_A0\sys\src\data_def.c
+D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_A0\sys\src\data_def.c
       1          //#include "stdio.h"
       2          #include "macro_def.h"
       3          #include "bq769x0.h"
@@ -94,138 +102,138 @@ D:\ProjectPath\GitPath\CH79_A0\sys\src\data_def.c
      63          unsigned int DisCurShort_Re_t; 
      64          
      65          unsigned int DEVICE_XREADY_Re_t; 
-     66          
-     67          unsigned int CellBalance_Cur_Selct;  
-     68          unsigned int LedFlash_t; 
-     69          unsigned int PowerOff_Delay_t;
-     70          unsigned int Delay_time_t;
-     71          
-     72          unsigned char Soc_OCV_CorrectEn_Flag = 0;
-     73          unsigned char CellBal_Cntrl_Lock = 0;
-     74          unsigned int CellBalance_Selct = 0;
-     75          unsigned char Init_Soc_Flag =0;
-     76          unsigned char LowPower_MCU_Entry_Flag = 0;
-     77          unsigned int LowPower_Entry_Delay_t = 0;
-     78          unsigned int Cell_Balance_Delay_t = 0;
-     79          enum  em_workmode
-     80          {
-     81             IDLE_MODE 	    =0x00,
-     82             CHARGE_MODE 	    =0x01,
-     83             DISCHARGE_MODE   =0x02
-     84          }WorkMode;
-     85           
-     86           union  SYS_STATUS_ST//#define   SYS_STAT  0x00__IO     
-     87          {
-     88            uint8_t Byte;  
-     89            struct
-     90            {
-     91              uint8_t OCD           :1; 
-     92              uint8_t SCD    	  :1;  
-     93              uint8_t OV    	  :1; 
-     94              uint8_t UV    	  :1;		 
-     95              uint8_t OVRD_ALERT	  :1;	 
-     96              uint8_t DEVICE_XREADY :1;		 
-     97              uint8_t RSVD 	  :1;	
-     98              uint8_t CC_READY 	  :1;	
-     99            }Bit;
-    100          }SYS_STAT; 
-    101          
-    102          union  SYS_CTRL1_ST 
-    103          {
-    104            uint8_t Byte;  
-    105            struct
-    106            {
-    107              uint8_t SHUT_B 	  :1;		 
-    108              uint8_t SHUT_A 	  :1;		 
-    109              uint8_t RSVD          :1;		 
-    110              uint8_t TEMP_SEL	  :1;
-    111              uint8_t ADC_EN    	  :1;	 
-    112              uint8_t RSVD1    	  :1; 
-    113              uint8_t RSVD2    	  :1; 
-    114              uint8_t LOAD_PRESENT  :1; 
-    115            }Bit;
-    116          }SYS_CTRL1; 
-    117           
-    118          union  SYS_CTRL2_ST      
-    119          {
-    120            uint8_t Byte;  
-    121            struct
-    122            {
-    123              uint8_t CHG_ON 	  :1;		 
-    124              uint8_t DSG_ON 	  :1;		 
-    125              uint8_t RSVD          :1;		 
-    126              uint8_t RSVD1	  :1;
-    127              uint8_t RSVD2    	  :1;	 
-    128              uint8_t CC_ONESHOT    :1; 
-    129              uint8_t CC_EN    	  :1; 
-    130              uint8_t DELAY_DIS     :1; 
-    131            }Bit;
-    132          }SYS_CTRL2; 
-    133                   
-    134          union UINT_UCHAR
-    135          {
-    136              unsigned int uintdata;
-    137              unsigned char uchardata[2];
-    138          } RevcComData;
-    139          
-    140          //------------------------------------------------------------------
-    141          union STATUS_FLAG
-    142          {
-    143            unsigned char Byte;
-    144            struct FLAG_BITS
-    145            {
-    146              //unsigned char Chg             : 1;
-    147              unsigned char ChgOv           : 1;
-    148              unsigned char ChgCurOv        : 1;
-    149              unsigned char ChgTemp         : 1; 
-    150              //unsigned char Dis             : 1;
-    151              unsigned char DisOv           : 1;
-    152              unsigned char DisTemp         : 1;  
-    153              unsigned char DisCurOv        : 1; 
-    154              unsigned char DisCurShort     : 1;  
-    155              //unsigned char KEY_on          : 1; 
-    156              unsigned char AfeErr          : 1; 
-    157            }Bit;
-    158          } Bits_flag;
-    159           
-    160          struct X_SOC
-    161          {
-    162              uint8_t 	soc;                	        // soc
-    163              uint32_t 	ah;               	 	// 剩余容量
-    164                   //uint16_t 	vlt_pack;          		// 实时总电压mV
-    165              uint16_t 	curr;              		// 实时电流mA
-    166              //uint8_t 	curr_dir;          		// 电流方向0为放电1为充电。
-    167              uint16_t 	min_cell_vlt;      		// 单体最低/高电压mV
-    168              uint16_t 	max_cell_vlt;
-    169              int8_t 	min_cell_temp;      	        // 电池最低/高温度drg
-    170              //int8_t 	max_cell_temp;
-    171              uint16_t 	min_cell_temp_vlt;
-    172              uint16_t	min_cell_dchg_vlt; 		// 最低放电电压
-    173              uint16_t 	max_cell_chg_vlt;  		// 最高充电电压
-    174              uint16_t 	rated_cap;     			// 额定容量
-    175              uint8_t 	temp_corr;     		 	// 执行温度修正标志，1执行，0不执行。
-    176          }SocReg;
-    177          
-    178          struct X_SOC_CALC
-    179          {
-    180              uint32_t inAh;     		// 充入的电量
-    181              uint32_t inAh_bak;
-    182              uint32_t totalInAh;
-    183              uint32_t totalInAh_bak;
-    184              uint32_t outAh;        	// 放出的电量
-    185              uint32_t outAh_bak;
-    186              uint32_t totalOutAh;
-    187              uint32_t totalOutAh_bak;
-    188              uint32_t curAh;
-    189              uint8_t  ov_cnt;    		// 过冲计时
-    190              uint8_t  uv_cnt;    		// 过放计时
-    191              uint32_t stb_cnt; 	                // 静置计时
-    192              uint8_t  soc_rt;
-    193          }SocCalc;
-    194          
-    195          //SocCalc.soc_rt
+     66          unsigned int AfeErr_t; 
+     67          
+     68          unsigned int CellBalance_Cur_Selct;  
+     69          unsigned int LedFlash_t; 
+     70          unsigned int LedFlash_Off_t; 
+     71          unsigned int PowerOff_Delay_t;
+     72          unsigned int Delay_time_t;
+     73          
+     74          unsigned char Soc_OCV_CorrectEn_Flag = 0;
+     75          unsigned char CellBal_Cntrl_Lock = 0;
+     76          unsigned int CellBalance_Selct = 0;
+     77          unsigned char Init_Soc_Flag =0;
+     78          unsigned char LowPower_MCU_Entry_Flag = 0;
+     79          unsigned int LowPower_Entry_Delay_t = 0;
+     80          unsigned int Cell_Balance_Delay_t = 0;
+     81          enum  em_workmode
+     82          {
+     83             IDLE_MODE 	    =0x00,
+     84             CHARGE_MODE 	    =0x01,
+     85             DISCHARGE_MODE   =0x02
+     86          }WorkMode;
+     87           
+     88           union  SYS_STATUS_ST//#define   SYS_STAT  0x00__IO     
+     89          {
+     90            uint8_t Byte;  
+     91            struct
+     92            {
+     93              uint8_t OCD           :1; 
+     94              uint8_t SCD    	  :1;  
+     95              uint8_t OV    	  :1; 
+     96              uint8_t UV    	  :1;		 
+     97              uint8_t OVRD_ALERT	  :1;	 
+     98              uint8_t DEVICE_XREADY :1;		 
+     99              uint8_t RSVD 	  :1;	
+    100              uint8_t CC_READY 	  :1;	
+    101            }Bit;
+    102          }SYS_STAT; 
+    103          
+    104          union  SYS_CTRL1_ST 
+    105          {
+    106            uint8_t Byte;  
+    107            struct
+    108            {
+    109              uint8_t SHUT_B 	  :1;		 
+    110              uint8_t SHUT_A 	  :1;		 
+    111              uint8_t RSVD          :1;		 
+    112              uint8_t TEMP_SEL	  :1;
+    113              uint8_t ADC_EN    	  :1;	 
+    114              uint8_t RSVD1    	  :1; 
+    115              uint8_t RSVD2    	  :1; 
+    116              uint8_t LOAD_PRESENT  :1; 
+    117            }Bit;
+    118          }SYS_CTRL1; 
+    119           
+    120          union  SYS_CTRL2_ST      
+    121          {
+    122            uint8_t Byte;  
+    123            struct
+    124            {
+    125              uint8_t CHG_ON 	  :1;		 
+    126              uint8_t DSG_ON 	  :1;		 
+    127              uint8_t RSVD          :1;		 
+    128              uint8_t RSVD1	  :1;
+    129              uint8_t RSVD2    	  :1;	 
+    130              uint8_t CC_ONESHOT    :1; 
+    131              uint8_t CC_EN    	  :1; 
+    132              uint8_t DELAY_DIS     :1; 
+    133            }Bit;
+    134          }SYS_CTRL2; 
+    135                   
+    136          union UINT_UCHAR
+    137          {
+    138              unsigned int uintdata;
+    139              unsigned char uchardata[2];
+    140          } RevcComData;
+    141          
+    142          //------------------------------------------------------------------
+    143          union STATUS_FLAG
+    144          {
+    145            unsigned char Byte;
+    146            struct FLAG_BITS
+    147            {
+    148              //unsigned char Chg             : 1;
+    149              unsigned char ChgOv           : 1;
+    150              unsigned char ChgCurOv        : 1;
+    151              unsigned char ChgTemp         : 1; 
+    152              //unsigned char Dis             : 1;
+    153              unsigned char DisOv           : 1;
+    154              unsigned char DisTemp         : 1;  
+    155              unsigned char DisCurOv        : 1; 
+    156              unsigned char DisCurShort     : 1;  
+    157              //unsigned char KEY_on          : 1; 
+    158              unsigned char AfeErr          : 1; 
+    159            }Bit;
+    160          } Bits_flag;
+    161           
+    162          struct X_SOC
+    163          {
+    164              uint8_t 	soc;                	        // soc
+    165              uint32_t 	ah;               	 	// 剩余容量
+    166                   //uint16_t 	vlt_pack;          		// 实时总电压mV
+    167              uint16_t 	curr;              		// 实时电流mA
+    168              //uint8_t 	curr_dir;          		// 电流方向0为放电1为充电。
+    169              uint16_t 	min_cell_vlt;      		// 单体最低/高电压mV
+    170              uint16_t 	max_cell_vlt;
+    171              int8_t 	min_cell_temp;      	        // 电池最低/高温度drg
+    172              //int8_t 	max_cell_temp;
+    173              uint16_t 	min_cell_temp_vlt;
+    174              uint16_t	min_cell_dchg_vlt; 		// 最低放电电压
+    175              uint16_t 	max_cell_chg_vlt;  		// 最高充电电压
+    176              uint16_t 	rated_cap;     			// 额定容量
+    177              uint8_t 	temp_corr;     		 	// 执行温度修正标志，1执行，0不执行。
+    178          }SocReg;
+    179          
+    180          struct X_SOC_CALC
+    181          {
+    182              uint32_t inAh;     		// 充入的电量
+    183              uint32_t inAh_bak;
+    184              uint32_t totalInAh;
+    185              uint32_t totalInAh_bak;
+    186              uint32_t outAh;        	// 放出的电量
+    187              uint32_t outAh_bak;
+    188              uint32_t totalOutAh;
+    189              uint32_t totalOutAh_bak;
+    190              uint32_t curAh;
+    191              uint8_t  ov_cnt;    		// 过冲计时
+    192              uint8_t  uv_cnt;    		// 过放计时
+    193              uint32_t stb_cnt; 	                // 静置计时
+    194              uint8_t  soc_rt;
+    195          }SocCalc;
     196          
-    197          
+    197          //SocCalc.soc_rt
     198          
     199          
     200          
@@ -235,6 +243,8 @@ D:\ProjectPath\GitPath\CH79_A0\sys\src\data_def.c
     204          
     205          
     206          
+    207          
+    208          
 
    Section sizes:
 
@@ -291,8 +301,10 @@ D:\ProjectPath\GitPath\CH79_A0\sys\src\data_def.c
      DisCurOv_Re_t              2
      DisCurShort_Re_t           2
      DEVICE_XREADY_Re_t         2
+     AfeErr_t                   2
      CellBalance_Cur_Selct      2
      LedFlash_t                 2
+     LedFlash_Off_t             2
      PowerOff_Delay_t           2
      Delay_time_t               2
      Soc_OCV_CorrectEn_Flag     1
@@ -312,9 +324,9 @@ D:\ProjectPath\GitPath\CH79_A0\sys\src\data_def.c
      SocCalc                   43
 
  
- 211 bytes in section .near.bss
+ 215 bytes in section .near.bss
  
- 211 bytes of DATA memory
+ 215 bytes of DATA memory
 
 Errors: none
 Warnings: none

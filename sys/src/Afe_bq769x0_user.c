@@ -57,6 +57,71 @@ uint16_t Afe_Get_Adc(uint8_t addr)
     but one of the upper cell groups’ supply voltage is below VSHUT. Raise all cell group supply voltages above
     VPORA and clear the status bit. Another possibility is that the part has been damaged.
 */
+void ChgDis_AbnormalCheck(void)
+{
+  static uint8_t AfeErr_Cnt = 0;
+  if(WorkMode == CHARGE_MODE)
+  {
+    FAULT_DETECT_CTRL_ON();
+    if((CC_Val < (-50)) || Bits_flag.Bit.AfeErr || IS_FAULT_ON())         // 充电状态检测到放电电流
+    {
+      if((AfeErr_Cnt ++) >= 100)
+      {
+        AfeErr_Cnt = 100;
+        Bits_flag.Bit.AfeErr = 1;
+      }
+    }
+    else
+    {
+      AfeErr_Cnt = 0;
+      AfeErr_t = 0;
+    }
+  }
+  else if(WorkMode == DISCHARGE_MODE)
+  {
+    if((CC_Val >= 50) ||Bits_flag.Bit.AfeErr)         // 放电状态检测到充电电流
+    {
+      if((AfeErr_Cnt ++) >= 100)
+      {
+        AfeErr_Cnt = 100;
+        Bits_flag.Bit.AfeErr = 1;
+      }
+    }
+    else
+    {
+      AfeErr_Cnt = 0;
+      AfeErr_t = 0;
+    }
+  }
+  else
+  {
+    AfeErr_Cnt = 0;
+  }
+      
+  /* 
+  if(SYS_STAT.Bit.DEVICE_XREADY)// || SYS_STAT.Bit.OVRD_ALERT)
+  {
+  }  */
+  if(Bits_flag.Bit.AfeErr )//&& DEVICE_XREADY_Re_t >= DEVICE_XREADY_Re_SET)//SYS_STAT.Bit.DEVICE_XREADY
+  {
+    SYS_STAT_Last |= 0x30;
+    I2C_Write(SYS_STAT_ADDR,SYS_STAT_Last);
+    SYS_STAT_Last &= ~0x30;
+    
+    SYS_STAT.Bit.DEVICE_XREADY = 0;
+    Bits_flag.Bit.AfeErr = 0;
+    DEVICE_XREADY_Re_t = 0;
+    Afe_Device_Init();
+    /*
+    Afe_SCD_Set(SCD_THREHOLD_VAL_SET, SCD_DELAY_SET);
+    Afe_OCD_Set(OCD_THREHOLD_VAL_SET, OCD_DELAY_SET);
+    Afe_OV_UV_Delay_Set(OV_DELAY_SET,UV_DELAY_SET); 
+    Afe_OV_UV_Threshold_Set(OV_THREHOLD_VAL_SET, UV_THREHOLD_VAL_SET);
+    */
+  } 
+     
+}
+
 void Afe_AbnormalCheck(void)
 {
   /* 
@@ -77,28 +142,20 @@ void Afe_AbnormalCheck(void)
     SYS_STAT_Last |= 0x30;
     I2C_Write(SYS_STAT_ADDR,SYS_STAT_Last);
     SYS_STAT_Last &= ~0x30;
+    
     SYS_STAT.Bit.DEVICE_XREADY = 0;
     Bits_flag.Bit.AfeErr = 0;
     DEVICE_XREADY_Re_t = 0;
     Afe_Device_Init();
-    /*Afe_SCD_Set(SCD_THREHOLD_VAL_SET, SCD_DELAY_SET);
+    /*
+    Afe_SCD_Set(SCD_THREHOLD_VAL_SET, SCD_DELAY_SET);
     Afe_OCD_Set(OCD_THREHOLD_VAL_SET, OCD_DELAY_SET);
     Afe_OV_UV_Delay_Set(OV_DELAY_SET,UV_DELAY_SET); 
-    Afe_OV_UV_Threshold_Set(OV_THREHOLD_VAL_SET, UV_THREHOLD_VAL_SET);*/
+    Afe_OV_UV_Threshold_Set(OV_THREHOLD_VAL_SET, UV_THREHOLD_VAL_SET);
+    */
   } 
-    
-  if(0)//(SYS_STAT.Bit.CC_READY) //CC_Volt_Sample_Cnt >= 26 (0)//IS_ALERT()&& 
-  {
-    //CC_Volt_Sample_Cnt = 0;
-    //CC_AD = Afe_Get_Adc(CC_HI_ADDR); 
-    //CC_Val = (int32_t)CC_AD * 820/100; //mA (int32_t)
-    SYS_STAT_Last |= 0x80;
-    I2C_Write(SYS_STAT_ADDR,SYS_STAT_Last); 
-    SYS_STAT_Last &= ~0x80;
-    Afe_CC_1Shot_Set();
-  }
+     
 }
-
 //==========================================================================
 /*
   Waking from SHIP mode to NORMAL mode requires pulling the TS1 pin greater than VBOOT, which triggers the device boot-up sequence.
@@ -199,8 +256,8 @@ void Afe_Device_Init(void)
   Afe_Temp_Enable();               // 开启温度检测模块
   Afe_Get_GainOffset();            // 获取电芯采样值得Gain Offset值，用来电芯电压AD值换算实际电压值（单位mV）
   ClrWdt();   
-  Afe_SCD_Set(SCD_THREHOLD_VAL_SET, SCD_DELAY_SET);  // 设置短路电流保护值、及延时时间
-  Afe_OCD_Set(OCD_THREHOLD_VAL_SET, OCD_DELAY_SET);  // 设置放电过流保护值及延时时间
+  Afe_SCD_Set(SCD_THREHOLD_VAL_SET, SCD_DELAY_SET);  // 设置短路电流保护值、及延时时间（参数虚设，请在函数内部进行修改）
+  Afe_OCD_Set(OCD_THREHOLD_VAL_SET, OCD_DELAY_SET);  // 设置放电过流保护值及延时时间（参数虚设，请在函数内部进行修改）
   ClrWdt(); 
   Afe_OV_UV_Delay_Set(OV_DELAY_SET,UV_DELAY_SET);    // 设置过充OV、过放UV的保护电压值
   Afe_OV_UV_Threshold_Set(OV_THREHOLD_VAL_SET, UV_THREHOLD_VAL_SET);  // 设置过充OV、过放UV的保护的延时时间
@@ -305,10 +362,9 @@ void Afe_SCD_Set(uint16_t SCD_val, uint16_t SCD_delay)//mA
   RSNS_mark = 1;
   //SCD_val_tmp = 0x02;    // 44mV
   SCD_val_tmp = 0x07;      // 200mV/5mR = 40A   
-  SCD_delay_tmp = 0x03;    // 400uS
+  SCD_delay_tmp = 0x00;    // 70uS
   PROTECT1_Last =  (RSNS_mark <<8) + (SCD_delay_tmp << 3) + SCD_val_tmp; //SCD
   I2C_Write(PROTECT1_ADDR,PROTECT1_Last);
-   
 }
 
 //==========================================================================
@@ -485,8 +541,7 @@ void Afe_OCD_Set(uint16_t OCD_val, uint16_t OCD_delay)
     OCD_delay_tmp = 0x00;  // 8mS
   }
   //== Protect page36
-  OCD_delay_tmp = 0x07;   // 1280mS
-  //OCD_val_tmp = 0x01;     //  11A 
+  OCD_delay_tmp = 0x06;   // 640mS
   OCD_val_tmp = 0x07;     //  56mV/5mR = 11A 
   PROTECT2_Last = (OCD_delay_tmp << 4) + OCD_val_tmp; //OCD
   I2C_Write(PROTECT2_ADDR,PROTECT2_Last); 
@@ -676,15 +731,18 @@ void Afe_FET_ChgDis_Cntrl(void)
   if(WorkMode == IDLE_MODE)
   {
     Afe_FET_ChgOff_DisOff(); // 关闭充电MOS、关闭放电MOS
+    ALERT_PIN_HIGH();
   }
   else if(WorkMode == CHARGE_MODE)
   { 
     if(Bits_flag.Bit.ChgOv || Bits_flag.Bit.ChgTemp || Bits_flag.Bit.ChgCurOv || Bits_flag.Bit.AfeErr)
     {
       Afe_FET_ChgOff_DisOff();  // 关闭充电MOS、关闭放电MOS
+      ALERT_PIN_HIGH();
     }
     else
     { 
+      ALERT_PIN_LOW();
       Afe_FET_ChgOn_DisOn();  // 开启充电MOS、开启放电MOS
     }
   }
@@ -693,9 +751,11 @@ void Afe_FET_ChgDis_Cntrl(void)
     if(Bits_flag.Bit.DisOv || Bits_flag.Bit.DisTemp || Bits_flag.Bit.DisCurOv || Bits_flag.Bit.AfeErr || Bits_flag.Bit.DisCurShort)
     {
       Afe_FET_ChgOff_DisOff();  // 关闭充电MOS、关闭放电MOS
+      ALERT_PIN_HIGH();
     }
     else
     { 
+      ALERT_PIN_LOW();
       Afe_FET_ChgOn_DisOn();  // 开启充电MOS、开启放电MOS
     }
   }
