@@ -79,19 +79,9 @@ void SOCAhIntergrate(void)
 {
     uint32_t tmpah;
     tmpah = Current_Val;    // xmA 10ms
-    
-#if 0
-
-    if(tmpah < 10)  // 极小电流认为是干扰或者处于静置状态。
-    {
-        SocCalc.totalInAh_bak = SocCalc.totalInAh;
-        SocCalc.totalOutAh_bak = SocCalc.totalOutAh;
-        return;
-    }
-
-#endif
- 
-    if(WorkMode == CHARGE_MODE)
+     
+    //if(WorkMode == CHARGE_MODE)
+    if(CC_Val > 0)
     {
       SocCalc.inAh_bak += tmpah;
 
@@ -101,7 +91,8 @@ void SOCAhIntergrate(void)
         SocCalc.inAh_bak = SocCalc.inAh_bak % 360000; // 充入1Ah。
       }
     }
-    else if(WorkMode == DISCHARGE_MODE)
+    //else if(WorkMode == DISCHARGE_MODE)
+    else// if(WorkMode == CHARGE_MODE)
     {
       
       //tmpah = Current_Val;    // xmA 10ms
@@ -115,15 +106,15 @@ void SOCAhIntergrate(void)
         SocCalc.totalOutAh += SocCalc.outAh_bak / 360000;
         SocCalc.outAh_bak = SocCalc.outAh_bak % 360000; // 放出1Ah。
       }
-    }
+    }/*
     else if(WorkMode == IDLE_MODE)//
     {
       //if((SocCalc.stb_cnt ++) >= 120000)//静置20分钟后，允许进行OCV校准
       {
         SocCalc.stb_cnt = 120000;
-        Soc_OCV_CorrectEn_Flag = 1;
+        //Soc_OCV_CorrectEn_Flag = 1;
       }
-    }
+    }*/
 }
 //================= 将soc 范围 10~90 转换为 soc_rt 所需的 0~100。
 void SOCConvert(void)
@@ -174,9 +165,8 @@ void SOCCalculate(void)
 
       if(SocCalc.curAh > SocReg.rated_cap)    // 防止大于额定容量。
       {
-        SocCalc.curAh = SocReg.rated_cap;
-      }
-  
+        SocCalc.curAh = SocReg.rated_cap; 
+      } 
     }
 
     if( SocCalc.totalOutAh > SocCalc.totalOutAh_bak) // 放出。
@@ -201,6 +191,8 @@ void SOCCalculate(void)
         {
           SocCalc.ov_cnt = 30;
           SocCalc.curAh = SocReg.rated_cap;
+          SocCalc.totalInAh = 0;
+          SocCalc.totalInAh_bak = 0;
         } 
       }
       else
@@ -208,7 +200,7 @@ void SOCCalculate(void)
         SocCalc.ov_cnt = 0;
       }
     }
-    else //(WorkMode == DISCHARGE_MODE ) // 放出。
+    else //(WorkMode == DISCHARGE_MODE ) // 放出。 
     {  
       if(Bits_flag.Bit.DisOv)  // 有任一电池过放了。
       {
@@ -218,6 +210,8 @@ void SOCCalculate(void)
           {
             SocCalc.uv_cnt = 30;
             SocCalc.curAh = 0;
+            SocCalc.totalOutAh = 0;
+            SocCalc.totalOutAh_bak = 0;
           } 
         }
       }
