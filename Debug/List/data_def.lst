@@ -1,42 +1,41 @@
 ###############################################################################
 #                                                                             #
-# IAR C/C++ Compiler V1.31.1.20058 [Evaluation] for STM831/Mar/2016  16:14:37 #
+# IAR C/C++ Compiler V1.31.1.20058 [Evaluation] for STM806/Apr/2016  14:54:26 #
 # Copyright 2010-2012 IAR Systems AB.                                         #
 #                                                                             #
-#    Source file  =  D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_A0\sys\s #
-#                    rc\data_def.c                                            #
-#    Command line =  D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_A0\sys\s #
-#                    rc\data_def.c -e -Ohz --debug --code_model small         #
-#                    --data_model medium -o D:\ProjectPath\STMPath\CH79_A0_3n #
-#                    d_Changed\CH79_A0\Debug\Obj\ --dlib_config "C:\Program   #
+#    Source file  =  D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src #
+#                    \data_def.c                                              #
+#    Command line =  D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src #
+#                    \data_def.c -e -Ohz --debug --code_model small           #
+#                    --data_model medium -o D:\ProjectPath\STMPath\CH79_A0_C- #
+#                    version\CH79_A0\Debug\Obj\ --dlib_config "C:\Program     #
 #                    Files\IAR Systems\Embedded Workbench 6.0                 #
 #                    Evaluation\stm8\LIB\dlstm8smn.h" -lcN                    #
-#                    D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_A0\Debug #
-#                    \List\ -I D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH7 #
-#                    9_A0/user/\ -I D:\ProjectPath\STMPath\CH79_A0_3nd_Change #
-#                    d\CH79_A0/user/src/\ -I D:\ProjectPath\STMPath\CH79_A0_3 #
-#                    nd_Changed\CH79_A0/user/inc/\ -I                         #
-#                    D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_A0/addon #
-#                    /\ -I D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_A0 #
-#                    /addon/src/\ -I D:\ProjectPath\STMPath\CH79_A0_3nd_Chang #
-#                    ed\CH79_A0/addon/inc/\ -I D:\ProjectPath\STMPath\CH79_A0 #
-#                    _3nd_Changed\CH79_A0/sys/\ -I                            #
-#                    D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_A0/sys/i #
-#                    nc/\ -I D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_ #
-#                    A0/sys/src/\ -I D:\ProjectPath\STMPath\CH79_A0_3nd_Chang #
-#                    ed\CH79_A0/lib/\ -I D:\ProjectPath\STMPath\CH79_A0_3nd_C #
-#                    hanged\CH79_A0/lib/src/\ -I                              #
-#                    D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_A0/lib/i #
-#                    nc/\ --vregs 16                                          #
-#    List file    =  D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_A0\Debug #
-#                    \List\data_def.lst                                       #
-#    Object file  =  D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_A0\Debug #
-#                    \Obj\data_def.o                                          #
+#                    D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\Debug\L #
+#                    ist\ -I D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0 #
+#                    /user/\ -I D:\ProjectPath\STMPath\CH79_A0_C-version\CH79 #
+#                    _A0/user/src/\ -I D:\ProjectPath\STMPath\CH79_A0_C-versi #
+#                    on\CH79_A0/user/inc/\ -I D:\ProjectPath\STMPath\CH79_A0_ #
+#                    C-version\CH79_A0/addon/\ -I                             #
+#                    D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0/addon/s #
+#                    rc/\ -I D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0 #
+#                    /addon/inc/\ -I D:\ProjectPath\STMPath\CH79_A0_C-version #
+#                    \CH79_A0/sys/\ -I D:\ProjectPath\STMPath\CH79_A0_C-versi #
+#                    on\CH79_A0/sys/inc/\ -I D:\ProjectPath\STMPath\CH79_A0_C #
+#                    -version\CH79_A0/sys/src/\ -I                            #
+#                    D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0/lib/\   #
+#                    -I D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0/lib/ #
+#                    src/\ -I D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A #
+#                    0/lib/inc/\ --vregs 16                                   #
+#    List file    =  D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\Debug\L #
+#                    ist\data_def.lst                                         #
+#    Object file  =  D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\Debug\O #
+#                    bj\data_def.o                                            #
 #                                                                             #
 #                                                                             #
 ###############################################################################
 
-D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_A0\sys\src\data_def.c
+D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src\data_def.c
       1          //#include "stdio.h"
       2          #include "macro_def.h"
       3          #include "bq769x0.h"

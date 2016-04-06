@@ -1,5 +1,5 @@
 [DebugChecksum]
-Checksum=2018414032
+Checksum=-519823797
 [DisAssemblyWindow]
 NumStates=_ 1
 State 1=_ 1
@@ -89,21 +89,23 @@ Bp8=_ "STD_DATA" "Afe_Device_Init" 0 0 0 3 0 "" 0 ""
 Bp9=_ "STD_DATA" "Afe_Device_Init" 0 0 0 3 0 "" 0 ""
 Bp10=_ "STD_DATA" "Afe_Device_Init" 0 0 0 3 0 "" 0 ""
 Bp11=_ "STD_DATA" "Afe_Device_Init" 0 0 0 3 0 "" 0 ""
-Count=12
+Bp12=_ "STD_DATA" "TempCheck" 0 0 0 3 0 "" 0 ""
+Count=13
 [Aliases]
-A0=_ "D:\R88 XCQ-5S\R88 XCQ-5S\lib\src\stm8s_iwdg.c" ""
-A1=_ "D:\R88 XCQ-5S\R88 XCQ-5S\lib\src\stm8s_tim1.c" ""
-A2=_ "D:\R88 XCQ-5S\R88 XCQ-5S\lib\src\stm8s_tim5.c" ""
-A3=_ "D:\R88 XCQ-5S\R88 XCQ-5S\lib\src\stm8s_tim6.c" ""
-A4=_ "D:\R88 XCQ-5S\R88 XCQ-5S\user\src\user.c" ""
-A5=_ "D:\STMPath\26X9010(MPP 2IN1)\lib\src\stm8s_exti.c" ""
-A6=_ "E:\LiangsxWorks\power XCQ-2S\addon\src\utility.c" ""
-A7=_ "E:\MMP\PPM\lib\src\stm8s_gpio.c" ""
-A8=_ "E:\MMP\PPM\lib\src\stm8s_tim6.c" ""
-A9=_ "E:\power XCQ-2Sa\power XCQ-2S\sys\src\main.c" ""
-A10=_ "F:\chengxu\stm8s903\lib\src\stm8s_tim1.c" ""
-A11=_ "F:\chengxu\stm8s903\lib\src\stm8s_tim5.c" ""
-A12=_ "H:\stm8s903\lib\src\stm8s_flash.c" ""
-A13=_ "H:\stm8s903\sys\src\main.c" ""
-Count=14
+A0=_ "D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_A0\sys\src\user.c" ""
+A1=_ "D:\R88 XCQ-5S\R88 XCQ-5S\lib\src\stm8s_iwdg.c" ""
+A2=_ "D:\R88 XCQ-5S\R88 XCQ-5S\lib\src\stm8s_tim1.c" ""
+A3=_ "D:\R88 XCQ-5S\R88 XCQ-5S\lib\src\stm8s_tim5.c" ""
+A4=_ "D:\R88 XCQ-5S\R88 XCQ-5S\lib\src\stm8s_tim6.c" ""
+A5=_ "D:\R88 XCQ-5S\R88 XCQ-5S\user\src\user.c" ""
+A6=_ "D:\STMPath\26X9010(MPP 2IN1)\lib\src\stm8s_exti.c" ""
+A7=_ "E:\LiangsxWorks\power XCQ-2S\addon\src\utility.c" ""
+A8=_ "E:\MMP\PPM\lib\src\stm8s_gpio.c" ""
+A9=_ "E:\MMP\PPM\lib\src\stm8s_tim6.c" ""
+A10=_ "E:\power XCQ-2Sa\power XCQ-2S\sys\src\main.c" ""
+A11=_ "F:\chengxu\stm8s903\lib\src\stm8s_tim1.c" ""
+A12=_ "F:\chengxu\stm8s903\lib\src\stm8s_tim5.c" ""
+A13=_ "H:\stm8s903\lib\src\stm8s_flash.c" ""
+A14=_ "H:\stm8s903\sys\src\main.c" ""
+Count=15
 SuppressDialog=1

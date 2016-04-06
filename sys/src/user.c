@@ -626,8 +626,9 @@ void VoltCheck(void)
     }
       
   }
-  else// if(WorkMode == DISCHARGE_MODE)
+  else if(WorkMode == DISCHARGE_MODE)
   {
+    //=========开机整体电芯电压
     if(Dis_First_Run_Flag ==0 && WorkMode == DISCHARGE_MODE)
     { 
       if((Cell_Volt_Avg < 3300) || (Cell_Volt_Min < 3300) || SYS_STAT.Bit.UV)
@@ -658,6 +659,7 @@ void VoltCheck(void)
       } 
     } 
 
+    //==== 放电欠压检测
     if((Cell_Volt_Avg < DIS_UV_VAL_SET) ||(Cell_Volt_Min < DIS_UV_MIN_VAL_SET) || SYS_STAT.Bit.UV)// 
     {
       if((DisOv_t >= DisOv_t_SET) || SYS_STAT.Bit.UV)
@@ -688,7 +690,7 @@ void VoltCheck(void)
   }
 }   
 //==========================================================================
-void ModeCheck(void)
+void ModeCheck_Backup(void)
 {       
   //工作模式的检测是依据外部Triger端的电压大小来判定
   Check_Val = ADConverse(3); 
@@ -702,7 +704,7 @@ void ModeCheck(void)
       WorkMode = CHARGE_MODE;
     }
   }   
-  else if((Check_Val >= 220 && Check_Val < 630) || SYS_CTRL1.Bit.LOAD_PRESENT) 
+  else if((Check_Val >= 220 && Check_Val < 630) || SYS_CTRL1.Bit.LOAD_PRESENT || CC_Val < (-10) )
   {  
     if(DisExchangeMode_Cnt >= 30)
     { 
@@ -722,6 +724,70 @@ void ModeCheck(void)
       WorkMode = IDLE_MODE;
     }
   } 
+}
+
+//==========================================================================
+void ModeCheck(void)
+{       
+  static uint8_t ModeChange_Lock = 0;
+  //工作模式的检测是依据外部Triger端的电压大小来判定
+  
+  // 问题3：（充放电及空载识别问题）欠压状态下，插上充电器时，识别不了充电器;  
+          //解决方案：检测无Triger信号时，为空载模式;
+                      //Triger信号范围在[220,630]时【[350,580]】，或检测到有负载信号、或放电电流 >= 10mA 时，为放电模式，否则为充电模式.
+  
+//==========================================================================
+//== OV_val为过充保护电压值（mV）、 UV_val为过放保护电压值（mV）
+//void Afe_OV_UV_Threshold_Set(uint16_t OV_val, uint16_t UV_val)
+  
+  Check_Val = ADConverse(3); 
+  if(Check_Val < 10)// 无信号
+  { 
+    if(IdleExchangeMode_Cnt >= 100)
+    { 
+      IdleExchangeMode_Cnt = 100;
+      ChgExchangeMode_Cnt = 0;
+      DisExchangeMode_Cnt = 0;
+      WorkMode = IDLE_MODE;
+      if(ModeChange_Lock != 0)
+      {
+        ModeChange_Lock = 0;
+        Afe_OV_UV_Threshold_Set(OV_THREHOLD_VAL_SET, UV_THREHOLD_VAL_SET); 
+      }
+    }
+  } 
+  else if((Check_Val >= 220 && Check_Val < 630) || SYS_CTRL1.Bit.LOAD_PRESENT || CC_Val < (-10) )
+  {  
+    if(DisExchangeMode_Cnt >= 30)
+    { 
+      IdleExchangeMode_Cnt = 0;
+      ChgExchangeMode_Cnt = 0;
+      DisExchangeMode_Cnt = 100; 
+      WorkMode = DISCHARGE_MODE;
+      if(ModeChange_Lock != 2)
+      {
+        ModeChange_Lock = 2;
+        // 问题1：放电状态下，电芯电压处于过充时，BQ会自动关闭充电MOS管;   解决方案：放电状态下，重新设置硬件过充电压为4.3V
+        Afe_OV_UV_Threshold_Set(4300, UV_THREHOLD_VAL_SET); 
+      }
+    }
+  }  
+  else// if((Check_Val >= 130 && Check_Val < 160) || CC_Val >= 10)
+  {  
+    if(ChgExchangeMode_Cnt >= 30)
+    { 
+      ChgExchangeMode_Cnt  = 100;
+      DisExchangeMode_Cnt  = 0;
+      IdleExchangeMode_Cnt = 0;
+      WorkMode = CHARGE_MODE;
+      if(ModeChange_Lock != 1)
+      {
+        ModeChange_Lock = 1;
+        // 问题2：充电状态下，电芯电压处于过放时，BQ会自动关闭放电MOS管;   解决方案：充电状态下，重新设置硬件过充电压为1.0V
+        Afe_OV_UV_Threshold_Set(OV_THREHOLD_VAL_SET, 1500);
+      }
+    }
+  }   
 }
 
   //===========================================
@@ -885,7 +951,8 @@ void Afe_Volt_Val_Get(void)
     CC_Volt_Sample_Cnt = 0;
     SYS_STAT.Bit.CC_READY = 0;
     CC_AD = Afe_Get_Adc(CC_HI_ADDR);  
-    CC_Val = (int32_t)820 * CC_AD /100; //mA (int32_t)
+    //CC_Val = (int32_t)820 * CC_AD /100; //mA (int32_t)
+    CC_Val = (int32_t)820 * CC_AD /500; //mA (int32_t)
      
     Afe_CC_1Shot_Set();
     if(CC_Val < -320000)
@@ -1030,7 +1097,7 @@ void LedShow_Cntrl(void)
         LED1_ON();
         LED2_OFF();
         LED3_OFF(); 
-        if(LedFlash_t >= 100)
+        if(LedFlash_t >= 50)
         {
           LedFlash_t = 0;
           FlowLedCnt = 1;
@@ -1041,7 +1108,7 @@ void LedShow_Cntrl(void)
         LED1_OFF();
         LED2_ON();
         LED3_OFF(); 
-        if(LedFlash_t >= 100)
+        if(LedFlash_t >= 50)
         {
           LedFlash_t = 0;
           FlowLedCnt = 2;
@@ -1052,7 +1119,7 @@ void LedShow_Cntrl(void)
         LED1_OFF();
         LED2_ON();
         LED3_OFF(); 
-        if(LedFlash_t >= 100)
+        if(LedFlash_t >= 50)
         {
           LedFlash_t = 0;
           FlowLedCnt = 3;
@@ -1067,7 +1134,7 @@ void LedShow_Cntrl(void)
         LED1_ON();
         LED2_OFF();
         LED3_OFF(); 
-        if(LedFlash_t >= 100)
+        if(LedFlash_t >= 50)
         {
           LedFlash_t = 0;
           FlowLedCnt = 1;
@@ -1078,7 +1145,7 @@ void LedShow_Cntrl(void)
         LED1_OFF();
         LED2_ON();
         LED3_OFF(); 
-        if(LedFlash_t >= 100)
+        if(LedFlash_t >= 50)
         {
           LedFlash_t = 0;
           FlowLedCnt = 2;
@@ -1089,7 +1156,7 @@ void LedShow_Cntrl(void)
         LED1_OFF();
         LED2_ON();
         LED3_OFF();
-        if(LedFlash_t >= 100)
+        if(LedFlash_t >= 50)
         {
           LedFlash_t = 0;
           FlowLedCnt = 0;
@@ -1205,9 +1272,8 @@ void LedShow_Cntrl(void)
       }
       else if(SocCalc.soc_rt >= 50)  //50%           LED全亮
       {
-        LED1_OFF();
-        LED2_OFF();
-        LED3_ON();
+        LED1_OFF();  LED2_OFF(); LED3_ON();
+        //LED3_OFF();  LED2_OFF(); LED1_ON();
       }
       else if(SocCalc.soc_rt >= 30) //30%---50%     LED1、LED2常亮
       {
@@ -1303,7 +1369,7 @@ void LowPower_Entry_MCU_Set(void)
 void LowPower_Powerdown_Enter(void)
 {
   uint8_t i = 0;
-  if(AfeErr_t >= 2000 || (LedFlash_Off_t >= 450))//PowerOff_Delay_t >= PowerOff_Delay_t_SET && 
+  if(AfeErr_t >= 2000 || (LedFlash_Off_t >= 450) || Bits_flag.Bit.DisOv)//PowerOff_Delay_t >= PowerOff_Delay_t_SET && 
   {
     SOC_SavedtoEEPROM();
     Delay_ms(10);
@@ -1325,7 +1391,7 @@ void LowPower_Powerdown_Enter(void)
 //==============================================================================
 void LowPower_Cntrl(void)
 {  
-  if(WorkMode == IDLE_MODE || AfeErr_t >= 2000)
+  if(WorkMode == IDLE_MODE || AfeErr_t >= 2000 || Bits_flag.Bit.DisOv)
   {
     if(!SYS_CTRL2.Bit.DSG_ON && !SYS_CTRL2.Bit.CHG_ON )  
     {

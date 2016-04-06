@@ -62,8 +62,8 @@
 #define   IS_CHG_DETECT()       PD_IDR_IDR2 == 0
 //#define   IS_LOAD_DETECT()    PA_IDR_IDR3 == 0
 //#define   IS_ALERT()          PC_IDR_IDR7 == 1
-#define   ALERT_PIN_HIGH()      PC_ODR_ODR7 = 1
-#define   ALERT_PIN_LOW()       PC_ODR_ODR7 = 0
+#define   ALERT_PIN_HIGH()      //PC_ODR_ODR7 = 1
+#define   ALERT_PIN_LOW()       //PC_ODR_ODR7 = 0
 
 #define   VCC1_ON()             PA_ODR_ODR1 = 1
 
@@ -73,15 +73,15 @@
 #define   FAULT_DETECT_CTRL_ON()   PC_ODR_ODR6 = 1
 #define   FAULT_DETECT_CTRL_OFF()  PC_ODR_ODR6 = 0
 
-#define   LED1_ON()             PC_ODR_ODR3 = 1
-#define   LED1_OFF()            PC_ODR_ODR3 = 0
+#define   LED1_ON()             PC_ODR_ODR5 = 1
+#define   LED1_OFF()            PC_ODR_ODR5 = 0
 #define   LED2_ON()             PC_ODR_ODR4 = 1
 #define   LED2_OFF()            PC_ODR_ODR4 = 0
-#define   LED3_ON()             PC_ODR_ODR5 = 1
-#define   LED3_OFF()            PC_ODR_ODR5 = 0
-#define   LED1_XOR()            PC_ODR_ODR3 = ~PC_ODR_ODR3
+#define   LED3_ON()             PC_ODR_ODR3 = 1
+#define   LED3_OFF()            PC_ODR_ODR3 = 0
+#define   LED1_XOR()            PC_ODR_ODR5 = ~PC_ODR_ODR5
 #define   LED2_XOR()            PC_ODR_ODR4 = ~PC_ODR_ODR4
-#define   LED3_XOR()            PC_ODR_ODR5 = ~PC_ODR_ODR5
+#define   LED3_XOR()            PC_ODR_ODR3 = ~PC_ODR_ODR3
  
  
 #define   ChgTempH_ON            264     //P55C

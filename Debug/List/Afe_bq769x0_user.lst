@@ -1,43 +1,41 @@
 ###############################################################################
 #                                                                             #
-# IAR C/C++ Compiler V1.31.1.20058 [Evaluation] for STM831/Mar/2016  16:14:37 #
+# IAR C/C++ Compiler V1.31.1.20058 [Evaluation] for STM806/Apr/2016  16:44:32 #
 # Copyright 2010-2012 IAR Systems AB.                                         #
 #                                                                             #
-#    Source file  =  D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_A0\sys\s #
-#                    rc\Afe_bq769x0_user.c                                    #
-#    Command line =  D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_A0\sys\s #
-#                    rc\Afe_bq769x0_user.c -e -Ohz --debug --code_model       #
-#                    small --data_model medium -o                             #
-#                    D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_A0\Debug #
-#                    \Obj\ --dlib_config "C:\Program Files\IAR                #
-#                    Systems\Embedded Workbench 6.0                           #
+#    Source file  =  D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src #
+#                    \Afe_bq769x0_user.c                                      #
+#    Command line =  D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src #
+#                    \Afe_bq769x0_user.c -e -Ohz --debug --code_model small   #
+#                    --data_model medium -o D:\ProjectPath\STMPath\CH79_A0_C- #
+#                    version\CH79_A0\Debug\Obj\ --dlib_config "C:\Program     #
+#                    Files\IAR Systems\Embedded Workbench 6.0                 #
 #                    Evaluation\stm8\LIB\dlstm8smn.h" -lcN                    #
-#                    D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_A0\Debug #
-#                    \List\ -I D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH7 #
-#                    9_A0/user/\ -I D:\ProjectPath\STMPath\CH79_A0_3nd_Change #
-#                    d\CH79_A0/user/src/\ -I D:\ProjectPath\STMPath\CH79_A0_3 #
-#                    nd_Changed\CH79_A0/user/inc/\ -I                         #
-#                    D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_A0/addon #
-#                    /\ -I D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_A0 #
-#                    /addon/src/\ -I D:\ProjectPath\STMPath\CH79_A0_3nd_Chang #
-#                    ed\CH79_A0/addon/inc/\ -I D:\ProjectPath\STMPath\CH79_A0 #
-#                    _3nd_Changed\CH79_A0/sys/\ -I                            #
-#                    D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_A0/sys/i #
-#                    nc/\ -I D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_ #
-#                    A0/sys/src/\ -I D:\ProjectPath\STMPath\CH79_A0_3nd_Chang #
-#                    ed\CH79_A0/lib/\ -I D:\ProjectPath\STMPath\CH79_A0_3nd_C #
-#                    hanged\CH79_A0/lib/src/\ -I                              #
-#                    D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_A0/lib/i #
-#                    nc/\ --vregs 16                                          #
-#    List file    =  D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_A0\Debug #
-#                    \List\Afe_bq769x0_user.lst                               #
-#    Object file  =  D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_A0\Debug #
-#                    \Obj\Afe_bq769x0_user.o                                  #
+#                    D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\Debug\L #
+#                    ist\ -I D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0 #
+#                    /user/\ -I D:\ProjectPath\STMPath\CH79_A0_C-version\CH79 #
+#                    _A0/user/src/\ -I D:\ProjectPath\STMPath\CH79_A0_C-versi #
+#                    on\CH79_A0/user/inc/\ -I D:\ProjectPath\STMPath\CH79_A0_ #
+#                    C-version\CH79_A0/addon/\ -I                             #
+#                    D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0/addon/s #
+#                    rc/\ -I D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0 #
+#                    /addon/inc/\ -I D:\ProjectPath\STMPath\CH79_A0_C-version #
+#                    \CH79_A0/sys/\ -I D:\ProjectPath\STMPath\CH79_A0_C-versi #
+#                    on\CH79_A0/sys/inc/\ -I D:\ProjectPath\STMPath\CH79_A0_C #
+#                    -version\CH79_A0/sys/src/\ -I                            #
+#                    D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0/lib/\   #
+#                    -I D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0/lib/ #
+#                    src/\ -I D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A #
+#                    0/lib/inc/\ --vregs 16                                   #
+#    List file    =  D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\Debug\L #
+#                    ist\Afe_bq769x0_user.lst                                 #
+#    Object file  =  D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\Debug\O #
+#                    bj\Afe_bq769x0_user.o                                    #
 #                                                                             #
 #                                                                             #
 ###############################################################################
 
-D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_A0\sys\src\Afe_bq769x0_user.c
+D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src\Afe_bq769x0_user.c
       1          //
       2          #include "stm8s.h" 
       3          #include "user.h"
@@ -633,175 +631,176 @@ D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_A0\sys\src\Afe_bq769x0_user.c
     593          void Afe_OV_UV_Threshold_Set(uint16_t OV_val, uint16_t UV_val)
     594          { 
     595            //==OV UV threshold setting
-    596            if(OV_val >= 4250)
-    597            {
-    598              OV_val = 4250;
-    599            }
-    600            if(UV_val <= 2000)
-    601            {
-    602              UV_val = 2000;
-    603            } 
-    604            OV_TRIP_Last = (uint8_t)(((uint32_t)1000 * (OV_val - ADCOffset_Val)/ADCGain_Val) >> 4);  
-    605            UV_TRIP_Last = (uint8_t)(((uint32_t)1000 * (UV_val - ADCOffset_Val)/ADCGain_Val) >> 4);  
-    606            I2C_Write(UV_TRIP_ADDR,UV_TRIP_Last);
-    607            I2C_Write(OV_TRIP_ADDR,OV_TRIP_Last);  
-    608          }
-    609          
-    610          //==========================================================================
-    611          void Afe_CC_Disable(void)
-    612          { 
-    613            // 电流采样结束标志位，写"1"清零
-    614            SYS_STAT_Last |= 0x80;
-    615            I2C_Write(SYS_STAT_ADDR,SYS_STAT_Last); 
-    616            SYS_STAT_Last &= ~0x80;
-    617              
-    618            SYS_CTRL2.Bit.CC_EN = 0;       // 关闭电流连续采样模式
-    619            SYS_CTRL2.Bit.CC_ONESHOT = 0;  // 开启电流单次采样模式
-    620            SYS_CTRL2.Bit.DELAY_DIS = 0;   // 强制为0
-    621            SYS_CTRL2_Last = SYS_CTRL2.Byte;
-    622            
-    623            //SYS_CTRL2_Last &= ~0x40;
-    624            //SYS_CTRL2_Last |= 0x20;
-    625            //I2C_Write(SYS_CTRL2_ADDR,SYS_CTRL2_Last); 
-    626            I2C_Write(SYS_CTRL2_ADDR,SYS_CTRL2_Last);
-    627            //SYS_CTRL2_Last = 0x20;
-    628          }
-    629          //==========================================================================
-    630          void Afe_CC_1Shot_Set(void)
-    631          { 
-    632            // 电流采样结束标志位，写"1"清零
-    633            SYS_STAT_Last |= 0x80;
-    634            I2C_Write(SYS_STAT_ADDR,SYS_STAT_Last); 
-    635            SYS_STAT_Last &= ~0x80;
-    636            
-    637            SYS_CTRL2.Bit.CC_EN = 0;       // 关闭电流连续采样模式
-    638            SYS_CTRL2.Bit.CC_ONESHOT = 1;  // 开启电流单次采样模式
-    639            SYS_CTRL2.Bit.DELAY_DIS = 0;   // 强制为0
-    640            SYS_CTRL2_Last = SYS_CTRL2.Byte;
-    641            
-    642            //SYS_CTRL2_Last &= ~0x40;
-    643            //SYS_CTRL2_Last |= 0x20;
-    644            //I2C_Write(SYS_CTRL2_ADDR,SYS_CTRL2_Last); 
-    645            
-    646            I2C_Write(SYS_CTRL2_ADDR,SYS_CTRL2_Last);
-    647            //SYS_CTRL2_Last = 0x20;
-    648          }
-    649          
+    596            /*
+    597            if(OV_val >= 4250)
+    598            {
+    599              OV_val = 4250;
+    600            }
+    601            if(UV_val <= 2000)
+    602            {
+    603              UV_val = 2000;
+    604            } */
+    605            OV_TRIP_Last = (uint8_t)(((uint32_t)1000 * (OV_val - ADCOffset_Val)/ADCGain_Val) >> 4);  
+    606            UV_TRIP_Last = (uint8_t)(((uint32_t)1000 * (UV_val - ADCOffset_Val)/ADCGain_Val) >> 4);  
+    607            I2C_Write(UV_TRIP_ADDR,UV_TRIP_Last);
+    608            I2C_Write(OV_TRIP_ADDR,OV_TRIP_Last);  
+    609          }
+    610          
+    611          //==========================================================================
+    612          void Afe_CC_Disable(void)
+    613          { 
+    614            // 电流采样结束标志位，写"1"清零
+    615            SYS_STAT_Last |= 0x80;
+    616            I2C_Write(SYS_STAT_ADDR,SYS_STAT_Last); 
+    617            SYS_STAT_Last &= ~0x80;
+    618              
+    619            SYS_CTRL2.Bit.CC_EN = 0;       // 关闭电流连续采样模式
+    620            SYS_CTRL2.Bit.CC_ONESHOT = 0;  // 开启电流单次采样模式
+    621            SYS_CTRL2.Bit.DELAY_DIS = 0;   // 强制为0
+    622            SYS_CTRL2_Last = SYS_CTRL2.Byte;
+    623            
+    624            //SYS_CTRL2_Last &= ~0x40;
+    625            //SYS_CTRL2_Last |= 0x20;
+    626            //I2C_Write(SYS_CTRL2_ADDR,SYS_CTRL2_Last); 
+    627            I2C_Write(SYS_CTRL2_ADDR,SYS_CTRL2_Last);
+    628            //SYS_CTRL2_Last = 0x20;
+    629          }
+    630          //==========================================================================
+    631          void Afe_CC_1Shot_Set(void)
+    632          { 
+    633            // 电流采样结束标志位，写"1"清零
+    634            SYS_STAT_Last |= 0x80;
+    635            I2C_Write(SYS_STAT_ADDR,SYS_STAT_Last); 
+    636            SYS_STAT_Last &= ~0x80;
+    637            
+    638            SYS_CTRL2.Bit.CC_EN = 0;       // 关闭电流连续采样模式
+    639            SYS_CTRL2.Bit.CC_ONESHOT = 1;  // 开启电流单次采样模式
+    640            SYS_CTRL2.Bit.DELAY_DIS = 0;   // 强制为0
+    641            SYS_CTRL2_Last = SYS_CTRL2.Byte;
+    642            
+    643            //SYS_CTRL2_Last &= ~0x40;
+    644            //SYS_CTRL2_Last |= 0x20;
+    645            //I2C_Write(SYS_CTRL2_ADDR,SYS_CTRL2_Last); 
+    646            
+    647            I2C_Write(SYS_CTRL2_ADDR,SYS_CTRL2_Last);
+    648            //SYS_CTRL2_Last = 0x20;
+    649          }
     650          
-    651          //==========================================================================
-    652          void Afe_CC_AlwaysOn_Set(void)
-    653          {
-    654            SYS_CTRL2_Last |= 0x40;   // 开启电流连续采样模式
-    655            SYS_CTRL2_Last &= ~0x20;
-    656            I2C_Write(SYS_CTRL2_ADDR,SYS_CTRL2_Last); 
-    657          }
-    658          
-    659          //==========================================================================
-    660          /*-------------------------------------------------------------------------
-    661                SYS_STAT (0x00)/RESET:0x00
-    662                BIT      7      6           5             4       3   2    1     0
-    663                NAME CC_READY  RSVD   DEVICE_XREADY   OVRD_ALERT  UV  OV  SCD   OCD
-    664          -------------------------------------------------------------------------*/
-    665          void Afe_Get_SysStatus(void)
-    666          { 
-    667              I2C_Read(SYS_STAT_ADDR,&SYS_STAT_Last); 
-    668              SYS_STAT.Byte = SYS_STAT_Last;
-    669              I2C_Read(SYS_CTRL1_ADDR,&SYS_CTRL1_Last); 
-    670              SYS_CTRL1.Byte = SYS_CTRL1_Last;
-    671              I2C_Read(SYS_CTRL2_ADDR,&SYS_CTRL2_Last); 
-    672              SYS_CTRL2.Byte = SYS_CTRL2_Last;
-    673              
-    674             // I2C_Read(PROTECT1_ADDR,&PROTECT1_Last_Copy); 
-    675             // I2C_Read(PROTECT2_ADDR,&PROTECT2_Last_Copy); 
-    676             // I2C_Read(PROTECT3_ADDR,&PROTECT3_Last_Copy); 
-    677          }
-    678          /*---------------------------------------------------------
-    679            打开充电MOS、打开放电MOS
-    680          ---------------------------------------------------------*/
-    681          void Afe_FET_ChgOn_DisOn(void)
-    682          {
-    683            SYS_CTRL2_Last |= 0x03;
-    684            I2C_Write(SYS_CTRL2_ADDR,SYS_CTRL2_Last);
-    685          }
-    686          /*---------------------------------------------------------
-    687            打开充电MOS、关闭放电MOS
-    688          ---------------------------------------------------------*/
-    689          void Afe_FET_ChgOn_DisOff(void)
-    690          {
-    691            SYS_CTRL2_Last |= 0x01;
-    692            SYS_CTRL2_Last &= ~0x02;
-    693            I2C_Write(SYS_CTRL2_ADDR,SYS_CTRL2_Last);
-    694          }
-    695          /*---------------------------------------------------------
-    696            关闭充电MOS、打开放电MOS
-    697          ---------------------------------------------------------*/
-    698          void Afe_FET_ChgOff_DisOn(void)
-    699          {
-    700            SYS_CTRL2_Last &= ~0x01;
-    701            SYS_CTRL2_Last |= 0x02;
-    702            I2C_Write(SYS_CTRL2_ADDR,SYS_CTRL2_Last);
-    703          }
-    704          /*---------------------------------------------------------
-    705            关闭充电MOS、关闭放电MOS
-    706          ---------------------------------------------------------*/
-    707          void Afe_FET_ChgOff_DisOff(void)
-    708          {
-    709            SYS_CTRL2_Last &= ~0x03;
-    710            I2C_Write(SYS_CTRL2_ADDR,SYS_CTRL2_Last);
-    711          }
-    712          
-    713          //==========================================================================
-    714          /*
-    715                SYS_STAT (0x00)/RESET:0x00
-    716                BIT      7      6           5             4       3   2    1     0
-    717                NAME CC_READY  RSVD   DEVICE_XREADY   OVRD_ALERT  UV  OV  SCD   OCD
-    718            
-    719                      CHG, DSG Response Under Various System Events
-    720              EVENT                         [CHG_ON]              [DSG_ON]
-    721              OV Fault                      Set to 0              —
-    722              UV Fault                      —                    Set to 0
-    723              OCD Fault                     —                    Set to 0  
-    724              SCD Fault                     —                    Set to 0
-    725              ALERT Override                Set to 0              Set to 0
-    726              DEVICE_XREADY is set          Set to 0              Set to 0
-    727              Enter SHIP mode from NORMAL   Set to 0              Set to 0
-    728          */
-    729          void Afe_FET_ChgDis_Cntrl(void)
-    730          { 
-    731            if(WorkMode == IDLE_MODE)
-    732            {
-    733              Afe_FET_ChgOff_DisOff(); // 关闭充电MOS、关闭放电MOS
-    734              ALERT_PIN_HIGH();
-    735            }
-    736            else if(WorkMode == CHARGE_MODE)
-    737            { 
-    738              if(Bits_flag.Bit.ChgOv || Bits_flag.Bit.ChgTemp || Bits_flag.Bit.ChgCurOv || Bits_flag.Bit.AfeErr)
-    739              {
-    740                Afe_FET_ChgOff_DisOff();  // 关闭充电MOS、关闭放电MOS
-    741                ALERT_PIN_HIGH();
-    742              }
-    743              else
-    744              { 
-    745                ALERT_PIN_LOW();
-    746                Afe_FET_ChgOn_DisOn();  // 开启充电MOS、开启放电MOS
-    747              }
-    748            }
-    749            else if(WorkMode == DISCHARGE_MODE)
-    750            { 
-    751              if(Bits_flag.Bit.DisOv || Bits_flag.Bit.DisTemp || Bits_flag.Bit.DisCurOv || Bits_flag.Bit.AfeErr || Bits_flag.Bit.DisCurShort)
-    752              {
-    753                Afe_FET_ChgOff_DisOff();  // 关闭充电MOS、关闭放电MOS
-    754                ALERT_PIN_HIGH();
-    755              }
-    756              else
-    757              { 
-    758                ALERT_PIN_LOW();
-    759                Afe_FET_ChgOn_DisOn();  // 开启充电MOS、开启放电MOS
-    760              }
-    761            }
-    762          }
-    763          
-    764          #endif
+    651          
+    652          //==========================================================================
+    653          void Afe_CC_AlwaysOn_Set(void)
+    654          {
+    655            SYS_CTRL2_Last |= 0x40;   // 开启电流连续采样模式
+    656            SYS_CTRL2_Last &= ~0x20;
+    657            I2C_Write(SYS_CTRL2_ADDR,SYS_CTRL2_Last); 
+    658          }
+    659          
+    660          //==========================================================================
+    661          /*-------------------------------------------------------------------------
+    662                SYS_STAT (0x00)/RESET:0x00
+    663                BIT      7      6           5             4       3   2    1     0
+    664                NAME CC_READY  RSVD   DEVICE_XREADY   OVRD_ALERT  UV  OV  SCD   OCD
+    665          -------------------------------------------------------------------------*/
+    666          void Afe_Get_SysStatus(void)
+    667          { 
+    668              I2C_Read(SYS_STAT_ADDR,&SYS_STAT_Last); 
+    669              SYS_STAT.Byte = SYS_STAT_Last;
+    670              I2C_Read(SYS_CTRL1_ADDR,&SYS_CTRL1_Last); 
+    671              SYS_CTRL1.Byte = SYS_CTRL1_Last;
+    672              I2C_Read(SYS_CTRL2_ADDR,&SYS_CTRL2_Last); 
+    673              SYS_CTRL2.Byte = SYS_CTRL2_Last;
+    674              
+    675             // I2C_Read(PROTECT1_ADDR,&PROTECT1_Last_Copy); 
+    676             // I2C_Read(PROTECT2_ADDR,&PROTECT2_Last_Copy); 
+    677             // I2C_Read(PROTECT3_ADDR,&PROTECT3_Last_Copy); 
+    678          }
+    679          /*---------------------------------------------------------
+    680            打开充电MOS、打开放电MOS
+    681          ---------------------------------------------------------*/
+    682          void Afe_FET_ChgOn_DisOn(void)
+    683          {
+    684            SYS_CTRL2_Last |= 0x03;
+    685            I2C_Write(SYS_CTRL2_ADDR,SYS_CTRL2_Last);
+    686          }
+    687          /*---------------------------------------------------------
+    688            打开充电MOS、关闭放电MOS
+    689          ---------------------------------------------------------*/
+    690          void Afe_FET_ChgOn_DisOff(void)
+    691          {
+    692            SYS_CTRL2_Last |= 0x01;
+    693            SYS_CTRL2_Last &= ~0x02;
+    694            I2C_Write(SYS_CTRL2_ADDR,SYS_CTRL2_Last);
+    695          }
+    696          /*---------------------------------------------------------
+    697            关闭充电MOS、打开放电MOS
+    698          ---------------------------------------------------------*/
+    699          void Afe_FET_ChgOff_DisOn(void)
+    700          {
+    701            SYS_CTRL2_Last &= ~0x01;
+    702            SYS_CTRL2_Last |= 0x02;
+    703            I2C_Write(SYS_CTRL2_ADDR,SYS_CTRL2_Last);
+    704          }
+    705          /*---------------------------------------------------------
+    706            关闭充电MOS、关闭放电MOS
+    707          ---------------------------------------------------------*/
+    708          void Afe_FET_ChgOff_DisOff(void)
+    709          {
+    710            SYS_CTRL2_Last &= ~0x03;
+    711            I2C_Write(SYS_CTRL2_ADDR,SYS_CTRL2_Last);
+    712          }
+    713          
+    714          //==========================================================================
+    715          /*
+    716                SYS_STAT (0x00)/RESET:0x00
+    717                BIT      7      6           5             4       3   2    1     0
+    718                NAME CC_READY  RSVD   DEVICE_XREADY   OVRD_ALERT  UV  OV  SCD   OCD
+    719            
+    720                      CHG, DSG Response Under Various System Events
+    721              EVENT                         [CHG_ON]              [DSG_ON]
+    722              OV Fault                      Set to 0              —
+    723              UV Fault                      —                    Set to 0
+    724              OCD Fault                     —                    Set to 0  
+    725              SCD Fault                     —                    Set to 0
+    726              ALERT Override                Set to 0              Set to 0
+    727              DEVICE_XREADY is set          Set to 0              Set to 0
+    728              Enter SHIP mode from NORMAL   Set to 0              Set to 0
+    729          */
+    730          void Afe_FET_ChgDis_Cntrl(void)
+    731          { 
+    732            if(WorkMode == IDLE_MODE)
+    733            {
+    734              Afe_FET_ChgOff_DisOff(); // 关闭充电MOS、关闭放电MOS
+    735              ALERT_PIN_HIGH();
+    736            }
+    737            else if(WorkMode == CHARGE_MODE)
+    738            { 
+    739              if(Bits_flag.Bit.ChgOv || Bits_flag.Bit.ChgTemp || Bits_flag.Bit.ChgCurOv || Bits_flag.Bit.AfeErr)
+    740              {
+    741                Afe_FET_ChgOff_DisOff();  // 关闭充电MOS、关闭放电MOS
+    742                ALERT_PIN_HIGH();
+    743              }
+    744              else
+    745              { 
+    746                ALERT_PIN_LOW();
+    747                Afe_FET_ChgOn_DisOn();  // 开启充电MOS、开启放电MOS
+    748              }
+    749            }
+    750            else if(WorkMode == DISCHARGE_MODE)
+    751            { 
+    752              if(Bits_flag.Bit.DisOv || Bits_flag.Bit.DisTemp || Bits_flag.Bit.DisCurOv || Bits_flag.Bit.AfeErr || Bits_flag.Bit.DisCurShort)
+    753              {
+    754                Afe_FET_ChgOff_DisOff();  // 关闭充电MOS、关闭放电MOS
+    755                ALERT_PIN_HIGH();
+    756              }
+    757              else
+    758              { 
+    759                ALERT_PIN_LOW();
+    760                Afe_FET_ChgOn_DisOn();  // 开启充电MOS、开启放电MOS
+    761              }
+    762            }
+    763          }
+    764          
+    765          #endif
 
    Section sizes:
 
@@ -831,7 +830,7 @@ D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_A0\sys\src\Afe_bq769x0_user.c
      Afe_SCD_Set               13
      Afe_OCD_Set               13
      Afe_OV_UV_Delay_Set       73
-     Afe_OV_UV_Threshold_Set   85
+     Afe_OV_UV_Threshold_Set   63
      ?Subroutine5              29
      Afe_CC_Disable            11
      ?Subroutine2              18
@@ -844,15 +843,15 @@ D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_A0\sys\src\Afe_bq769x0_user.c
      Afe_FET_ChgOn_DisOff      13
      Afe_FET_ChgOff_DisOn      13
      Afe_FET_ChgOff_DisOff     11
-     Afe_FET_ChgDis_Cntrl      44
+     Afe_FET_ChgDis_Cntrl      34
 
  
-     1 byte  in section .near.bss
-     2 bytes in section .near.noinit
- 1 011 bytes in section .near_func.text
+   1 byte  in section .near.bss
+   2 bytes in section .near.noinit
+ 979 bytes in section .near_func.text
  
- 1 011 bytes of CODE memory
-     1 byte  of DATA memory (+ 2 bytes shared)
+ 979 bytes of CODE memory
+   1 byte  of DATA memory (+ 2 bytes shared)
 
 Errors: none
 Warnings: 1

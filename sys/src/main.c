@@ -6,7 +6,7 @@
 #include "iostm8s003f3.h"
 #include "bq769x0.h" 
 
-//#define Uart_Model_Enable
+#define Uart_Model_Enable
 void main(void)
 {  
   uint8_t i = 0;
@@ -31,18 +31,31 @@ void main(void)
   //Afe_Temp_Disable();       // 100+uA
   while(1)
   {
+    //=========
+    // 问题1：放电状态下，电芯电压处于过充时，BQ会自动关闭充电MOS管;   解决方案：放电状态下，重新设置硬件过充电压为4.3V
+    // 问题2：充电状态下，电芯电压处于过放时，BQ会自动关闭放电MOS管;   解决方案：充电状态下，重新设置硬件过充电压为1.0V
+    // 问题3：（充放电及空载识别问题）欠压状态下，插上充电器时，识别不了充电器;  
+              //解决方案：检测无Triger信号时，为空载模式;
+                          //Triger信号范围在[]时，或检测到有负载信号、或放电电流 >= 10mA 时，为放电模式，否则为充电模式.
+    // 问题4：
     ClrWdt();                          // 刷新看门狗 1.02S未刷新系统复位 
     
     Afe_Get_SysStatus();               // AFE IC 状态检测，包括充放电MOS管开关状态、电流采样结束状态、AFE IC（错误、过流、短路、过充、过放）异常状态
    
 #ifdef Uart_Model_Enable
     Uart_SendStr("\r\n");
-    Uart_SendStr("\r\n SYS_STAT = ");  Uart_SendData(SYS_STAT.Byte,16); 
-    Uart_SendStr(" SYS_CTRL1 = ");     Uart_SendData(SYS_CTRL1.Byte,16); 
-    Uart_SendStr(" SYS_CTRL2 = ");     Uart_SendData(SYS_CTRL2.Byte,16);  
+    Uart_SendStr("\r\n SYS_STAT = ");   Uart_SendData(SYS_STAT.Byte,16); 
+    Uart_SendStr(" ADCGain_Val = ");    Uart_SendData(ADCGain_Val,10); 
+    Uart_SendStr(" ADCOffset_Val = ");  Uart_SendData(ADCOffset_Val,10); 
+    //ADCGain_Val = 377 ADCOffset_Val = 47
+    // UV_TRIP_Last = (uint8_t)(((uint32_t)1000 * (UV_val - ADCOffset_Val)/ADCGain_Val) >> 4); 
+    // UV_TRIP_Last = (uint8_t)(((uint32_t)1000 * (1500 - 47)/377) >> 4);//86 
+    Uart_SendStr(" SYS_CTRL1 = ");      Uart_SendData(SYS_CTRL1.Byte,16); 
+    Uart_SendStr(" SYS_CTRL2 = ");      Uart_SendData(SYS_CTRL2.Byte,16);  
 #endif
     
     ModeCheck();         // 充电、放电、空载工作模式检测
+    //WorkMode = DISCHARGE_MODE;
     
     ClearStatus();       // 各工作模式下的变量清零处理
     
@@ -66,6 +79,7 @@ void main(void)
      
 #ifdef Uart_Model_Enable  
     
+    Uart_SendStr(" Check_Val= ");     Uart_SendData((uint16_t)Check_Val,10);
     Uart_SendStr(" WorkMode= ");      Uart_SendData(WorkMode,16); 
     Uart_SendStr(" Bits_flag = ");    Uart_SendData(Bits_flag.Byte,16); 
     
@@ -76,8 +90,10 @@ void main(void)
      
     Uart_SendStr(" soc_rt= ");        Uart_SendData((uint16_t)SocCalc.soc_rt,10); 
     Uart_SendStr(" ah= ");            Uart_SendData((uint16_t)SocReg.ah,10);
-    Uart_SendStr(" CellBal= ");       Uart_SendData((uint16_t)CellBalance_Selct,16);  
+    Uart_SendStr(" CellBal = ");      Uart_SendData((uint16_t)CellBalance_Selct,16);  
     /* 
+    Uart_SendStr(" Temp_Val = ");     Uart_SendData((uint16_t)Temp_Val,10);  
+    Uart_SendStr("\r\n");
     for(i =0;i<10;i++)
     { 
       Uart_SendStr(" C_");
@@ -85,7 +101,7 @@ void main(void)
       Uart_SendStr("= ");
       Uart_SendData(Cell_Volt[i],10);
     } 
-    */ 
+     */
 #endif
     
     LowPower_Cntrl();        // 低功耗控制管理

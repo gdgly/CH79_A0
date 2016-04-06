@@ -593,6 +593,7 @@ void Afe_OV_UV_Delay_Set(uint8_t OV_delay, uint8_t UV_delay)
 void Afe_OV_UV_Threshold_Set(uint16_t OV_val, uint16_t UV_val)
 { 
   //==OV UV threshold setting
+  /*
   if(OV_val >= 4250)
   {
     OV_val = 4250;
@@ -600,7 +601,7 @@ void Afe_OV_UV_Threshold_Set(uint16_t OV_val, uint16_t UV_val)
   if(UV_val <= 2000)
   {
     UV_val = 2000;
-  } 
+  } */
   OV_TRIP_Last = (uint8_t)(((uint32_t)1000 * (OV_val - ADCOffset_Val)/ADCGain_Val) >> 4);  
   UV_TRIP_Last = (uint8_t)(((uint32_t)1000 * (UV_val - ADCOffset_Val)/ADCGain_Val) >> 4);  
   I2C_Write(UV_TRIP_ADDR,UV_TRIP_Last);
