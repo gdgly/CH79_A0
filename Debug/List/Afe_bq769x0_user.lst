@@ -1,15 +1,16 @@
 ###############################################################################
 #                                                                             #
-# IAR C/C++ Compiler V1.31.1.20058 [Evaluation] for STM807/Apr/2016  10:36:29 #
+# IAR C/C++ Compiler V1.31.1.20058 [Evaluation] for STM807/Apr/2016  16:33:16 #
 # Copyright 2010-2012 IAR Systems AB.                                         #
 #                                                                             #
 #    Source file  =  D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src #
 #                    \Afe_bq769x0_user.c                                      #
 #    Command line =  D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src #
-#                    \Afe_bq769x0_user.c -e -Ohz --debug --code_model small   #
-#                    --data_model medium -o D:\ProjectPath\STMPath\CH79_A0_C- #
-#                    version\CH79_A0\Debug\Obj\ --dlib_config "C:\Program     #
-#                    Files\IAR Systems\Embedded Workbench 6.0                 #
+#                    \Afe_bq769x0_user.c -e --enable_multibytes -Ohz --debug  #
+#                    --code_model small --data_model medium -o                #
+#                    D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\Debug\O #
+#                    bj\ --dlib_config "C:\Program Files\IAR                  #
+#                    Systems\Embedded Workbench 6.0                           #
 #                    Evaluation\stm8\LIB\dlstm8smn.h" -lcN                    #
 #                    D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\Debug\L #
 #                    ist\ -I D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0 #
@@ -103,11 +104,11 @@ D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src\Afe_bq769x0_user.c
      65            if(WorkMode == CHARGE_MODE)
      66            {
      67              FAULT_DETECT_CTRL_ON();
-     68              if((CC_Val < (-50)) || Bits_flag.Bit.AfeErr || IS_FAULT_ON())         // 充电状态检测到放电电流
+     68              if((CC_Val < (-50)) || Bits_flag.Bit.AfeErr || IS_FAULT_ON() || Cell_Volt_Max >= 4250)         // 充电状态检测到放电电流
      69              {
-     70                if((AfeErr_Cnt ++) >= 100)
+     70                if((AfeErr_Cnt ++) >= 10)
      71                {
-     72                  AfeErr_Cnt = 100;
+     72                  AfeErr_Cnt = 10;
      73                  Bits_flag.Bit.AfeErr = 1;
      74                }
      75              }
@@ -119,11 +120,11 @@ D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src\Afe_bq769x0_user.c
      81            }
      82            else if(WorkMode == DISCHARGE_MODE)
      83            {
-     84              if((CC_Val >= 50) ||Bits_flag.Bit.AfeErr)         // 放电状态检测到充电电流
+     84              if((CC_Val >= 50) ||Bits_flag.Bit.AfeErr || Cell_Volt_Max >= 4250)         // 放电状态检测到充电电流
      85              {
-     86                if((AfeErr_Cnt ++) >= 100)
+     86                if((AfeErr_Cnt ++) >= 10)
      87                {
-     88                  AfeErr_Cnt = 100;
+     88                  AfeErr_Cnt = 10;
      89                  Bits_flag.Bit.AfeErr = 1;
      90                }
      91              }
@@ -817,7 +818,7 @@ D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src\Afe_bq769x0_user.c
      Afe_CellBalance_Enable    38
      Afe_CellBalance_Disable   71
      Afe_Get_Adc               54
-     ChgDis_AbnormalCheck     117
+     ChgDis_AbnormalCheck     133
      ?Subroutine3              14
      AfeErr_Cnt                 1
      ?Subroutine5               2
@@ -852,9 +853,9 @@ D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src\Afe_bq769x0_user.c
  
    1 byte  in section .near.bss
    2 bytes in section .near.noinit
- 981 bytes in section .near_func.text
+ 997 bytes in section .near_func.text
  
- 981 bytes of CODE memory
+ 997 bytes of CODE memory
    1 byte  of DATA memory (+ 2 bytes shared)
 
 Errors: none

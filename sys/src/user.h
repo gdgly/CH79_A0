@@ -195,6 +195,7 @@ void LowPower_Powerdown_Enter(void);
       unsigned char DisTemp         : 1;  
       unsigned char DisCurOv        : 1; 
       unsigned char DisCurShort     : 1;   
+      //unsigned char OpenDetect      : 1; 
       unsigned char AfeErr          : 1; 
     }Bit;
   } Bits_flag;

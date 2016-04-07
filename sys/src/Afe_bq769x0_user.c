@@ -65,11 +65,11 @@ void ChgDis_AbnormalCheck(void)
   if(WorkMode == CHARGE_MODE)
   {
     FAULT_DETECT_CTRL_ON();
-    if((CC_Val < (-50)) || Bits_flag.Bit.AfeErr || IS_FAULT_ON())         // 充电状态检测到放电电流
+    if((CC_Val < (-50)) || Bits_flag.Bit.AfeErr || IS_FAULT_ON() || Cell_Volt_Max >= 4250)         // 充电状态检测到放电电流
     {
-      if((AfeErr_Cnt ++) >= 100)
+      if((AfeErr_Cnt ++) >= 10)
       {
-        AfeErr_Cnt = 100;
+        AfeErr_Cnt = 10;
         Bits_flag.Bit.AfeErr = 1;
       }
     }
@@ -81,11 +81,11 @@ void ChgDis_AbnormalCheck(void)
   }
   else if(WorkMode == DISCHARGE_MODE)
   {
-    if((CC_Val >= 50) ||Bits_flag.Bit.AfeErr)         // 放电状态检测到充电电流
+    if((CC_Val >= 50) ||Bits_flag.Bit.AfeErr || Cell_Volt_Max >= 4250)         // 放电状态检测到充电电流
     {
-      if((AfeErr_Cnt ++) >= 100)
+      if((AfeErr_Cnt ++) >= 10)
       {
-        AfeErr_Cnt = 100;
+        AfeErr_Cnt = 10;
         Bits_flag.Bit.AfeErr = 1;
       }
     }

@@ -727,6 +727,7 @@ void ModeCheck(void)
   uint32_t OV_tmp = 1;
   uint32_t UV_tmp = 1;
   uint8_t Trip_tmp = 1;
+  uint16_t Check_Val_tmp = 0;
   //工作模式的检测是依据外部Triger端的电压大小来判定 
   // 问题3：（充放电及空载识别问题）欠压状态下，插上充电器时，识别不了充电器;  
           //解决方案：检测无Triger信号时，为空载模式;
@@ -737,6 +738,7 @@ void ModeCheck(void)
   //OV_TRIP_Last = (uint8_t)(((uint32_t)1000 * (OV_val - ADCOffset_Val)/ADCGain_Val) >> 4);  
   //UV_TRIP_Last = (uint8_t)(((uint32_t)1000 * (UV_val - ADCOffset_Val)/ADCGain_Val) >> 4); 
   Check_Val = ADConverse(3); // 充电时Check_Val_MAX == 150
+   
   if(Check_Val < 10)// 无信号
   { 
     if(IdleExchangeMode_Cnt >= 100)
@@ -760,71 +762,77 @@ void ModeCheck(void)
         else
         {
           ModeChange_Lock = 0;
-        }
-          
+        } 
       }
     }
   } 
-  else if((Check_Val >= 186 && Check_Val < 630) || SYS_CTRL1.Bit.LOAD_PRESENT)// || CC_Val < (-10) )
-  {  
-    if(DisExchangeMode_Cnt >= 30)
-    { 
-      IdleExchangeMode_Cnt = 0;
-      ChgExchangeMode_Cnt = 0;
-      DisExchangeMode_Cnt = 100; 
-      WorkMode = DISCHARGE_MODE;
-      if(2 != ModeChange_Lock)
-      {
-        //ModeChange_Lock = 2; 
-        //Afe_OV_UV_Threshold_Set(4300, UV_THREHOLD_VAL_SET); // 问题1：放电状态下，电芯电压处于过充时，BQ会自动关闭充电MOS管;   解决方案：放电状态下，重新设置硬件过充电压为4.3V
-        I2C_Read(OV_TRIP_ADDR,&Trip_tmp); 
-        OV_tmp = ADCOffset_Val + (((uint32_t)OV_TRIP_Last << 4) * ADCGain_Val)/1000;
-          
-        I2C_Read(UV_TRIP_ADDR,&Trip_tmp); 
-        UV_tmp = ADCOffset_Val + (((uint32_t)UV_TRIP_Last << 4) * ADCGain_Val)/1000;
-          
-         //if((4250 >= OV_tmp) || (2950 >= UV_tmp ))//3000
-        if((4300 != OV_tmp) || (UV_THREHOLD_VAL_SET != UV_tmp ))
+  else
+  {
+    // dsg: Cell_Volt_Total == 31070   Check_Val == [385,394]   Check_Val_tmp == [31018,31743]  Max_Delta == 673
+    // chg: Cell_Volt_Total == 31050   Check_Val == [204,208]   Check_Val_tmp == [16435,16757]  Max_Delta == [14615,14293]
+    Check_Val_tmp = (uint16_t)((uint32_t)Check_Val *3300 * 25 /1024);//+-1000mV
+    if( ((Check_Val_tmp < Cell_Volt_Tol) && (Cell_Volt_Tol - Check_Val_tmp <= 2000)) || ((Check_Val_tmp > Cell_Volt_Tol) && (Check_Val_tmp - Cell_Volt_Tol <= 2000)) || SYS_CTRL1.Bit.LOAD_PRESENT) 
+    //else if((Check_Val >= 186 && Check_Val < 630) || SYS_CTRL1.Bit.LOAD_PRESENT)// || CC_Val < (-10) )
+    {  
+      if(DisExchangeMode_Cnt >= 30)
+      { 
+        IdleExchangeMode_Cnt = 0;
+        ChgExchangeMode_Cnt = 0;
+        DisExchangeMode_Cnt = 100; 
+        WorkMode = DISCHARGE_MODE;
+        if(2 != ModeChange_Lock)
         {
-          Afe_OV_UV_Threshold_Set(4300, UV_THREHOLD_VAL_SET); 
-        }
-        else
-        {
-          ModeChange_Lock = 2;
-        }
-      }
-    }
-  }  
-  else// if((Check_Val >= 130 && Check_Val < 160) || CC_Val >= 10)
-  {  
-    if(ChgExchangeMode_Cnt >= 30)
-    { 
-      ChgExchangeMode_Cnt  = 100;
-      DisExchangeMode_Cnt  = 0;
-      IdleExchangeMode_Cnt = 0;
-      WorkMode = CHARGE_MODE;
-      if(1 != ModeChange_Lock)
-      {
-        //ModeChange_Lock = 1; 
-        //Afe_OV_UV_Threshold_Set(OV_THREHOLD_VAL_SET, 0);// 问题2：充电状态下，电芯电压处于过放时，BQ会自动关闭放电MOS管;   解决方案：充电状态下，重新设置硬件过充电压为1.5V
-        I2C_Read(OV_TRIP_ADDR,&Trip_tmp); 
-        OV_tmp = ADCOffset_Val + (((uint32_t)OV_TRIP_Last << 4) * ADCGain_Val)/1000;
-          
-        I2C_Read(UV_TRIP_ADDR,&Trip_tmp); 
-        UV_tmp = ADCOffset_Val + (((uint32_t)UV_TRIP_Last << 4) * ADCGain_Val)/1000;
-          
-        //if((4200 < OV_tmp) || (50 >= UV_tmp ))
-        if((OV_THREHOLD_VAL_SET != OV_tmp) || (0 != UV_tmp ))
-        {
-          Afe_OV_UV_Threshold_Set(OV_THREHOLD_VAL_SET, 0); 
-        }
-        else
-        {
-          ModeChange_Lock = 1;
+          //ModeChange_Lock = 2; 
+          //Afe_OV_UV_Threshold_Set(4300, UV_THREHOLD_VAL_SET); // 问题1：放电状态下，电芯电压处于过充时，BQ会自动关闭充电MOS管;   解决方案：放电状态下，重新设置硬件过充电压为4.3V
+          I2C_Read(OV_TRIP_ADDR,&Trip_tmp); 
+          OV_tmp = ADCOffset_Val + (((uint32_t)OV_TRIP_Last << 4) * ADCGain_Val)/1000;
+            
+          I2C_Read(UV_TRIP_ADDR,&Trip_tmp); 
+          UV_tmp = ADCOffset_Val + (((uint32_t)UV_TRIP_Last << 4) * ADCGain_Val)/1000;
+            
+           //if((4250 >= OV_tmp) || (2950 >= UV_tmp ))//3000
+          if((4300 != OV_tmp) || (UV_THREHOLD_VAL_SET != UV_tmp ))
+          {
+            Afe_OV_UV_Threshold_Set(4300, UV_THREHOLD_VAL_SET); 
+          }
+          else
+          {
+            ModeChange_Lock = 2;
+          }
         }
       }
-    }
-  }   
+    }  
+    else// if((Check_Val >= 130 && Check_Val < 160) || CC_Val >= 10)
+    {  
+      if(ChgExchangeMode_Cnt >= 30)
+      { 
+        ChgExchangeMode_Cnt  = 100;
+        DisExchangeMode_Cnt  = 0;
+        IdleExchangeMode_Cnt = 0;
+        WorkMode = CHARGE_MODE;
+        if(1 != ModeChange_Lock)
+        {
+          //ModeChange_Lock = 1; 
+          //Afe_OV_UV_Threshold_Set(OV_THREHOLD_VAL_SET, 0);// 问题2：充电状态下，电芯电压处于过放时，BQ会自动关闭放电MOS管;   解决方案：充电状态下，重新设置硬件过充电压为1.5V
+          I2C_Read(OV_TRIP_ADDR,&Trip_tmp); 
+          OV_tmp = ADCOffset_Val + (((uint32_t)OV_TRIP_Last << 4) * ADCGain_Val)/1000;
+            
+          I2C_Read(UV_TRIP_ADDR,&Trip_tmp); 
+          UV_tmp = ADCOffset_Val + (((uint32_t)UV_TRIP_Last << 4) * ADCGain_Val)/1000;
+            
+          //if((4200 < OV_tmp) || (50 >= UV_tmp ))
+          if((OV_THREHOLD_VAL_SET != OV_tmp) || (0 != UV_tmp ))
+          {
+            Afe_OV_UV_Threshold_Set(OV_THREHOLD_VAL_SET, 0); 
+          }
+          else
+          {
+            ModeChange_Lock = 1;
+          }
+        }
+      }
+    }  
+  }
 }
 
   //===========================================
@@ -983,7 +991,7 @@ void Afe_Volt_Val_Get(void)
     The following equation shows how to convert the 16-bit CC reading into an analog voltage if no boardlevel calibration is performed:
     CC Reading (in μV) = [16-bit 2’s Complement Value] × (8.44 μV/LSB) 
   */
-  if( SYS_STAT.Bit.CC_READY) //CC_Volt_Sample_Cnt >= 23 &&
+  if((CC_Volt_Sample_Cnt >= 26) && SYS_STAT.Bit.CC_READY) //(0)//
   {
     CC_Volt_Sample_Cnt = 0;
     SYS_STAT.Bit.CC_READY = 0;
@@ -1019,6 +1027,22 @@ void Afe_Volt_Val_Get(void)
   
 }
  
+void OpenDetect_Cntrl(void)
+{
+  static uint8_t Opendetect_cnt = 0;
+  if(Cell_Volt_Max >= 4250)
+  {
+    if((Opendetect_cnt++) >= 10)
+    {
+      Opendetect_cnt = 10;
+      //Bits_flag.Bit.OpenDetect = 1;
+    }
+  }
+  else
+  {
+    Opendetect_cnt = 0;
+  } 
+}
 //==========================================================================
 /*
   turn on condition  :    >4.0V && deltaVolt >200mV
@@ -1032,7 +1056,7 @@ void CellBal_Cntrl(void)
     if(Cell_Balance_Delay_t >= 100)
     {
       Cell_Balance_Delay_t = 0;
-      if((Cell_Volt_Max >= CELLBALANCE_BEGIN_VAL) && ((Cell_Volt_Max - Cell_Volt_Min) >= CELLBALANCE_DELTA_VAL) && !Bits_flag.Bit.ChgOv && !Bits_flag.Bit.ChgTemp && !Bits_flag.Bit.ChgCurOv)
+      if((Cell_Volt_Max >= CELLBALANCE_BEGIN_VAL) && ((Cell_Volt_Max - Cell_Volt_Min) >= CELLBALANCE_DELTA_VAL) && !Bits_flag.Bit.ChgOv && !Bits_flag.Bit.ChgTemp && !Bits_flag.Bit.ChgCurOv && !Bits_flag.Bit.AfeErr)
       {
         CellBal_Cntrl_Lock = 1;
         for(i =0; i <10; i++)
@@ -1159,46 +1183,20 @@ void LedShow_Cntrl(void)
         if(LedFlash_t >= 50)
         {
           LedFlash_t = 0;
-          FlowLedCnt = 3;
+          FlowLedCnt = 0;
           FlowLed_Finish_Flag = 1;
         }  
       }
     }
     else if(Bits_flag.Bit.AfeErr)
-    {
-      if(FlowLedCnt ==0)
+    { 
+      if(LedFlash_t >= 50)
       {
-        LED1_ON();
+        LED1_OFF();
         LED2_OFF();
-        LED3_OFF(); 
-        if(LedFlash_t >= 50)
-        {
-          LedFlash_t = 0;
-          FlowLedCnt = 1;
-        }  
-      }
-      else if(FlowLedCnt ==1)
-      {
-        LED1_OFF();
-        LED2_ON();
-        LED3_OFF(); 
-        if(LedFlash_t >= 50)
-        {
-          LedFlash_t = 0;
-          FlowLedCnt = 2;
-        }  
-      }
-      else if(FlowLedCnt ==2)
-      {
-        LED1_OFF();
-        LED2_ON();
-        LED3_OFF();
-        if(LedFlash_t >= 50)
-        {
-          LedFlash_t = 0;
-          FlowLedCnt = 0;
-        }  
-      }
+        LED3_XOR();  
+        LedFlash_t = 0; 
+      }  
     }
     else if(WorkMode == CHARGE_MODE)
     {
@@ -1406,7 +1404,7 @@ void LowPower_Entry_MCU_Set(void)
 void LowPower_Powerdown_Enter(void)
 {
   uint8_t i = 0;
-  if(AfeErr_t >= 2000 || (LedFlash_Off_t >= 250) || Bits_flag.Bit.DisOv)//PowerOff_Delay_t >= PowerOff_Delay_t_SET && 
+  if(AfeErr_t >= 2000 || (LedFlash_Off_t >= 250) || Bits_flag.Bit.DisOv || (WorkMode == DISCHARGE_MODE && Bits_flag.Bit.AfeErr))//PowerOff_Delay_t >= PowerOff_Delay_t_SET && 
   {
     SOC_SavedtoEEPROM();
     Delay_ms(10);
@@ -1428,7 +1426,7 @@ void LowPower_Powerdown_Enter(void)
 //==============================================================================
 void LowPower_Cntrl(void)
 {  
-  if(WorkMode == IDLE_MODE || AfeErr_t >= 2000 || Bits_flag.Bit.DisOv)
+  if(WorkMode == IDLE_MODE || AfeErr_t >= 2000 || Bits_flag.Bit.DisOv || (WorkMode == DISCHARGE_MODE && Bits_flag.Bit.AfeErr))
   {
     if(!SYS_CTRL2.Bit.DSG_ON && !SYS_CTRL2.Bit.CHG_ON )  
     {

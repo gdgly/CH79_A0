@@ -27,9 +27,10 @@ void main(void)
   Afe_Device_Init();          // 初始化AFE IC，包括开启ADC、电流检测模块、设置过放过充电芯电压值、放电过流、短路保护等参数 
   LED1_OFF();                 // 关闭LED1
   SOC_Init();                 // 利用EEPROM中保存数据或OCV初始化SOC数据
-  Soc_OCV_CorrectEn_Flag = 1;  // 上电允许SOC的OCV校准 
+  Soc_OCV_CorrectEn_Flag = 1; // 上电允许SOC的OCV校准 
   //Afe_ADC_Disable();        // 100+uA
   //Afe_Temp_Disable();       // 100+uA
+  WorkMode = DISCHARGE_MODE;
   while(1)
   {
     //=========
@@ -91,11 +92,11 @@ void main(void)
     Uart_SendStr(" Volt_Avg= ");      Uart_SendData(Cell_Volt_Avg,10);
     Uart_SendStr(" Max= ");           Uart_SendData(Cell_Volt_Max,10);
     Uart_SendStr(" Min= ");           Uart_SendData(Cell_Volt_Min,10);
-     
+       
     Uart_SendStr(" soc_rt= ");        Uart_SendData((uint16_t)SocCalc.soc_rt,10); 
     Uart_SendStr(" ah= ");            Uart_SendData((uint16_t)SocReg.ah,10);
     Uart_SendStr(" CellBal = ");      Uart_SendData((uint16_t)CellBalance_Selct,16);  
-    /* 
+  /* 
     Uart_SendStr(" Temp_Val = ");     Uart_SendData((uint16_t)Temp_Val,10);  
     Uart_SendStr("\r\n");
     for(i =0;i<10;i++)

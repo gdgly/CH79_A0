@@ -2,7 +2,7 @@
 
 <project>
   <fileVersion>2</fileVersion>
-  <fileChecksum>2216976987</fileChecksum>
+  <fileChecksum>2336885582</fileChecksum>
   <configuration>
     <name>Debug</name>
     <outputs>
@@ -114,6 +114,7 @@
       <file>$PROJ_DIR$\Debug\Obj\stm8s_flash.pbi</file>
       <file>$TOOLKIT_DIR$\inc\c\DLib_Product.h</file>
       <file>$PROJ_DIR$\sys\src\type.h</file>
+      <file>$PROJ_DIR$\Debug\List\stm8s_flash.lst</file>
     </outputs>
     <file>
       <name>[ROOT_NODE]</name>
@@ -290,7 +291,7 @@
       <outputs>
         <tool>
           <name>ICCSTM8</name>
-          <file> 104</file>
+          <file> 108 104</file>
         </tool>
         <tool>
           <name>BICOMP</name>
@@ -298,6 +299,10 @@
         </tool>
       </outputs>
       <inputs>
+        <tool>
+          <name>ICCSTM8</name>
+          <file> 39 68 44 86 64 56 70 55 30 57 90 33 73 38 50 102 87 19 101 91</file>
+        </tool>
         <tool>
           <name>BICOMP</name>
           <file> 39 68 44 86 64 56 70 55 30 57 90 33 73 38 50 102 87 19 101 91</file>

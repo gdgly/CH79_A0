@@ -1,15 +1,16 @@
 ###############################################################################
 #                                                                             #
-# IAR C/C++ Compiler V1.31.1.20058 [Evaluation] for STM806/Apr/2016  14:54:26 #
+# IAR C/C++ Compiler V1.31.1.20058 [Evaluation] for STM807/Apr/2016  16:17:15 #
 # Copyright 2010-2012 IAR Systems AB.                                         #
 #                                                                             #
 #    Source file  =  D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src #
 #                    \data_def.c                                              #
 #    Command line =  D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src #
-#                    \data_def.c -e -Ohz --debug --code_model small           #
-#                    --data_model medium -o D:\ProjectPath\STMPath\CH79_A0_C- #
-#                    version\CH79_A0\Debug\Obj\ --dlib_config "C:\Program     #
-#                    Files\IAR Systems\Embedded Workbench 6.0                 #
+#                    \data_def.c -e --enable_multibytes -Ohz --debug          #
+#                    --code_model small --data_model medium -o                #
+#                    D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\Debug\O #
+#                    bj\ --dlib_config "C:\Program Files\IAR                  #
+#                    Systems\Embedded Workbench 6.0                           #
 #                    Evaluation\stm8\LIB\dlstm8smn.h" -lcN                    #
 #                    D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\Debug\L #
 #                    ist\ -I D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0 #
@@ -183,57 +184,57 @@ D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src\data_def.c
     145            unsigned char Byte;
     146            struct FLAG_BITS
     147            {
-    148              //unsigned char Chg             : 1;
+    148              //unsigned char Chg           : 1;
     149              unsigned char ChgOv           : 1;
     150              unsigned char ChgCurOv        : 1;
     151              unsigned char ChgTemp         : 1; 
-    152              //unsigned char Dis             : 1;
+    152              //unsigned char Dis           : 1;
     153              unsigned char DisOv           : 1;
     154              unsigned char DisTemp         : 1;  
     155              unsigned char DisCurOv        : 1; 
     156              unsigned char DisCurShort     : 1;  
-    157              //unsigned char KEY_on          : 1; 
-    158              unsigned char AfeErr          : 1; 
-    159            }Bit;
-    160          } Bits_flag;
-    161           
-    162          struct X_SOC
-    163          {
-    164              uint8_t 	soc;                	        // soc
-    165              uint32_t 	ah;               	 	// 剩余容量
-    166                   //uint16_t 	vlt_pack;          		// 实时总电压mV
-    167              uint16_t 	curr;              		// 实时电流mA
-    168              //uint8_t 	curr_dir;          		// 电流方向0为放电1为充电。
-    169              uint16_t 	min_cell_vlt;      		// 单体最低/高电压mV
-    170              uint16_t 	max_cell_vlt;
-    171              int8_t 	min_cell_temp;      	        // 电池最低/高温度drg
-    172              //int8_t 	max_cell_temp;
-    173              uint16_t 	min_cell_temp_vlt;
-    174              uint16_t	min_cell_dchg_vlt; 		// 最低放电电压
-    175              uint16_t 	max_cell_chg_vlt;  		// 最高充电电压
-    176              uint16_t 	rated_cap;     			// 额定容量
-    177              uint8_t 	temp_corr;     		 	// 执行温度修正标志，1执行，0不执行。
-    178          }SocReg;
-    179          
-    180          struct X_SOC_CALC
-    181          {
-    182              uint32_t inAh;     		// 充入的电量
-    183              uint32_t inAh_bak;
-    184              uint32_t totalInAh;
-    185              uint32_t totalInAh_bak;
-    186              uint32_t outAh;        	// 放出的电量
-    187              uint32_t outAh_bak;
-    188              uint32_t totalOutAh;
-    189              uint32_t totalOutAh_bak;
-    190              uint32_t curAh;
-    191              uint8_t  ov_cnt;    		// 过冲计时
-    192              uint8_t  uv_cnt;    		// 过放计时
-    193              uint32_t stb_cnt; 	                // 静置计时
-    194              uint8_t  soc_rt;
-    195          }SocCalc;
-    196          
-    197          //SocCalc.soc_rt
-    198          
+    157              //unsigned char KEY_on        : 1; 
+    158              //unsigned char OpenDetect      : 1; 
+    159              unsigned char AfeErr          : 1; 
+    160            }Bit;
+    161          } Bits_flag;
+    162           
+    163          struct X_SOC
+    164          {
+    165              uint8_t 	soc;                	        // soc
+    166              uint32_t 	ah;               	 	// 剩余容量
+    167                   //uint16_t 	vlt_pack;          		// 实时总电压mV
+    168              uint16_t 	curr;              		// 实时电流mA
+    169              //uint8_t 	curr_dir;          		// 电流方向0为放电1为充电。
+    170              uint16_t 	min_cell_vlt;      		// 单体最低/高电压mV
+    171              uint16_t 	max_cell_vlt;
+    172              int8_t 	min_cell_temp;      	        // 电池最低/高温度drg
+    173              //int8_t 	max_cell_temp;
+    174              uint16_t 	min_cell_temp_vlt;
+    175              uint16_t	min_cell_dchg_vlt; 		// 最低放电电压
+    176              uint16_t 	max_cell_chg_vlt;  		// 最高充电电压
+    177              uint16_t 	rated_cap;     			// 额定容量
+    178              uint8_t 	temp_corr;     		 	// 执行温度修正标志，1执行，0不执行。
+    179          }SocReg;
+    180          
+    181          struct X_SOC_CALC
+    182          {
+    183              uint32_t inAh;     		// 充入的电量
+    184              uint32_t inAh_bak;
+    185              uint32_t totalInAh;
+    186              uint32_t totalInAh_bak;
+    187              uint32_t outAh;        	// 放出的电量
+    188              uint32_t outAh_bak;
+    189              uint32_t totalOutAh;
+    190              uint32_t totalOutAh_bak;
+    191              uint32_t curAh;
+    192              uint8_t  ov_cnt;    		// 过冲计时
+    193              uint8_t  uv_cnt;    		// 过放计时
+    194              uint32_t stb_cnt; 	                // 静置计时
+    195              uint8_t  soc_rt;
+    196          }SocCalc;
+    197          
+    198          //SocCalc.soc_rt
     199          
     200          
     201          
@@ -244,6 +245,7 @@ D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src\data_def.c
     206          
     207          
     208          
+    209          
 
    Section sizes:
 

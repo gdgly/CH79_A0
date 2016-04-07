@@ -1,34 +1,42 @@
 ###############################################################################
 #                                                                             #
-# IAR C/C++ Compiler V1.31.1.20058 [Evaluation] for STM811/Apr/2015  10:45:33 #
+# IAR C/C++ Compiler V1.31.1.20058 [Evaluation] for STM807/Apr/2016  16:09:05 #
 # Copyright 2010-2012 IAR Systems AB.                                         #
 #                                                                             #
-#    Source file  =  D:\STMPath\26X9010(MPP 2IN1)\lib\src\stm8s_flash.c       #
-#    Command line =  "D:\STMPath\26X9010(MPP 2IN1)\lib\src\stm8s_flash.c" -e  #
-#                    -Ohz --debug --code_model small --data_model medium -o   #
-#                    "D:\STMPath\26X9010(MPP 2IN1)\Debug\Obj\" --dlib_config  #
-#                    "C:\Program Files\IAR Systems\Embedded Workbench 6.0     #
+#    Source file  =  D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src #
+#                    \stm8s_flash.c                                           #
+#    Command line =  D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src #
+#                    \stm8s_flash.c -e --enable_multibytes -Ohz --debug       #
+#                    --code_model small --data_model medium -o                #
+#                    D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\Debug\O #
+#                    bj\ --dlib_config "C:\Program Files\IAR                  #
+#                    Systems\Embedded Workbench 6.0                           #
 #                    Evaluation\stm8\LIB\dlstm8smn.h" -lcN                    #
-#                    "D:\STMPath\26X9010(MPP 2IN1)\Debug\List\" -I            #
-#                    "D:\STMPath\26X9010(MPP 2IN1)/user/\" -I                 #
-#                    "D:\STMPath\26X9010(MPP 2IN1)/user/src/\" -I             #
-#                    "D:\STMPath\26X9010(MPP 2IN1)/user/inc/\" -I             #
-#                    "D:\STMPath\26X9010(MPP 2IN1)/addon/\" -I                #
-#                    "D:\STMPath\26X9010(MPP 2IN1)/addon/src/\" -I            #
-#                    "D:\STMPath\26X9010(MPP 2IN1)/addon/inc/\" -I            #
-#                    "D:\STMPath\26X9010(MPP 2IN1)/sys/\" -I                  #
-#                    "D:\STMPath\26X9010(MPP 2IN1)/sys/inc/\" -I              #
-#                    "D:\STMPath\26X9010(MPP 2IN1)/sys/src/\" -I              #
-#                    "D:\STMPath\26X9010(MPP 2IN1)/lib/\" -I                  #
-#                    "D:\STMPath\26X9010(MPP 2IN1)/lib/src/\" -I              #
-#                    "D:\STMPath\26X9010(MPP 2IN1)/lib/inc/\" --vregs 16      #
-#    List file    =  D:\STMPath\26X9010(MPP 2IN1)\Debug\List\stm8s_flash.lst  #
-#    Object file  =  D:\STMPath\26X9010(MPP 2IN1)\Debug\Obj\stm8s_flash.o     #
+#                    D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\Debug\L #
+#                    ist\ -I D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0 #
+#                    /user/\ -I D:\ProjectPath\STMPath\CH79_A0_C-version\CH79 #
+#                    _A0/user/src/\ -I D:\ProjectPath\STMPath\CH79_A0_C-versi #
+#                    on\CH79_A0/user/inc/\ -I D:\ProjectPath\STMPath\CH79_A0_ #
+#                    C-version\CH79_A0/addon/\ -I                             #
+#                    D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0/addon/s #
+#                    rc/\ -I D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0 #
+#                    /addon/inc/\ -I D:\ProjectPath\STMPath\CH79_A0_C-version #
+#                    \CH79_A0/sys/\ -I D:\ProjectPath\STMPath\CH79_A0_C-versi #
+#                    on\CH79_A0/sys/inc/\ -I D:\ProjectPath\STMPath\CH79_A0_C #
+#                    -version\CH79_A0/sys/src/\ -I                            #
+#                    D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0/lib/\   #
+#                    -I D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0/lib/ #
+#                    src/\ -I D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A #
+#                    0/lib/inc/\ --vregs 16                                   #
+#    List file    =  D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\Debug\L #
+#                    ist\stm8s_flash.lst                                      #
+#    Object file  =  D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\Debug\O #
+#                    bj\stm8s_flash.o                                         #
 #                                                                             #
 #                                                                             #
 ###############################################################################
 
-D:\STMPath\26X9010(MPP 2IN1)\lib\src\stm8s_flash.c
+D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src\stm8s_flash.c
       1          /**
       2            ******************************************************************************
       3            * @file    stm8s_flash.c
