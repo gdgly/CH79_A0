@@ -1,42 +1,41 @@
 ###############################################################################
 #                                                                             #
-# IAR C/C++ Compiler V1.31.1.20058 [Evaluation] for STM831/Mar/2016  16:41:34 #
+# IAR C/C++ Compiler V1.31.1.20058 [Evaluation] for STM807/Apr/2016  11:54:40 #
 # Copyright 2010-2012 IAR Systems AB.                                         #
 #                                                                             #
-#    Source file  =  D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_A0\sys\s #
-#                    rc\soc.c                                                 #
-#    Command line =  D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_A0\sys\s #
-#                    rc\soc.c -e -Ohz --debug --code_model small              #
-#                    --data_model medium -o D:\ProjectPath\STMPath\CH79_A0_3n #
-#                    d_Changed\CH79_A0\Debug\Obj\ --dlib_config "C:\Program   #
-#                    Files\IAR Systems\Embedded Workbench 6.0                 #
+#    Source file  =  D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src #
+#                    \soc.c                                                   #
+#    Command line =  D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src #
+#                    \soc.c -e -Ohz --debug --code_model small --data_model   #
+#                    medium -o D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_ #
+#                    A0\Debug\Obj\ --dlib_config "C:\Program Files\IAR        #
+#                    Systems\Embedded Workbench 6.0                           #
 #                    Evaluation\stm8\LIB\dlstm8smn.h" -lcN                    #
-#                    D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_A0\Debug #
-#                    \List\ -I D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH7 #
-#                    9_A0/user/\ -I D:\ProjectPath\STMPath\CH79_A0_3nd_Change #
-#                    d\CH79_A0/user/src/\ -I D:\ProjectPath\STMPath\CH79_A0_3 #
-#                    nd_Changed\CH79_A0/user/inc/\ -I                         #
-#                    D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_A0/addon #
-#                    /\ -I D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_A0 #
-#                    /addon/src/\ -I D:\ProjectPath\STMPath\CH79_A0_3nd_Chang #
-#                    ed\CH79_A0/addon/inc/\ -I D:\ProjectPath\STMPath\CH79_A0 #
-#                    _3nd_Changed\CH79_A0/sys/\ -I                            #
-#                    D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_A0/sys/i #
-#                    nc/\ -I D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_ #
-#                    A0/sys/src/\ -I D:\ProjectPath\STMPath\CH79_A0_3nd_Chang #
-#                    ed\CH79_A0/lib/\ -I D:\ProjectPath\STMPath\CH79_A0_3nd_C #
-#                    hanged\CH79_A0/lib/src/\ -I                              #
-#                    D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_A0/lib/i #
-#                    nc/\ --vregs 16                                          #
-#    List file    =  D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_A0\Debug #
-#                    \List\soc.lst                                            #
-#    Object file  =  D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_A0\Debug #
-#                    \Obj\soc.o                                               #
+#                    D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\Debug\L #
+#                    ist\ -I D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0 #
+#                    /user/\ -I D:\ProjectPath\STMPath\CH79_A0_C-version\CH79 #
+#                    _A0/user/src/\ -I D:\ProjectPath\STMPath\CH79_A0_C-versi #
+#                    on\CH79_A0/user/inc/\ -I D:\ProjectPath\STMPath\CH79_A0_ #
+#                    C-version\CH79_A0/addon/\ -I                             #
+#                    D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0/addon/s #
+#                    rc/\ -I D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0 #
+#                    /addon/inc/\ -I D:\ProjectPath\STMPath\CH79_A0_C-version #
+#                    \CH79_A0/sys/\ -I D:\ProjectPath\STMPath\CH79_A0_C-versi #
+#                    on\CH79_A0/sys/inc/\ -I D:\ProjectPath\STMPath\CH79_A0_C #
+#                    -version\CH79_A0/sys/src/\ -I                            #
+#                    D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0/lib/\   #
+#                    -I D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0/lib/ #
+#                    src/\ -I D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A #
+#                    0/lib/inc/\ --vregs 16                                   #
+#    List file    =  D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\Debug\L #
+#                    ist\soc.lst                                              #
+#    Object file  =  D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\Debug\O #
+#                    bj\soc.o                                                 #
 #                                                                             #
 #                                                                             #
 ###############################################################################
 
-D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_A0\sys\src\soc.c
+D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src\soc.c
       1          
       2          #include "stm8s.h" 
       3          #include"user.h"
@@ -226,7 +225,7 @@ D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_A0\sys\src\soc.c
     187              {  
     188                if(Bits_flag.Bit.ChgOv)   // ¹ý³ä 
     189                {
-    190                  if((SocCalc.ov_cnt ++) >= 30)
+    190                  if((SocCalc.ov_cnt ++) >= 30 && (Cell_Volt_Max >= 4100 && Cell_Volt_Avg >= 4100))
     191                  {
     192                    SocCalc.ov_cnt = 30;
     193                    SocCalc.curAh = SocReg.rated_cap;
@@ -552,7 +551,7 @@ D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_A0\sys\src\soc.c
      ?Subroutine0        49
      ?Subroutine12        3
      ??Subroutine21_0     4
-     SOCCalculate       141
+     SOCCalculate       157
      ?Subroutine14       10
      ?Subroutine11        9
      ??Subroutine22_0     9
@@ -582,9 +581,9 @@ D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_A0\sys\src\soc.c
      9 bytes in section .near.bss
     33 bytes in section .near.data
     96 bytes in section .near.rodata
- 1 216 bytes in section .near_func.text
+ 1 232 bytes in section .near_func.text
  
- 1 216 bytes of CODE  memory
+ 1 232 bytes of CODE  memory
     96 bytes of CONST memory
     42 bytes of DATA  memory
 

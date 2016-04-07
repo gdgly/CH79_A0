@@ -187,7 +187,7 @@ void SOCCalculate(void)
     {  
       if(Bits_flag.Bit.ChgOv)   // ¹ý³ä 
       {
-        if((SocCalc.ov_cnt ++) >= 30)
+        if((SocCalc.ov_cnt ++) >= 30 && (Cell_Volt_Max >= 4100 && Cell_Volt_Avg >= 4100))
         {
           SocCalc.ov_cnt = 30;
           SocCalc.curAh = SocReg.rated_cap;

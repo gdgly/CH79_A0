@@ -60,6 +60,8 @@ uint16_t Afe_Get_Adc(uint8_t addr)
 void ChgDis_AbnormalCheck(void)
 {
   static uint8_t AfeErr_Cnt = 0;
+ 
+  //========================================
   if(WorkMode == CHARGE_MODE)
   {
     FAULT_DETECT_CTRL_ON();
@@ -98,10 +100,13 @@ void ChgDis_AbnormalCheck(void)
     AfeErr_Cnt = 0;
   }
       
-  /* 
+  /*  
+  //====================================================
+  
   if(SYS_STAT.Bit.DEVICE_XREADY)// || SYS_STAT.Bit.OVRD_ALERT)
   {
-  }  */
+    Bits_flag.Bit.AfeErr = 1;
+  } 
   if(Bits_flag.Bit.AfeErr )//&& DEVICE_XREADY_Re_t >= DEVICE_XREADY_Re_SET)//SYS_STAT.Bit.DEVICE_XREADY
   {
     SYS_STAT_Last |= 0x30;
@@ -111,15 +116,9 @@ void ChgDis_AbnormalCheck(void)
     SYS_STAT.Bit.DEVICE_XREADY = 0;
     Bits_flag.Bit.AfeErr = 0;
     DEVICE_XREADY_Re_t = 0;
-    Afe_Device_Init();
-    /*
-    Afe_SCD_Set(SCD_THREHOLD_VAL_SET, SCD_DELAY_SET);
-    Afe_OCD_Set(OCD_THREHOLD_VAL_SET, OCD_DELAY_SET);
-    Afe_OV_UV_Delay_Set(OV_DELAY_SET,UV_DELAY_SET); 
-    Afe_OV_UV_Threshold_Set(OV_THREHOLD_VAL_SET, UV_THREHOLD_VAL_SET);
-    */
+    Afe_Device_Init(); 
   } 
-     
+   */
 }
 
 void Afe_AbnormalCheck(void)
@@ -254,7 +253,7 @@ void Afe_Device_Init(void)
   ClrWdt(); 
   Afe_CC_1Shot_Set();              // 开启电流检测--单次采样模式
   Afe_Temp_Enable();               // 开启温度检测模块
-  Afe_Get_GainOffset();            // 获取电芯采样值得Gain Offset值，用来电芯电压AD值换算实际电压值（单位mV）
+  Afe_Get_GainOffset();            // 获取电芯采样值得Gain Offset值，用来电芯电压AD值换算实际电压值（单位mV）//ADCGain_Val = 377 ADCOffset_Val = 47
   ClrWdt();   
   Afe_SCD_Set(SCD_THREHOLD_VAL_SET, SCD_DELAY_SET);  // 设置短路电流保护值、及延时时间（参数虚设，请在函数内部进行修改）
   Afe_OCD_Set(OCD_THREHOLD_VAL_SET, OCD_DELAY_SET);  // 设置放电过流保护值及延时时间（参数虚设，请在函数内部进行修改）
@@ -603,7 +602,14 @@ void Afe_OV_UV_Threshold_Set(uint16_t OV_val, uint16_t UV_val)
     UV_val = 2000;
   } */
   OV_TRIP_Last = (uint8_t)(((uint32_t)1000 * (OV_val - ADCOffset_Val)/ADCGain_Val) >> 4);  
-  UV_TRIP_Last = (uint8_t)(((uint32_t)1000 * (UV_val - ADCOffset_Val)/ADCGain_Val) >> 4);  
+  if(0 == UV_val)
+  {
+    UV_TRIP_Last = 0;
+  }
+  else
+  {
+    UV_TRIP_Last = (uint8_t)(((uint32_t)1000 * (UV_val - ADCOffset_Val)/ADCGain_Val) >> 4);  
+  }
   I2C_Write(UV_TRIP_ADDR,UV_TRIP_Last);
   I2C_Write(OV_TRIP_ADDR,OV_TRIP_Last);  
 }
