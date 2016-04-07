@@ -6,7 +6,7 @@
 #include "iostm8s003f3.h"
 #include "bq769x0.h" 
 
-#define Uart_Model_Enable
+//#define Uart_Model_Enable
 void main(void)
 {  
   uint8_t i = 0;
@@ -27,10 +27,11 @@ void main(void)
   Afe_Device_Init();          // 初始化AFE IC，包括开启ADC、电流检测模块、设置过放过充电芯电压值、放电过流、短路保护等参数 
   LED1_OFF();                 // 关闭LED1
   SOC_Init();                 // 利用EEPROM中保存数据或OCV初始化SOC数据
-  Soc_OCV_CorrectEn_Flag = 1; // 上电允许SOC的OCV校准 
+  //Soc_OCV_CorrectEn_Flag = 1; // 上电允许SOC的OCV校准 
   //Afe_ADC_Disable();        // 100+uA
   //Afe_Temp_Disable();       // 100+uA
   WorkMode = DISCHARGE_MODE;
+  Bits_flag.Bit.DisOv = 1;
   while(1)
   {
     //=========

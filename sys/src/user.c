@@ -833,9 +833,8 @@ void ModeCheck(void)
       }
     }  
   }
-}
-
-  //===========================================
+} 
+//===========================================
 void ClearStatus(void)
 {
   if(WorkMode == CHARGE_MODE)
@@ -893,6 +892,7 @@ void ClearStatus(void)
   }*/
   else if(WorkMode == IDLE_MODE)
   {   
+    //Bits_flag.Bit.AfeErr = 0;
     Dis_First_Run_Flag = 0;
     Dis_First_Run_t = 0;
     //if(Bits_flag.Bit.ChgCurOv)// && ChgCurOv_Re_t >= ChgCurOv_Re_t_SET)
@@ -1151,78 +1151,77 @@ void LedShow_Cntrl(void)
   else
   { 
     LedFlash_Off_t = 0;
-    if(FlowLed_Finish_Flag ==0)
-    {
-      if(FlowLedCnt ==0)
+    if(Bits_flag.Bit.AfeErr)
+    { 
+      if(LedFlash_t < 50)
       {
         LED1_ON();
         LED2_OFF();
-        LED3_OFF(); 
-        if(LedFlash_t >= 50)
-        {
-          LedFlash_t = 0;
-          FlowLedCnt = 1;
-        }  
-      }
-      else if(FlowLedCnt ==1)
+        LED3_OFF();    
+      } 
+      else if(LedFlash_t < 100)
       {
         LED1_OFF();
         LED2_ON();
-        LED3_OFF(); 
-        if(LedFlash_t >= 50)
-        {
-          LedFlash_t = 0;
-          FlowLedCnt = 2;
-        }  
-      }
-      else if(FlowLedCnt ==2)
+        LED3_OFF();   
+      } 
+      else if(LedFlash_t < 150)
       {
         LED1_OFF();
         LED2_OFF();
-        LED3_ON(); 
-        if(LedFlash_t >= 50)
-        {
-          LedFlash_t = 0;
-          FlowLedCnt = 0;
-          FlowLed_Finish_Flag = 1;
-        }  
-      }
-    }
-    else if(Bits_flag.Bit.AfeErr)
-    { 
-      if(LedFlash_t >= 50)
+        LED3_ON();   
+      } 
+      else if(LedFlash_t < 200)
       {
         LED1_OFF();
         LED2_OFF();
-        LED3_XOR();  
+        LED3_OFF();  
+      } 
+      else
+      {
         LedFlash_t = 0; 
-      }  
+      }
     }
     else if(WorkMode == CHARGE_MODE)
-    {
-      /*
-      if(Bits_flag.Bit.ChgCurOv)
+    { 
+      if(FlowLed_Finish_Flag ==0 )
       {
-        LED1_OFF();
-        if(LedFlash_t >= 50)
+        if(FlowLedCnt ==0)
         {
-          LED2_XOR();
-          LedFlash_t = 0;
-        } 
-        LED3_OFF();  
-      }
-      else if(Bits_flag.Bit.ChgTemp)
-      {
-        LED1_OFF();
-        LED2_OFF();  
-        if(LedFlash_t >= 50)
+          LED1_ON();
+          LED2_OFF();
+          LED3_OFF(); 
+          if(LedFlash_t >= 50)
+          {
+            LedFlash_t = 0;
+            FlowLedCnt = 1;
+          }  
+        }
+        else if(FlowLedCnt ==1)
         {
-          LED3_XOR();
-          LedFlash_t = 0;
-        } 
+          LED1_OFF();
+          LED2_ON();
+          LED3_OFF(); 
+          if(LedFlash_t >= 50)
+          {
+            LedFlash_t = 0;
+            FlowLedCnt = 2;
+          }  
+        }
+        else if(FlowLedCnt ==2)
+        {
+          LED1_OFF();
+          LED2_OFF();
+          LED3_ON(); 
+          if(LedFlash_t >= 50)
+          {
+            LedFlash_t = 0;
+            FlowLedCnt = 0;
+            FlowLed_Finish_Flag = 1;
+          }  
+        }
       }
-      else */
-      if(Bits_flag.Bit.ChgOv || (Cell_Volt_Max >= 4100 && Cell_Volt_Avg >= 4100)) 
+      else if(Bits_flag.Bit.ChgOv || (Cell_Volt_Max >= 4100 && Cell_Volt_Avg >= 4100)) 
       {
         LED1_OFF();
         LED2_OFF(); 
@@ -1276,29 +1275,8 @@ void LedShow_Cntrl(void)
       } 
     } 
     else if(WorkMode == DISCHARGE_MODE)
-    { 
-      /*
-      if(Bits_flag.Bit.DisCurOv  || Bits_flag.Bit.DisCurShort)
-      {
-        LED1_OFF();
-        if(LedFlash_t >= 50)
-        {
-          LED2_XOR();
-          LedFlash_t = 0;
-        } 
-        LED3_OFF();  
-      }
-      else if(Bits_flag.Bit.DisTemp)
-      {
-        LED1_OFF();
-        LED2_OFF();  
-        if(LedFlash_t >= 50)
-        {
-          LED3_XOR();
-          LedFlash_t = 0;
-        } 
-      }
-      else */
+    {  
+      FlowLed_Finish_Flag = 0;
       if(Bits_flag.Bit.DisOv)
       {
         LED1_OFF();
@@ -1404,7 +1382,7 @@ void LowPower_Entry_MCU_Set(void)
 void LowPower_Powerdown_Enter(void)
 {
   uint8_t i = 0;
-  if(AfeErr_t >= 2000 || (LedFlash_Off_t >= 250) || Bits_flag.Bit.DisOv || (WorkMode == DISCHARGE_MODE && Bits_flag.Bit.AfeErr))//PowerOff_Delay_t >= PowerOff_Delay_t_SET && 
+  if(AfeErr_t >= 2000 || (LedFlash_Off_t >= 250) || (Dis_First_Run_Flag ==1 && Bits_flag.Bit.DisOv) || (WorkMode == DISCHARGE_MODE && Bits_flag.Bit.AfeErr))//PowerOff_Delay_t >= PowerOff_Delay_t_SET && 
   {
     SOC_SavedtoEEPROM();
     Delay_ms(10);
@@ -1426,7 +1404,7 @@ void LowPower_Powerdown_Enter(void)
 //==============================================================================
 void LowPower_Cntrl(void)
 {  
-  if(WorkMode == IDLE_MODE || AfeErr_t >= 2000 || Bits_flag.Bit.DisOv || (WorkMode == DISCHARGE_MODE && Bits_flag.Bit.AfeErr))
+  if(WorkMode == IDLE_MODE || AfeErr_t >= 2000 || (Dis_First_Run_Flag ==1 && Bits_flag.Bit.DisOv) || (WorkMode == DISCHARGE_MODE && Bits_flag.Bit.AfeErr))
   {
     if(!SYS_CTRL2.Bit.DSG_ON && !SYS_CTRL2.Bit.CHG_ON )  
     {

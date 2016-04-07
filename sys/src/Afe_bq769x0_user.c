@@ -66,12 +66,20 @@ void ChgDis_AbnormalCheck(void)
   {
     FAULT_DETECT_CTRL_ON();
     if((CC_Val < (-50)) || Bits_flag.Bit.AfeErr || IS_FAULT_ON() || Cell_Volt_Max >= 4250)         // 充电状态检测到放电电流
-    {
+    { 
+#ifdef Uart_Model_Enable
       if((AfeErr_Cnt ++) >= 10)
       {
         AfeErr_Cnt = 10;
         Bits_flag.Bit.AfeErr = 1;
       }
+#else
+      if((AfeErr_Cnt ++) >= 100)
+      {
+        AfeErr_Cnt = 100;
+        Bits_flag.Bit.AfeErr = 1;
+      }
+#endif
     }
     else
     {
@@ -82,12 +90,20 @@ void ChgDis_AbnormalCheck(void)
   else if(WorkMode == DISCHARGE_MODE)
   {
     if((CC_Val >= 50) ||Bits_flag.Bit.AfeErr || Cell_Volt_Max >= 4250)         // 放电状态检测到充电电流
-    {
+    { 
+#ifdef Uart_Model_Enable
       if((AfeErr_Cnt ++) >= 10)
       {
         AfeErr_Cnt = 10;
         Bits_flag.Bit.AfeErr = 1;
       }
+#else
+      if((AfeErr_Cnt ++) >= 100)
+      {
+        AfeErr_Cnt = 100;
+        Bits_flag.Bit.AfeErr = 1;
+      }
+#endif
     }
     else
     {
@@ -583,7 +599,7 @@ void Afe_OV_UV_Delay_Set(uint8_t OV_delay, uint8_t UV_delay)
   {
     UV_delay = 0x00;
   }
-  PROTECT3_Last = (UV_delay << 2) + OV_delay ; //OV, UV delay time 4s
+  PROTECT3_Last = (UV_delay << 6) + (OV_delay <<4) ; //OV, UV delay time 4s
   I2C_Write(PROTECT3_ADDR,PROTECT3_Last);
 }
 
@@ -642,7 +658,7 @@ void Afe_CC_1Shot_Set(void)
   SYS_STAT_Last &= ~0x80;
   
   SYS_CTRL2.Bit.CC_EN = 0;       // 关闭电流连续采样模式
-  SYS_CTRL2.Bit.CC_ONESHOT = 1;  // 开启电流单次采样模式
+  SYS_CTRL2.Bit.CC_ONESHOT = 1;  // 开启电流单次采样模式 CC_ONESHOT =1: Enable single CC reading (only valid if [CC_EN] = 0), and [CC_READY] = 0)
   SYS_CTRL2.Bit.DELAY_DIS = 0;   // 强制为0
   SYS_CTRL2_Last = SYS_CTRL2.Byte;
   
