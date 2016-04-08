@@ -20,15 +20,15 @@
 #define   UV_DELAY_SET          1                   //  单位：S, AFE（硬件）过放保护延时时间, 有效范围:[1,4,8,16]
 #define   OCD_DELAY_SET         640                 //  单位：mS,AFE（硬件）放电过流保护延时时间, 有效范围:[8,20,40,80,160,320,640,1280]
 #define   SCD_DELAY_SET         400                 //  单位：uS,AFE（硬件）短路过流保护延时时间, 有效范围:[70,100,200,400]
-#define   OV_THREHOLD_VAL_SET   4150                //  单位：mV,AFE（硬件）过充保护电压值, 有效范围:[2993,4482][3150,4700]
-#define   UV_THREHOLD_VAL_SET   3000                //  单位：mV,AFE（硬件）过充保护电压值, 有效范围:[1495,2984][1580,3100]
+#define   OV_THREHOLD_VAL_SET   4200                //  单位：mV,AFE（硬件）过充保护电压值, 有效范围:[2993,4482][3150,4700]
+#define   UV_THREHOLD_VAL_SET   2700                //  单位：mV,AFE（硬件）过充保护电压值, 有效范围:[1495,2984][1580,3100]
 #define   OCD_THREHOLD_VAL_SET  11000               //  单位：mA,AFE（硬件）放电保护电流值, 有效范围:[800,10000]     
 #define   SCD_THREHOLD_VAL_SET  44000               //  单位：mA,AFE（硬件）短路保护电流值, 有效范围:[22000,200000]
 //==========================================
 #define   CHG_OV_VAL_SET        4150               //  单位：mV, MCU（软件）过充保护电压值
 #define   DIS_UV_VAL_SET        3000               //  单位：mV, MCU（软件）过过放保护电压值（平均电芯电压值）
-#define   DIS_UV_MIN_VAL_SET    3000               //  单位：mV, MCU（软件）过过放保护电压值（最小电芯电压值）
-#define   CHG_OV_RE_VAL_SET     4000               //  单位：mV, MCU（软件）过过充保护释放电压值
+#define   DIS_UV_MIN_VAL_SET    2700               //  单位：mV, MCU（软件）过过放保护电压值（最小电芯电压值）
+#define   CHG_OV_RE_VAL_SET     4100               //  单位：mV, MCU（软件）过过充保护释放电压值
 #define   DIS_UV_RE_VAL_SET     3300               //  单位：mV, MCU（软件）过过放保护释放电压值
 
 #define   ChgCurOv_Val_SET      3000               //  单位：mA, MCU（软件）充电保护电流值

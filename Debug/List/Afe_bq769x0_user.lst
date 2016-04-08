@@ -1,6 +1,6 @@
 ###############################################################################
 #                                                                             #
-# IAR C/C++ Compiler V1.31.1.20058 [Evaluation] for STM808/Apr/2016  16:03:12 #
+# IAR C/C++ Compiler V1.31.1.20058 [Evaluation] for STM808/Apr/2016  22:12:00 #
 # Copyright 2010-2012 IAR Systems AB.                                         #
 #                                                                             #
 #    Source file  =  D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src #
@@ -104,7 +104,7 @@ D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src\Afe_bq769x0_user.c
      65            if(WorkMode == CHARGE_MODE)
      66            { 
      67              FAULT_DETECT_CTRL_ON();
-     68              if((CC_Val < (-50)) || Bits_flag.Bit.AfeErr || IS_FAULT_ON() || Cell_Volt_Max >= 4250 ||SYS_STAT.Bit.DEVICE_XREADY)         // 充电状态检测到放电电流
+     68              if((CC_Val < (-50)) || Bits_flag.Bit.AfeErr || IS_FAULT_ON() || Cell_Volt_Max >= 4300 ||SYS_STAT.Bit.DEVICE_XREADY)         // 充电状态检测到放电电流
      69              { 
      70          #ifdef Uart_Model_Enable
      71                if((AfeErr_Cnt ++) >= 10)
@@ -128,7 +128,7 @@ D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src\Afe_bq769x0_user.c
      89            }
      90            else if(WorkMode == DISCHARGE_MODE)
      91            {
-     92              if((CC_Val >= 50) ||Bits_flag.Bit.AfeErr || Cell_Volt_Max >= 4250 || SYS_STAT.Bit.DEVICE_XREADY)         // 放电状态检测到充电电流
+     92              if((CC_Val >= 50) ||Bits_flag.Bit.AfeErr || Cell_Volt_Max >= 4300 || SYS_STAT.Bit.DEVICE_XREADY)         // 放电状态检测到充电电流
      93              { 
      94          #ifdef Uart_Model_Enable
      95                if((AfeErr_Cnt ++) >= 10)

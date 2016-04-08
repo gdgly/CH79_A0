@@ -809,9 +809,9 @@ void ModeCheck(void)
           UV_tmp = ADCOffset_Val + (((uint32_t)UV_TRIP_Last << 4) * ADCGain_Val)/1000;
             
            //if((4250 >= OV_tmp) || (2950 >= UV_tmp ))//3000
-          if((4300 != OV_tmp) || (UV_THREHOLD_VAL_SET != UV_tmp ))
+          if((4400 != OV_tmp) || (UV_THREHOLD_VAL_SET != UV_tmp ))
           {
-            Afe_OV_UV_Threshold_Set(4300, UV_THREHOLD_VAL_SET); 
+            Afe_OV_UV_Threshold_Set(4400, UV_THREHOLD_VAL_SET); 
           }
           else
           {
@@ -1446,18 +1446,33 @@ void LowPower_Powerdown_Enter(void)
 //==============================================================================
 void LowPower_Cntrl(void)
 {  
+  static uint8_t Afe_Temp_Disable_Lock = 0;
+  uint8_t Afe_Temp_Disable_Tmp = 0x08;
   //if(WorkMode == IDLE_MODE || AfeErr_t >= 2000 || (Dis_First_Run_Flag ==1 && Bits_flag.Bit.DisOv) || (WorkMode == DISCHARGE_MODE && (Bits_flag.Bit.AfeErr || Temp_Protect_Delay_t >= 1000)))
   if(WorkMode == IDLE_MODE || AfeErr_t >= 500 || (Dis_First_Run_Flag ==1 && Bits_flag.Bit.DisOv) || (WorkMode == DISCHARGE_MODE && (Bits_flag.Bit.AfeErr || Bits_flag.Bit.DisCurOv || Bits_flag.Bit.DisTemp || Bits_flag.Bit.DisCurShort)) || (Bits_flag.Bit.ChgTemp && Temp_Protect_Delay_t >= 180000))
   {
     Afe_Temp_Disable();
-    if(!SYS_CTRL2.Bit.DSG_ON && !SYS_CTRL2.Bit.CHG_ON )  
+    if(Afe_Temp_Disable_Lock ==0)
     {
-      LowPower_Powerdown_Enter();  
-    } 
+      //SYS_CTRL1_Last &= ~0x08;
+      I2C_Read(SYS_CTRL1_ADDR,&Afe_Temp_Disable_Tmp);
+      if((Afe_Temp_Disable_Tmp & 0x08) == 0)
+      {
+        Afe_Temp_Disable_Lock = 1;
+      }
+    }
+    else
+    {
+      if(!SYS_CTRL2.Bit.DSG_ON && !SYS_CTRL2.Bit.CHG_ON )  
+      {
+        LowPower_Powerdown_Enter();  
+      } 
+    }
   }
   else
   {
     PowerOff_Delay_t = 0;
+    Afe_Temp_Disable_Lock = 0;
   }
 }
 //==============================================================================

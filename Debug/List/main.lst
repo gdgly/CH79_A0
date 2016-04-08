@@ -1,6 +1,6 @@
 ###############################################################################
 #                                                                             #
-# IAR C/C++ Compiler V1.31.1.20058 [Evaluation] for STM808/Apr/2016  16:37:56 #
+# IAR C/C++ Compiler V1.31.1.20058 [Evaluation] for STM808/Apr/2016  22:11:59 #
 # Copyright 2010-2012 IAR Systems AB.                                         #
 #                                                                             #
 #    Source file  =  D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src #
@@ -132,7 +132,7 @@ D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src\main.c
      93              Uart_SendStr(" ah= ");            Uart_SendData((uint16_t)SocReg.ah,10);
      94              Uart_SendStr(" CellBal = ");      Uart_SendData((uint16_t)CellBalance_Selct,16);  
      95              Uart_SendStr(" Temp_Val = ");     Uart_SendData((uint16_t)Temp_Val,10); 
-     96            /*  
+     96              /*  
      97              Uart_SendStr("\r\n");
      98              for(i =0;i<10;i++)
      99              { 
@@ -141,7 +141,7 @@ D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src\main.c
     102                Uart_SendStr("= ");
     103                Uart_SendData(Cell_Volt[i],10);
     104              } 
-    105               */
+    105              */
     106          #endif 
     107              LowPower_Cntrl();        // 低功耗控制管理
     108            }    

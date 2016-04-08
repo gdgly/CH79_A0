@@ -93,7 +93,7 @@ void main(void)
     Uart_SendStr(" ah= ");            Uart_SendData((uint16_t)SocReg.ah,10);
     Uart_SendStr(" CellBal = ");      Uart_SendData((uint16_t)CellBalance_Selct,16);  
     Uart_SendStr(" Temp_Val = ");     Uart_SendData((uint16_t)Temp_Val,10); 
-  /*  
+    /*  
     Uart_SendStr("\r\n");
     for(i =0;i<10;i++)
     { 
@@ -102,7 +102,7 @@ void main(void)
       Uart_SendStr("= ");
       Uart_SendData(Cell_Volt[i],10);
     } 
-     */
+    */
 #endif 
     LowPower_Cntrl();        // 低功耗控制管理
   }    
