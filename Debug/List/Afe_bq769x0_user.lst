@@ -1,6 +1,6 @@
 ###############################################################################
 #                                                                             #
-# IAR C/C++ Compiler V1.31.1.20058 [Evaluation] for STM808/Apr/2016  14:49:59 #
+# IAR C/C++ Compiler V1.31.1.20058 [Evaluation] for STM808/Apr/2016  16:03:12 #
 # Copyright 2010-2012 IAR Systems AB.                                         #
 #                                                                             #
 #    Source file  =  D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src #
@@ -417,390 +417,390 @@ D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src\Afe_bq769x0_user.c
     378            RSNS_mark = 1;
     379            //SCD_val_tmp = 0x02;    // 44mV
     380            SCD_val_tmp = 0x07;      // 200mV/5mR = 40A   
-    381            SCD_delay_tmp = 0x00;    // 70uS
-    382            PROTECT1_Last =  (RSNS_mark <<8) + (SCD_delay_tmp << 3) + SCD_val_tmp; //SCD
-    383            I2C_Write(PROTECT1_ADDR,PROTECT1_Last);
-    384          }
-    385          
-    386          //==========================================================================
-    387          void Afe_OCD_Set(uint16_t OCD_val, uint16_t OCD_delay)
-    388          { 
-    389            uint8_t OCD_val_tmp,OCD_delay_tmp;
-    390            //OCD_val = OCD_val/1000;
-    391            OCD_val = (uint16_t)((uint32_t)5*OCD_val/1000);   //采样电阻阻值 5mR
-    392            if(SCD_THREHOLD_VAL_SET >= 100000)
-    393            { 
-    394              if(OCD_val > 94)
-    395              {
-    396                OCD_val_tmp = 0x0F;  // 100 
-    397              }
-    398              else if(OCD_val > 89)
-    399              {
-    400                OCD_val_tmp = 0x0E;  //  94
-    401              }
-    402              else if(OCD_val > 83)
-    403              {
-    404                OCD_val_tmp = 0x0D;  //  89
-    405              } 
-    406              else if(OCD_val > 78)
-    407              {
-    408                OCD_val_tmp = 0x0C;  //  83
-    409              }
-    410              else if(OCD_val > 72)
-    411              {
-    412                OCD_val_tmp = 0x0B;  // 78 
-    413              } 
-    414              else if(OCD_val > 67)
-    415              {
-    416                OCD_val_tmp = 0x0A;  //  72
-    417              }
-    418              else if(OCD_val > 61)
-    419              {
-    420                OCD_val_tmp = 0x09;  //  67
-    421              } 
-    422              else if(OCD_val > 56)
-    423              {
-    424                OCD_val_tmp = 0x08;  //  61
-    425              } 
-    426              else if(OCD_val > 50)
-    427              {
-    428                OCD_val_tmp = 0x07;  //  56
-    429              }
-    430              else if(OCD_val > 44)
-    431              {
-    432                OCD_val_tmp = 0x06;  //  50
-    433              }
-    434              else if(OCD_val > 39)
-    435              {
-    436                OCD_val_tmp = 0x05;  //  44
-    437              } 
-    438              else if(OCD_val > 33)
-    439              {
-    440                OCD_val_tmp = 0x04;  //  39
-    441              }
-    442              else if(OCD_val > 28)
-    443              {
-    444                OCD_val_tmp = 0x03;  //  33
-    445              } 
-    446              else if(OCD_val > 22)
-    447              {
-    448                OCD_val_tmp = 0x02;  // 28 
-    449              }
-    450              else if(OCD_val > 17)
-    451              {
-    452                OCD_val_tmp = 0x01;  // 22mV
-    453              } 
-    454              else
-    455              {
-    456                OCD_val_tmp = 0x00;  // 17mV
-    457              } 
-    458            }
-    459            else
-    460            { 
-    461              if(OCD_val > 47)
-    462              {
-    463                OCD_val_tmp = 0x0F;  //  50
-    464              }
-    465              else if(OCD_val > 44)
-    466              {
-    467                OCD_val_tmp = 0x0E;  //  47
-    468              }
-    469              else if(OCD_val > 42)
-    470              {
-    471                OCD_val_tmp = 0x0D;  //  44
-    472              } 
-    473              else if(OCD_val > 39)
-    474              {
-    475                OCD_val_tmp = 0x0C;  //  42
-    476              }
-    477              else if(OCD_val > 36)
-    478              {
-    479                OCD_val_tmp = 0x0B;  //  39
-    480              } 
-    481              else if(OCD_val > 33)
-    482              {
-    483                OCD_val_tmp = 0x0A;  //  36
-    484              }
-    485              else if(OCD_val > 31)
-    486              {
-    487                OCD_val_tmp = 0x09;  //  33
-    488              } 
-    489              else if(OCD_val > 28)
-    490              {
-    491                OCD_val_tmp = 0x08;  //  31
-    492              } 
-    493              else if(OCD_val > 25)
-    494              {
-    495                OCD_val_tmp = 0x07;  //  28
-    496              }
-    497              else if(OCD_val > 22)
-    498              {
-    499                OCD_val_tmp = 0x06;  //  25
-    500              }
-    501              else if(OCD_val > 19)
-    502              {
-    503                OCD_val_tmp = 0x05;  //  22
-    504              } 
-    505              else if(OCD_val > 17)
-    506              {
-    507                OCD_val_tmp = 0x04;  // 19 
-    508              }
-    509              else if(OCD_val > 14)
-    510              {
-    511                OCD_val_tmp = 0x03;  // 17 
-    512              } 
-    513              else if(OCD_val > 11)
-    514              {
-    515                OCD_val_tmp = 0x02;  // 14 
-    516              }
-    517              else if(OCD_val > 8)
-    518              {
-    519                OCD_val_tmp = 0x01;  //  11
-    520              } 
-    521              else
-    522              {
-    523                OCD_val_tmp = 0x00;  //  8
-    524              } 
-    525            } 
-    526            //========================
-    527            if(OCD_delay > 640)
-    528            {
-    529              OCD_delay_tmp = 0x07;  // 1280mS
-    530            }
-    531            else if(OCD_delay > 320)
-    532            {
-    533              OCD_delay_tmp = 0x06;  // 640mS
-    534            }
-    535            else if(OCD_delay > 160)
-    536            {
-    537              OCD_delay_tmp = 0x05;  // 320mS
-    538            }
-    539            else if(OCD_delay > 80)
-    540            {
-    541              OCD_delay_tmp = 0x04;  // 160mS
-    542            }
-    543            else if(OCD_delay > 40)
-    544            {
-    545              OCD_delay_tmp = 0x03;  // 80mS
-    546            }
-    547            else if(OCD_delay > 20)
-    548            {
-    549              OCD_delay_tmp = 0x02;  // 40mS
-    550            }
-    551            else if(OCD_delay > 8)
-    552            {
-    553              OCD_delay_tmp = 0x01;  // 20mS
-    554            }
-    555            else
-    556            {
-    557              OCD_delay_tmp = 0x00;  // 8mS
-    558            }
-    559            //== Protect page36
-    560            OCD_delay_tmp = 0x06;   // 640mS
-    561            OCD_val_tmp = 0x07;     //  56mV/5mR = 11A 
-    562            PROTECT2_Last = (OCD_delay_tmp << 4) + OCD_val_tmp; //OCD
-    563            I2C_Write(PROTECT2_ADDR,PROTECT2_Last); 
-    564          }
-    565          
-    566          //==========================================================================
-    567          //== OV_delay 为过充保护延时时间（s）、 UV_delay 为过放保护延时时间（s）
-    568          void Afe_OV_UV_Delay_Set(uint8_t OV_delay, uint8_t UV_delay)
-    569          {
-    570            if(OV_delay > 4)
-    571            {
-    572              OV_delay = 0x30;  // 8s
-    573            }
-    574            else if(OV_delay > 2)
-    575            {
-    576              OV_delay = 0x20;  // 4s
-    577            }
-    578            else if(OV_delay > 1)
-    579            {
-    580              OV_delay = 0x10;  // 2s
-    581            }
-    582            else
-    583            {
-    584              OV_delay = 0x00;  // 1s
-    585            }
-    586            //==============================
-    587            if(UV_delay > 8)
-    588            {
-    589              UV_delay = 0x30;
-    590            }
-    591            else if(UV_delay > 4)
-    592            {
-    593              UV_delay = 0x20;
-    594            }
-    595            else if(UV_delay > 2)
-    596            {
-    597              UV_delay = 0x10;
-    598            }
-    599            else
-    600            {
-    601              UV_delay = 0x00;
-    602            }
-    603            PROTECT3_Last = (UV_delay << 6) + (OV_delay <<4) ; //OV, UV delay time 4s
-    604            I2C_Write(PROTECT3_ADDR,PROTECT3_Last);
-    605          }
-    606          
-    607          //==========================================================================
-    608          //== OV_val为过充保护电压值（mV）、 UV_val为过放保护电压值（mV）
-    609          void Afe_OV_UV_Threshold_Set(uint16_t OV_val, uint16_t UV_val)
-    610          { 
-    611            //==OV UV threshold setting
-    612            /*
-    613            if(OV_val >= 4250)
-    614            {
-    615              OV_val = 4250;
-    616            }
-    617            if(UV_val <= 2000)
-    618            {
-    619              UV_val = 2000;
-    620            } */
-    621            OV_TRIP_Last = (uint8_t)(((uint32_t)1000 * (OV_val - ADCOffset_Val)/ADCGain_Val) >> 4);  
-    622            if(0 == UV_val)
-    623            {
-    624              UV_TRIP_Last = 0;
-    625            }
-    626            else
-    627            {
-    628              UV_TRIP_Last = (uint8_t)(((uint32_t)1000 * (UV_val - ADCOffset_Val)/ADCGain_Val) >> 4);  
-    629            }
-    630            I2C_Write(UV_TRIP_ADDR,UV_TRIP_Last);
-    631            I2C_Write(OV_TRIP_ADDR,OV_TRIP_Last);  
-    632          }
-    633          
-    634          //==========================================================================
-    635          void Afe_CC_Disable(void)
-    636          { 
-    637            // 电流采样结束标志位，写"1"清零
-    638            SYS_STAT_Last |= 0x80;
-    639            I2C_Write(SYS_STAT_ADDR,SYS_STAT_Last); 
-    640            SYS_STAT_Last &= ~0x80;
-    641              
-    642            SYS_CTRL2.Bit.CC_EN = 0;       // 关闭电流连续采样模式
-    643            SYS_CTRL2.Bit.CC_ONESHOT = 0;  // 开启电流单次采样模式
-    644            SYS_CTRL2.Bit.DELAY_DIS = 0;   // 强制为0
-    645            SYS_CTRL2_Last = SYS_CTRL2.Byte;
-    646            
-    647            //SYS_CTRL2_Last &= ~0x40;
-    648            //SYS_CTRL2_Last |= 0x20;
-    649            //I2C_Write(SYS_CTRL2_ADDR,SYS_CTRL2_Last); 
-    650            I2C_Write(SYS_CTRL2_ADDR,SYS_CTRL2_Last);
-    651            //SYS_CTRL2_Last = 0x20;
-    652          }
-    653          //==========================================================================
-    654          void Afe_CC_1Shot_Set(void)
-    655          { 
-    656            // 电流采样结束标志位，写"1"清零
-    657            SYS_STAT_Last |= 0x80;
-    658            I2C_Write(SYS_STAT_ADDR,SYS_STAT_Last); 
-    659            SYS_STAT_Last &= ~0x80;
-    660            
-    661            SYS_CTRL2.Bit.CC_EN = 0;       // 关闭电流连续采样模式
-    662            SYS_CTRL2.Bit.CC_ONESHOT = 1;  // 开启电流单次采样模式 CC_ONESHOT =1: Enable single CC reading (only valid if [CC_EN] = 0), and [CC_READY] = 0)
-    663            SYS_CTRL2.Bit.DELAY_DIS = 0;   // 强制为0
-    664            SYS_CTRL2_Last = SYS_CTRL2.Byte;
-    665            
-    666            //SYS_CTRL2_Last &= ~0x40;
-    667            //SYS_CTRL2_Last |= 0x20;
-    668            //I2C_Write(SYS_CTRL2_ADDR,SYS_CTRL2_Last); 
-    669            
-    670            I2C_Write(SYS_CTRL2_ADDR,SYS_CTRL2_Last);
-    671            //SYS_CTRL2_Last = 0x20;
-    672          }
-    673          
+    381            SCD_delay_tmp = 0x03;    // 70uS
+    382            //PROTECT1_Last =  (RSNS_mark <<7) + (SCD_delay_tmp << 3) + SCD_val_tmp; //SCD
+    383            PROTECT1_Last =  0x80 + (SCD_delay_tmp << 3) + SCD_val_tmp; //SCD
+    384            I2C_Write(PROTECT1_ADDR,PROTECT1_Last);
+    385          }
+    386          
+    387          //==========================================================================
+    388          void Afe_OCD_Set(uint16_t OCD_val, uint16_t OCD_delay)
+    389          { 
+    390            uint8_t OCD_val_tmp,OCD_delay_tmp;
+    391            //OCD_val = OCD_val/1000;
+    392            OCD_val = (uint16_t)((uint32_t)5*OCD_val/1000);   //采样电阻阻值 5mR
+    393            if(SCD_THREHOLD_VAL_SET >= 100000)
+    394            { 
+    395              if(OCD_val > 94)
+    396              {
+    397                OCD_val_tmp = 0x0F;  // 100 
+    398              }
+    399              else if(OCD_val > 89)
+    400              {
+    401                OCD_val_tmp = 0x0E;  //  94
+    402              }
+    403              else if(OCD_val > 83)
+    404              {
+    405                OCD_val_tmp = 0x0D;  //  89
+    406              } 
+    407              else if(OCD_val > 78)
+    408              {
+    409                OCD_val_tmp = 0x0C;  //  83
+    410              }
+    411              else if(OCD_val > 72)
+    412              {
+    413                OCD_val_tmp = 0x0B;  // 78 
+    414              } 
+    415              else if(OCD_val > 67)
+    416              {
+    417                OCD_val_tmp = 0x0A;  //  72
+    418              }
+    419              else if(OCD_val > 61)
+    420              {
+    421                OCD_val_tmp = 0x09;  //  67
+    422              } 
+    423              else if(OCD_val > 56)
+    424              {
+    425                OCD_val_tmp = 0x08;  //  61
+    426              } 
+    427              else if(OCD_val > 50)
+    428              {
+    429                OCD_val_tmp = 0x07;  //  56
+    430              }
+    431              else if(OCD_val > 44)
+    432              {
+    433                OCD_val_tmp = 0x06;  //  50
+    434              }
+    435              else if(OCD_val > 39)
+    436              {
+    437                OCD_val_tmp = 0x05;  //  44
+    438              } 
+    439              else if(OCD_val > 33)
+    440              {
+    441                OCD_val_tmp = 0x04;  //  39
+    442              }
+    443              else if(OCD_val > 28)
+    444              {
+    445                OCD_val_tmp = 0x03;  //  33
+    446              } 
+    447              else if(OCD_val > 22)
+    448              {
+    449                OCD_val_tmp = 0x02;  // 28 
+    450              }
+    451              else if(OCD_val > 17)
+    452              {
+    453                OCD_val_tmp = 0x01;  // 22mV
+    454              } 
+    455              else
+    456              {
+    457                OCD_val_tmp = 0x00;  // 17mV
+    458              } 
+    459            }
+    460            else
+    461            { 
+    462              if(OCD_val > 47)
+    463              {
+    464                OCD_val_tmp = 0x0F;  //  50
+    465              }
+    466              else if(OCD_val > 44)
+    467              {
+    468                OCD_val_tmp = 0x0E;  //  47
+    469              }
+    470              else if(OCD_val > 42)
+    471              {
+    472                OCD_val_tmp = 0x0D;  //  44
+    473              } 
+    474              else if(OCD_val > 39)
+    475              {
+    476                OCD_val_tmp = 0x0C;  //  42
+    477              }
+    478              else if(OCD_val > 36)
+    479              {
+    480                OCD_val_tmp = 0x0B;  //  39
+    481              } 
+    482              else if(OCD_val > 33)
+    483              {
+    484                OCD_val_tmp = 0x0A;  //  36
+    485              }
+    486              else if(OCD_val > 31)
+    487              {
+    488                OCD_val_tmp = 0x09;  //  33
+    489              } 
+    490              else if(OCD_val > 28)
+    491              {
+    492                OCD_val_tmp = 0x08;  //  31
+    493              } 
+    494              else if(OCD_val > 25)
+    495              {
+    496                OCD_val_tmp = 0x07;  //  28
+    497              }
+    498              else if(OCD_val > 22)
+    499              {
+    500                OCD_val_tmp = 0x06;  //  25
+    501              }
+    502              else if(OCD_val > 19)
+    503              {
+    504                OCD_val_tmp = 0x05;  //  22
+    505              } 
+    506              else if(OCD_val > 17)
+    507              {
+    508                OCD_val_tmp = 0x04;  // 19 
+    509              }
+    510              else if(OCD_val > 14)
+    511              {
+    512                OCD_val_tmp = 0x03;  // 17 
+    513              } 
+    514              else if(OCD_val > 11)
+    515              {
+    516                OCD_val_tmp = 0x02;  // 14 
+    517              }
+    518              else if(OCD_val > 8)
+    519              {
+    520                OCD_val_tmp = 0x01;  //  11
+    521              } 
+    522              else
+    523              {
+    524                OCD_val_tmp = 0x00;  //  8
+    525              } 
+    526            } 
+    527            //========================
+    528            if(OCD_delay > 640)
+    529            {
+    530              OCD_delay_tmp = 0x07;  // 1280mS
+    531            }
+    532            else if(OCD_delay > 320)
+    533            {
+    534              OCD_delay_tmp = 0x06;  // 640mS
+    535            }
+    536            else if(OCD_delay > 160)
+    537            {
+    538              OCD_delay_tmp = 0x05;  // 320mS
+    539            }
+    540            else if(OCD_delay > 80)
+    541            {
+    542              OCD_delay_tmp = 0x04;  // 160mS
+    543            }
+    544            else if(OCD_delay > 40)
+    545            {
+    546              OCD_delay_tmp = 0x03;  // 80mS
+    547            }
+    548            else if(OCD_delay > 20)
+    549            {
+    550              OCD_delay_tmp = 0x02;  // 40mS
+    551            }
+    552            else if(OCD_delay > 8)
+    553            {
+    554              OCD_delay_tmp = 0x01;  // 20mS
+    555            }
+    556            else
+    557            {
+    558              OCD_delay_tmp = 0x00;  // 8mS
+    559            }
+    560            //== Protect page36
+    561            OCD_delay_tmp = 0x06;   // 640mS
+    562            OCD_val_tmp = 0x07;     //  56mV/5mR = 11A 
+    563            PROTECT2_Last = (OCD_delay_tmp << 4) + OCD_val_tmp; //OCD
+    564            I2C_Write(PROTECT2_ADDR,PROTECT2_Last); 
+    565          }
+    566          
+    567          //==========================================================================
+    568          //== OV_delay 为过充保护延时时间（s）、 UV_delay 为过放保护延时时间（s）
+    569          void Afe_OV_UV_Delay_Set(uint8_t OV_delay, uint8_t UV_delay)
+    570          {
+    571            if(OV_delay > 4)
+    572            {
+    573              OV_delay = 0x30;  // 8s
+    574            }
+    575            else if(OV_delay > 2)
+    576            {
+    577              OV_delay = 0x20;  // 4s
+    578            }
+    579            else if(OV_delay > 1)
+    580            {
+    581              OV_delay = 0x10;  // 2s
+    582            }
+    583            else
+    584            {
+    585              OV_delay = 0x00;  // 1s
+    586            }
+    587            //==============================
+    588            if(UV_delay > 8)
+    589            {
+    590              UV_delay = 0x30;
+    591            }
+    592            else if(UV_delay > 4)
+    593            {
+    594              UV_delay = 0x20;
+    595            }
+    596            else if(UV_delay > 2)
+    597            {
+    598              UV_delay = 0x10;
+    599            }
+    600            else
+    601            {
+    602              UV_delay = 0x00;
+    603            }
+    604            PROTECT3_Last = (UV_delay << 6) + (OV_delay <<4) ; //OV, UV delay time 4s
+    605            I2C_Write(PROTECT3_ADDR,PROTECT3_Last);
+    606          }
+    607          
+    608          //==========================================================================
+    609          //== OV_val为过充保护电压值（mV）、 UV_val为过放保护电压值（mV）
+    610          void Afe_OV_UV_Threshold_Set(uint16_t OV_val, uint16_t UV_val)
+    611          { 
+    612            //==OV UV threshold setting
+    613            /*
+    614            if(OV_val >= 4250)
+    615            {
+    616              OV_val = 4250;
+    617            }
+    618            if(UV_val <= 2000)
+    619            {
+    620              UV_val = 2000;
+    621            } */
+    622            OV_TRIP_Last = (uint8_t)(((uint32_t)1000 * (OV_val - ADCOffset_Val)/ADCGain_Val) >> 4);  
+    623            if(0 == UV_val)
+    624            {
+    625              UV_TRIP_Last = 0;
+    626            }
+    627            else
+    628            {
+    629              UV_TRIP_Last = (uint8_t)(((uint32_t)1000 * (UV_val - ADCOffset_Val)/ADCGain_Val) >> 4);  
+    630            }
+    631            I2C_Write(UV_TRIP_ADDR,UV_TRIP_Last);
+    632            I2C_Write(OV_TRIP_ADDR,OV_TRIP_Last);  
+    633          }
+    634          
+    635          //==========================================================================
+    636          void Afe_CC_Disable(void)
+    637          { 
+    638            // 电流采样结束标志位，写"1"清零
+    639            SYS_STAT_Last |= 0x80;
+    640            I2C_Write(SYS_STAT_ADDR,SYS_STAT_Last); 
+    641            SYS_STAT_Last &= ~0x80;
+    642              
+    643            SYS_CTRL2.Bit.CC_EN = 0;       // 关闭电流连续采样模式
+    644            SYS_CTRL2.Bit.CC_ONESHOT = 0;  // 开启电流单次采样模式
+    645            SYS_CTRL2.Bit.DELAY_DIS = 0;   // 强制为0
+    646            SYS_CTRL2_Last = SYS_CTRL2.Byte;
+    647            
+    648            //SYS_CTRL2_Last &= ~0x40;
+    649            //SYS_CTRL2_Last |= 0x20;
+    650            //I2C_Write(SYS_CTRL2_ADDR,SYS_CTRL2_Last); 
+    651            I2C_Write(SYS_CTRL2_ADDR,SYS_CTRL2_Last);
+    652            //SYS_CTRL2_Last = 0x20;
+    653          }
+    654          //==========================================================================
+    655          void Afe_CC_1Shot_Set(void)
+    656          { 
+    657            // 电流采样结束标志位，写"1"清零
+    658            SYS_STAT_Last |= 0x80;
+    659            I2C_Write(SYS_STAT_ADDR,SYS_STAT_Last); 
+    660            SYS_STAT_Last &= ~0x80;
+    661            
+    662            SYS_CTRL2.Bit.CC_EN = 0;       // 关闭电流连续采样模式
+    663            SYS_CTRL2.Bit.CC_ONESHOT = 1;  // 开启电流单次采样模式 CC_ONESHOT =1: Enable single CC reading (only valid if [CC_EN] = 0), and [CC_READY] = 0)
+    664            SYS_CTRL2.Bit.DELAY_DIS = 0;   // 强制为0
+    665            SYS_CTRL2_Last = SYS_CTRL2.Byte;
+    666            
+    667            //SYS_CTRL2_Last &= ~0x40;
+    668            //SYS_CTRL2_Last |= 0x20;
+    669            //I2C_Write(SYS_CTRL2_ADDR,SYS_CTRL2_Last); 
+    670            
+    671            I2C_Write(SYS_CTRL2_ADDR,SYS_CTRL2_Last);
+    672            //SYS_CTRL2_Last = 0x20;
+    673          }
     674          
-    675          //==========================================================================
-    676          void Afe_CC_AlwaysOn_Set(void)
-    677          {
-    678            SYS_CTRL2_Last |= 0x40;   // 开启电流连续采样模式
-    679            SYS_CTRL2_Last &= ~0x20;
-    680            I2C_Write(SYS_CTRL2_ADDR,SYS_CTRL2_Last); 
-    681          }
-    682          
-    683          //==========================================================================
-    684          /*-------------------------------------------------------------------------
-    685                SYS_STAT (0x00)/RESET:0x00
-    686                BIT      7      6           5             4       3   2    1     0
-    687                NAME CC_READY  RSVD   DEVICE_XREADY   OVRD_ALERT  UV  OV  SCD   OCD
-    688          -------------------------------------------------------------------------*/
-    689          void Afe_Get_SysStatus(void)
-    690          { 
-    691              I2C_Read(SYS_STAT_ADDR,&SYS_STAT_Last); 
-    692              SYS_STAT.Byte = SYS_STAT_Last;
-    693              I2C_Read(SYS_CTRL1_ADDR,&SYS_CTRL1_Last); 
-    694              SYS_CTRL1.Byte = SYS_CTRL1_Last;
-    695              I2C_Read(SYS_CTRL2_ADDR,&SYS_CTRL2_Last); 
-    696              SYS_CTRL2.Byte = SYS_CTRL2_Last;
-    697              
-    698             // I2C_Read(PROTECT1_ADDR,&PROTECT1_Last_Copy); 
-    699             // I2C_Read(PROTECT2_ADDR,&PROTECT2_Last_Copy); 
-    700             // I2C_Read(PROTECT3_ADDR,&PROTECT3_Last_Copy); 
-    701          }
-    702          /*---------------------------------------------------------
-    703            打开充电MOS、打开放电MOS
-    704          ---------------------------------------------------------*/
-    705          void Afe_FET_ChgOn_DisOn(void)
-    706          {
-    707            SYS_CTRL2_Last |= 0x03;
-    708            I2C_Write(SYS_CTRL2_ADDR,SYS_CTRL2_Last);
-    709          }
-    710          /*---------------------------------------------------------
-    711            打开充电MOS、关闭放电MOS
-    712          ---------------------------------------------------------*/
-    713          void Afe_FET_ChgOn_DisOff(void)
-    714          {
-    715            SYS_CTRL2_Last |= 0x01;
-    716            SYS_CTRL2_Last &= ~0x02;
-    717            I2C_Write(SYS_CTRL2_ADDR,SYS_CTRL2_Last);
-    718          }
-    719          /*---------------------------------------------------------
-    720            关闭充电MOS、打开放电MOS
-    721          ---------------------------------------------------------*/
-    722          void Afe_FET_ChgOff_DisOn(void)
-    723          {
-    724            SYS_CTRL2_Last &= ~0x01;
-    725            SYS_CTRL2_Last |= 0x02;
-    726            I2C_Write(SYS_CTRL2_ADDR,SYS_CTRL2_Last);
-    727          }
-    728          /*---------------------------------------------------------
-    729            关闭充电MOS、关闭放电MOS
-    730          ---------------------------------------------------------*/
-    731          void Afe_FET_ChgOff_DisOff(void)
-    732          {
-    733            SYS_CTRL2_Last &= ~0x03;
-    734            I2C_Write(SYS_CTRL2_ADDR,SYS_CTRL2_Last);
-    735          }
-    736          
-    737          //==========================================================================
-    738          /*
-    739                SYS_STAT (0x00)/RESET:0x00
-    740                BIT      7      6           5             4       3   2    1     0
-    741                NAME CC_READY  RSVD   DEVICE_XREADY   OVRD_ALERT  UV  OV  SCD   OCD
-    742            
-    743                      CHG, DSG Response Under Various System Events
-    744              EVENT                         [CHG_ON]              [DSG_ON]
-    745              OV Fault                      Set to 0              —
-    746              UV Fault                      —                    Set to 0
-    747              OCD Fault                     —                    Set to 0  
-    748              SCD Fault                     —                    Set to 0
-    749              ALERT Override                Set to 0              Set to 0
-    750              DEVICE_XREADY is set          Set to 0              Set to 0
-    751              Enter SHIP mode from NORMAL   Set to 0              Set to 0
-    752          */
-    753          void Afe_FET_ChgDis_Cntrl(void)
-    754          { 
-    755            if(WorkMode == IDLE_MODE)
-    756            {
-    757              Afe_FET_ChgOff_DisOff(); // 关闭充电MOS、关闭放电MOS
-    758              ALERT_PIN_HIGH();
-    759            }
-    760            else if(WorkMode == CHARGE_MODE)
-    761            { 
-    762              if(Bits_flag.Bit.ChgOv || Bits_flag.Bit.ChgTemp || Bits_flag.Bit.ChgCurOv || Bits_flag.Bit.AfeErr)
-    763              {  
-    764                //Afe_Temp_Disable();
+    675          
+    676          //==========================================================================
+    677          void Afe_CC_AlwaysOn_Set(void)
+    678          {
+    679            SYS_CTRL2_Last |= 0x40;   // 开启电流连续采样模式
+    680            SYS_CTRL2_Last &= ~0x20;
+    681            I2C_Write(SYS_CTRL2_ADDR,SYS_CTRL2_Last); 
+    682          }
+    683          
+    684          //==========================================================================
+    685          /*-------------------------------------------------------------------------
+    686                SYS_STAT (0x00)/RESET:0x00
+    687                BIT      7      6           5             4       3   2    1     0
+    688                NAME CC_READY  RSVD   DEVICE_XREADY   OVRD_ALERT  UV  OV  SCD   OCD
+    689          -------------------------------------------------------------------------*/
+    690          void Afe_Get_SysStatus(void)
+    691          { 
+    692              I2C_Read(SYS_STAT_ADDR,&SYS_STAT_Last); 
+    693              SYS_STAT.Byte = SYS_STAT_Last;
+    694              I2C_Read(SYS_CTRL1_ADDR,&SYS_CTRL1_Last); 
+    695              SYS_CTRL1.Byte = SYS_CTRL1_Last;
+    696              I2C_Read(SYS_CTRL2_ADDR,&SYS_CTRL2_Last); 
+    697              SYS_CTRL2.Byte = SYS_CTRL2_Last;
+    698              
+    699             // I2C_Read(PROTECT1_ADDR,&PROTECT1_Last_Copy); 
+    700             // I2C_Read(PROTECT2_ADDR,&PROTECT2_Last_Copy); 
+    701             // I2C_Read(PROTECT3_ADDR,&PROTECT3_Last_Copy); 
+    702          }
+    703          /*---------------------------------------------------------
+    704            打开充电MOS、打开放电MOS
+    705          ---------------------------------------------------------*/
+    706          void Afe_FET_ChgOn_DisOn(void)
+    707          {
+    708            SYS_CTRL2_Last |= 0x03;
+    709            I2C_Write(SYS_CTRL2_ADDR,SYS_CTRL2_Last);
+    710          }
+    711          /*---------------------------------------------------------
+    712            打开充电MOS、关闭放电MOS
+    713          ---------------------------------------------------------*/
+    714          void Afe_FET_ChgOn_DisOff(void)
+    715          {
+    716            SYS_CTRL2_Last |= 0x01;
+    717            SYS_CTRL2_Last &= ~0x02;
+    718            I2C_Write(SYS_CTRL2_ADDR,SYS_CTRL2_Last);
+    719          }
+    720          /*---------------------------------------------------------
+    721            关闭充电MOS、打开放电MOS
+    722          ---------------------------------------------------------*/
+    723          void Afe_FET_ChgOff_DisOn(void)
+    724          {
+    725            SYS_CTRL2_Last &= ~0x01;
+    726            SYS_CTRL2_Last |= 0x02;
+    727            I2C_Write(SYS_CTRL2_ADDR,SYS_CTRL2_Last);
+    728          }
+    729          /*---------------------------------------------------------
+    730            关闭充电MOS、关闭放电MOS
+    731          ---------------------------------------------------------*/
+    732          void Afe_FET_ChgOff_DisOff(void)
+    733          {
+    734            SYS_CTRL2_Last &= ~0x03;
+    735            I2C_Write(SYS_CTRL2_ADDR,SYS_CTRL2_Last);
+    736          }
+    737          
+    738          //==========================================================================
+    739          /*
+    740                SYS_STAT (0x00)/RESET:0x00
+    741                BIT      7      6           5             4       3   2    1     0
+    742                NAME CC_READY  RSVD   DEVICE_XREADY   OVRD_ALERT  UV  OV  SCD   OCD
+    743            
+    744                      CHG, DSG Response Under Various System Events
+    745              EVENT                         [CHG_ON]              [DSG_ON]
+    746              OV Fault                      Set to 0              —
+    747              UV Fault                      —                    Set to 0
+    748              OCD Fault                     —                    Set to 0  
+    749              SCD Fault                     —                    Set to 0
+    750              ALERT Override                Set to 0              Set to 0
+    751              DEVICE_XREADY is set          Set to 0              Set to 0
+    752              Enter SHIP mode from NORMAL   Set to 0              Set to 0
+    753          */
+    754          void Afe_FET_ChgDis_Cntrl(void)
+    755          { 
+    756            if(WorkMode == IDLE_MODE)
+    757            {
+    758              Afe_FET_ChgOff_DisOff(); // 关闭充电MOS、关闭放电MOS
+    759              ALERT_PIN_HIGH();
+    760            }
+    761            else if(WorkMode == CHARGE_MODE)
+    762            { 
+    763              if(Bits_flag.Bit.ChgOv || Bits_flag.Bit.ChgTemp || Bits_flag.Bit.ChgCurOv || Bits_flag.Bit.AfeErr)
+    764              {   
     765                Afe_FET_ChgOff_DisOff();  // 关闭充电MOS、关闭放电MOS
     766                ALERT_PIN_HIGH();
     767              }
@@ -874,4 +874,4 @@ D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src\Afe_bq769x0_user.c
    1 byte  of DATA memory (+ 2 bytes shared)
 
 Errors: none
-Warnings: 1
+Warnings: 2

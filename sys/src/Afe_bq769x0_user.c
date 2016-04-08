@@ -378,8 +378,9 @@ void Afe_SCD_Set(uint16_t SCD_val, uint16_t SCD_delay)//mA
   RSNS_mark = 1;
   //SCD_val_tmp = 0x02;    // 44mV
   SCD_val_tmp = 0x07;      // 200mV/5mR = 40A   
-  SCD_delay_tmp = 0x00;    // 70uS
-  PROTECT1_Last =  (RSNS_mark <<8) + (SCD_delay_tmp << 3) + SCD_val_tmp; //SCD
+  SCD_delay_tmp = 0x03;    // 70uS
+  //PROTECT1_Last =  (RSNS_mark <<7) + (SCD_delay_tmp << 3) + SCD_val_tmp; //SCD
+  PROTECT1_Last =  0x80 + (SCD_delay_tmp << 3) + SCD_val_tmp; //SCD
   I2C_Write(PROTECT1_ADDR,PROTECT1_Last);
 }
 
@@ -760,8 +761,7 @@ void Afe_FET_ChgDis_Cntrl(void)
   else if(WorkMode == CHARGE_MODE)
   { 
     if(Bits_flag.Bit.ChgOv || Bits_flag.Bit.ChgTemp || Bits_flag.Bit.ChgCurOv || Bits_flag.Bit.AfeErr)
-    {  
-      //Afe_Temp_Disable();
+    {   
       Afe_FET_ChgOff_DisOff();  // 关闭充电MOS、关闭放电MOS
       ALERT_PIN_HIGH();
     }

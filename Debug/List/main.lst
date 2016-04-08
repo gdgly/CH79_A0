@@ -1,6 +1,6 @@
 ###############################################################################
 #                                                                             #
-# IAR C/C++ Compiler V1.31.1.20058 [Evaluation] for STM808/Apr/2016  14:49:59 #
+# IAR C/C++ Compiler V1.31.1.20058 [Evaluation] for STM808/Apr/2016  16:08:42 #
 # Copyright 2010-2012 IAR Systems AB.                                         #
 #                                                                             #
 #    Source file  =  D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src #
@@ -43,7 +43,7 @@ D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src\main.c
       4          #include "user.h"  
       5          #include "macro_def.h"  
       6          #include "iostm8s003f3.h"
-      7          #include "bq769x0.h" 
+      7          #include "bq769x0.h"
       8          
       9          #define Uart_Model_Enable
      10          void main(void)
@@ -53,7 +53,7 @@ D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src\main.c
      14            disableInterrupts();        // 关闭MCU全局变量
      15            SysInit();                  // 系统初始化，MCU时钟配置、ADC模块初始化
      16            PortInit();                 // MCU管脚配置
-     17            LED2_ON();                  // 复位后亮LED1，在完成AFE IC初始化之后，熄灭
+     17            //LED2_ON();                  // 复位后亮LED1，在完成AFE IC初始化之后，熄灭
      18            I2C_Model_Init();           // 启用MCU的IIC模块
      19          #ifdef Uart_Model_Enable
      20            Uart_Model_Init();          // 启用MCU的UART模块
@@ -167,7 +167,7 @@ D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src\main.c
      Function/Label                 Bytes
      --------------                 -----
      _A_PC_ODR                         1
-     main                            275
+     main                            271
      ?Subroutine3                      8
      ?Subroutine2                      5
      ?Subroutine1                      8
@@ -191,9 +191,9 @@ D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src\main.c
  
    1 byte  in section .near.noinit
  167 bytes in section .near.rodata
- 304 bytes in section .near_func.text
+ 300 bytes in section .near_func.text
  
- 304 bytes of CODE  memory
+ 300 bytes of CODE  memory
  167 bytes of CONST memory
    0 bytes of DATA  memory (+ 1 byte shared)
 

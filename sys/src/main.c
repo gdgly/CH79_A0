@@ -4,7 +4,7 @@
 #include "user.h"  
 #include "macro_def.h"  
 #include "iostm8s003f3.h"
-#include "bq769x0.h" 
+#include "bq769x0.h"
 
 #define Uart_Model_Enable
 void main(void)
@@ -14,7 +14,7 @@ void main(void)
   disableInterrupts();        // 关闭MCU全局变量
   SysInit();                  // 系统初始化，MCU时钟配置、ADC模块初始化
   PortInit();                 // MCU管脚配置
-  LED2_ON();                  // 复位后亮LED1，在完成AFE IC初始化之后，熄灭
+  //LED2_ON();                  // 复位后亮LED1，在完成AFE IC初始化之后，熄灭
   I2C_Model_Init();           // 启用MCU的IIC模块
 #ifdef Uart_Model_Enable
   Uart_Model_Init();          // 启用MCU的UART模块

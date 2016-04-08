@@ -86,7 +86,7 @@
  
 #define   ChgTempH_ON            1028   //264   //P55C
 #define   ChgTempH_OFF           1294   //334   //P45C
-#define   ChgTempL_ON            2976  //800   //N5C
+#define   ChgTempL_ON            2976   //800   //N5C
 #define   ChgTempL_OFF           2659   //711   //P5C
 
 #define   DisTempH_ON            811   //207     //P65C

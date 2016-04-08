@@ -954,6 +954,10 @@ void ClearStatus(void)
     Bits_flag.Bit.ChgOv = 0;
     Bits_flag.Bit.ChgCurOv = 0;
     Bits_flag.Bit.ChgTemp = 0;
+    
+    
+      Bits_flag.Bit.DisTemp = 0;
+      DisTemp_cnt = 0;
      
   }
   else
@@ -1410,7 +1414,7 @@ void LowPower_Powerdown_Enter(void)
 {
   uint8_t i = 0;
   //if(AfeErr_t >= 2000 || (LedFlash_Off_t >= 250) || (Dis_First_Run_Flag ==1 && Bits_flag.Bit.DisOv) || (WorkMode == DISCHARGE_MODE && (Bits_flag.Bit.AfeErr || Temp_Protect_Delay_t >= 1000)))//PowerOff_Delay_t >= PowerOff_Delay_t_SET && 
-  if(AfeErr_t >= 500 || (LedFlash_Off_t >= 10) || (Dis_First_Run_Flag ==1 && Bits_flag.Bit.DisOv) || (WorkMode == DISCHARGE_MODE && Bits_flag.Bit.AfeErr) || Temp_Protect_Delay_t >= 1000)
+  if(AfeErr_t >= 500 || (LedFlash_Off_t >= 10) || (Dis_First_Run_Flag ==1 && Bits_flag.Bit.DisOv) || (WorkMode == DISCHARGE_MODE && (Bits_flag.Bit.AfeErr || Bits_flag.Bit.DisTemp || Bits_flag.Bit.DisCurOv || Bits_flag.Bit.DisCurShort)) || (Bits_flag.Bit.ChgTemp && Temp_Protect_Delay_t >= 1000))
   {
     Afe_Temp_Disable();
     SOC_SavedtoEEPROM();
@@ -1434,7 +1438,7 @@ void LowPower_Powerdown_Enter(void)
 void LowPower_Cntrl(void)
 {  
   //if(WorkMode == IDLE_MODE || AfeErr_t >= 2000 || (Dis_First_Run_Flag ==1 && Bits_flag.Bit.DisOv) || (WorkMode == DISCHARGE_MODE && (Bits_flag.Bit.AfeErr || Temp_Protect_Delay_t >= 1000)))
-  if(WorkMode == IDLE_MODE || AfeErr_t >= 500 || (Dis_First_Run_Flag ==1 && Bits_flag.Bit.DisOv) || (WorkMode == DISCHARGE_MODE && Bits_flag.Bit.AfeErr) || Temp_Protect_Delay_t >= 1000)
+  if(WorkMode == IDLE_MODE || AfeErr_t >= 500 || (Dis_First_Run_Flag ==1 && Bits_flag.Bit.DisOv) || (WorkMode == DISCHARGE_MODE && (Bits_flag.Bit.AfeErr || Bits_flag.Bit.DisCurOv || Bits_flag.Bit.DisTemp || Bits_flag.Bit.DisCurShort)) || (Bits_flag.Bit.ChgTemp && Temp_Protect_Delay_t >= 1000))
   {
     Afe_Temp_Disable();
     if(!SYS_CTRL2.Bit.DSG_ON && !SYS_CTRL2.Bit.CHG_ON )  
