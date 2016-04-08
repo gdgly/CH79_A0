@@ -1,6 +1,6 @@
 ###############################################################################
 #                                                                             #
-# IAR C/C++ Compiler V1.31.1.20058 [Evaluation] for STM808/Apr/2016  16:08:42 #
+# IAR C/C++ Compiler V1.31.1.20058 [Evaluation] for STM808/Apr/2016  16:37:56 #
 # Copyright 2010-2012 IAR Systems AB.                                         #
 #                                                                             #
 #    Source file  =  D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src #
@@ -45,7 +45,7 @@ D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src\main.c
       6          #include "iostm8s003f3.h"
       7          #include "bq769x0.h"
       8          
-      9          #define Uart_Model_Enable
+      9          //#define Uart_Model_Enable
      10          void main(void)
      11          {  
      12            uint8_t i = 0;
@@ -164,38 +164,17 @@ D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src\main.c
 
    Section sizes:
 
-     Function/Label                 Bytes
-     --------------                 -----
-     _A_PC_ODR                         1
-     main                            271
-     ?Subroutine3                      8
-     ?Subroutine2                      5
-     ?Subroutine1                      8
-     ?Subroutine0                      8
-     ?<Constant "\r\n">                3
-     ?<Constant "\r\n SYS_STAT = ">   15
-     ?<Constant " SYS_CTRL1 = ">      14
-     ?<Constant " SYS_CTRL2 = ">      14
-     ?<Constant " Check_Val= ">       13
-     ?<Constant " WorkMode= ">        12
-     ?<Constant " Bits_flag = ">      14
-     ?<Constant " Current_Val= ">     15
-     ?<Constant " Volt_Avg= ">        12
-     ?<Constant " Max= ">              7
-     ?<Constant " Min= ">              7
-     ?<Constant " soc_rt= ">          10
-     ?<Constant " ah= ">               6
-     ?<Constant " CellBal = ">        12
-     ?<Constant " Temp_Val = ">       13
+     Function/Label Bytes
+     -------------- -----
+     _A_PC_ODR         1
+     main             93
 
  
-   1 byte  in section .near.noinit
- 167 bytes in section .near.rodata
- 300 bytes in section .near_func.text
+  1 byte  in section .near.noinit
+ 93 bytes in section .near_func.text
  
- 300 bytes of CODE  memory
- 167 bytes of CONST memory
-   0 bytes of DATA  memory (+ 1 byte shared)
+ 93 bytes of CODE memory
+  0 bytes of DATA memory (+ 1 byte shared)
 
 Errors: none
 Warnings: 1

@@ -6,7 +6,7 @@
 #include "iostm8s003f3.h"
 #include "bq769x0.h"
 
-#define Uart_Model_Enable
+//#define Uart_Model_Enable
 void main(void)
 {  
   uint8_t i = 0;

@@ -1,6 +1,6 @@
 ###############################################################################
 #                                                                             #
-# IAR C/C++ Compiler V1.31.1.20058 [Evaluation] for STM808/Apr/2016  16:12:51 #
+# IAR C/C++ Compiler V1.31.1.20058 [Evaluation] for STM808/Apr/2016  16:37:58 #
 # Copyright 2010-2012 IAR Systems AB.                                         #
 #                                                                             #
 #    Source file  =  D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src #
@@ -1453,7 +1453,7 @@ D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src\user.c
    1414          {
    1415            uint8_t i = 0;
    1416            //if(AfeErr_t >= 2000 || (LedFlash_Off_t >= 250) || (Dis_First_Run_Flag ==1 && Bits_flag.Bit.DisOv) || (WorkMode == DISCHARGE_MODE && (Bits_flag.Bit.AfeErr || Temp_Protect_Delay_t >= 1000)))//PowerOff_Delay_t >= PowerOff_Delay_t_SET && 
-   1417            if(AfeErr_t >= 500 || (LedFlash_Off_t >= 10) || (Dis_First_Run_Flag ==1 && Bits_flag.Bit.DisOv) || (WorkMode == DISCHARGE_MODE && (Bits_flag.Bit.AfeErr || Bits_flag.Bit.DisTemp || Bits_flag.Bit.DisCurOv || Bits_flag.Bit.DisCurShort)) || (Bits_flag.Bit.ChgTemp && Temp_Protect_Delay_t >= 1000))
+   1417            if(AfeErr_t >= 500 || (LedFlash_Off_t >= 10) || (Dis_First_Run_Flag ==1 && Bits_flag.Bit.DisOv) || (WorkMode == DISCHARGE_MODE && (Bits_flag.Bit.AfeErr || Bits_flag.Bit.DisTemp || Bits_flag.Bit.DisCurOv || Bits_flag.Bit.DisCurShort)) || (Bits_flag.Bit.ChgTemp && Temp_Protect_Delay_t >= 180000))
    1418            {
    1419              Afe_Temp_Disable();
    1420              SOC_SavedtoEEPROM();
@@ -1477,7 +1477,7 @@ D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src\user.c
    1438          void LowPower_Cntrl(void)
    1439          {  
    1440            //if(WorkMode == IDLE_MODE || AfeErr_t >= 2000 || (Dis_First_Run_Flag ==1 && Bits_flag.Bit.DisOv) || (WorkMode == DISCHARGE_MODE && (Bits_flag.Bit.AfeErr || Temp_Protect_Delay_t >= 1000)))
-   1441            if(WorkMode == IDLE_MODE || AfeErr_t >= 500 || (Dis_First_Run_Flag ==1 && Bits_flag.Bit.DisOv) || (WorkMode == DISCHARGE_MODE && (Bits_flag.Bit.AfeErr || Bits_flag.Bit.DisCurOv || Bits_flag.Bit.DisTemp || Bits_flag.Bit.DisCurShort)) || (Bits_flag.Bit.ChgTemp && Temp_Protect_Delay_t >= 1000))
+   1441            if(WorkMode == IDLE_MODE || AfeErr_t >= 500 || (Dis_First_Run_Flag ==1 && Bits_flag.Bit.DisOv) || (WorkMode == DISCHARGE_MODE && (Bits_flag.Bit.AfeErr || Bits_flag.Bit.DisCurOv || Bits_flag.Bit.DisTemp || Bits_flag.Bit.DisCurShort)) || (Bits_flag.Bit.ChgTemp && Temp_Protect_Delay_t >= 180000))
    1442            {
    1443              Afe_Temp_Disable();
    1444              if(!SYS_CTRL2.Bit.DSG_ON && !SYS_CTRL2.Bit.CHG_ON )  
@@ -2081,18 +2081,18 @@ D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src\user.c
      PWM2_Init                  61
      PWM1_Init                  77
      ADC                        47
-     ?Subroutine32              15
-     ?Subroutine3                7
+     ?Subroutine36              15
+     ?Subroutine4                7
      ADConverse                122
      SysInit                    60
      ClrWdt                     21
-     PortInit                  112
+     PortInit                  118
      ?Subroutine40               6
-     ?Subroutine39               9
-     ?Subroutine38               7
+     ?Subroutine39               3
+     ??Subroutine53_0            4
+     ?Subroutine38               6
      ?Subroutine37               7
-     ?Subroutine45               8
-     ?Subroutine36               7
+     ?Subroutine47               8
      Uart_Model_Init            29
      Uart_SendByte              25
      itoa                      110
@@ -2102,78 +2102,80 @@ D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src\user.c
      I2C_Model_Init             33
      Timer2Init                 41
      Timer4_Init_us             18
+     ?Subroutine27               9
      ?Subroutine26               9
-     ?Subroutine25               9
-     ?Subroutine24              13
+     ?Subroutine25              13
      Timer4_Init_ms             18
      Timer4_Disable             13
      Delay_us                   14
      Delay_ms                   14
-     ?Subroutine23               6
+     ?Subroutine24               6
      TempCheck                 150
      DisTemp_Lock                1
      CurrentCheck              138
-     ?Subroutine33              12
+     ?Subroutine32              12
      VoltCheck                 213
-     ?Subroutine8                9
-     ?Subroutine48               8
+     ?Subroutine9                9
+     ?Subroutine49               8
      ModeCheck                 307
-     ?Subroutine15               9
-     ??Subroutine51_0            4
-     ?Subroutine47               6
-     ?Subroutine6                9
+     ?Subroutine16               9
+     ??Subroutine52_0            4
+     ?Subroutine44               6
+     ?Subroutine7                9
      ?Subroutine1                9
      ?Subroutine0               15
-     ?Subroutine41              30
-     ?Subroutine46               8
+     ?Subroutine41              32
+     ?Subroutine48               8
      ModeChange_Lock             1
      ClearStatus               201
      ?Subroutine35               9
-     Afe_Volt_Val_Get          386
-     ?Subroutine34               6
-     ?Subroutine31               4
+     ?Subroutine43               5
+     Afe_Volt_Val_Get          382
+     ?Subroutine34               4
+     ?Subroutine33               6
      OpenDetect_Cntrl           33
      Opendetect_cnt              1
      CellBal_Cntrl             197
-     ?Subroutine30              10
-     ?Subroutine9                8
-     ?Subroutine5                7
+     ?Subroutine29              10
+     ?Subroutine10               8
+     ?Subroutine6                7
      LedShow_Cntrl             325
-     ?Subroutine29               9
-     ?Subroutine28               5
-     ?Subroutine27               4
-     ??Subroutine50_0            7
-     ?Subroutine4                5
+     ?Subroutine31               9
+     ?Subroutine30               5
+     ?Subroutine28               4
+     ??Subroutine51_0            7
+     ?Subroutine5                5
      FlowLedCnt                  1
      FlowLed_Finish_Flag         1
      LowPower_Entry_MCU_Set    130
      LowPower_Entry_Exit_Cnt     1
-     LowPower_Powerdown_Enter  106
-     LowPower_Cntrl             70
+     LowPower_Powerdown_Enter  103
+     ?Subroutine3               18
+     LowPower_Cntrl             67
      LowPower_Cntrl_1           45
      LowPower_Cntrl_Backup      45
      CRC8_Caculate              66
+     ?Subroutine22               5
      ?Subroutine21               5
-     ?Subroutine20               5
      ?Subroutine18               6
-     ?Subroutine13               2
-     ??Subroutine49_0            6
-     ?Subroutine44               9
-     ?Subroutine7               10
+     ?Subroutine14               2
+     ??Subroutine50_0            6
+     ?Subroutine46               9
+     ?Subroutine8               10
      I2C_Read                  155
-     ?Subroutine22              11
-     ?Subroutine19               7
-     ?Subroutine43               7
+     ?Subroutine23              11
+     ?Subroutine20               7
+     ?Subroutine45               7
+     ?Subroutine19              11
      ?Subroutine17              16
-     ?Subroutine16              11
-     ?Subroutine14              21
+     ?Subroutine15              21
      I2C_Write                 116
-     ?Subroutine12              32
+     ?Subroutine13              32
      I2C_Read_Backup           137
      I2C_Write_Backup          101
-     ?Subroutine10               3
+     ?Subroutine11               3
      SOC_Init                   68
-     ?Subroutine11               5
+     ?Subroutine12               5
      ?Subroutine2               15
      ?Subroutine42               8
      SOC_SavedtoEEPROM          29
@@ -2186,11 +2188,11 @@ D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src\user.c
     27 bytes in section .near.bss
     63 bytes in section .near.noinit
     30 bytes in section .near.rodata
- 4 666 bytes in section .near_func.text
+ 4 677 bytes in section .near_func.text
  
- 4 666 bytes of CODE  memory
+ 4 677 bytes of CODE  memory
     30 bytes of CONST memory
     27 bytes of DATA  memory (+ 63 bytes shared)
 
 Errors: none
-Warnings: 2
+Warnings: 4
