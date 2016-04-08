@@ -84,15 +84,15 @@
 #define   LED3_XOR()            PC_ODR_ODR3 = ~PC_ODR_ODR3
  
  
-#define   ChgTempH_ON            264     //P55C
-#define   ChgTempH_OFF           334     //P45C
-#define   ChgTempL_ON            800     //N5C
-#define   ChgTempL_OFF           711     //P5C
+#define   ChgTempH_ON            1028   //264   //P55C
+#define   ChgTempH_OFF           1294   //334   //P45C
+#define   ChgTempL_ON            2976  //800   //N5C
+#define   ChgTempL_OFF           2659   //711   //P5C
 
-#define   DisTempH_ON            207     //P65C
-#define   DisTempH_OFF           264     //P55C
-#define   DisTempL_ON            873     //N15C
-#define   DisTempL_OFF           800     //N5C
+#define   DisTempH_ON            811   //207     //P65C
+#define   DisTempH_OFF           1028   //264     //P55C
+#define   DisTempL_ON            3218  //873     //N15C
+#define   DisTempL_OFF           2976  //800     //N5C
 
  
  

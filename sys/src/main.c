@@ -6,7 +6,7 @@
 #include "iostm8s003f3.h"
 #include "bq769x0.h" 
 
-//#define Uart_Model_Enable
+#define Uart_Model_Enable
 void main(void)
 {  
   uint8_t i = 0;
@@ -14,7 +14,7 @@ void main(void)
   disableInterrupts();        // 关闭MCU全局变量
   SysInit();                  // 系统初始化，MCU时钟配置、ADC模块初始化
   PortInit();                 // MCU管脚配置
-  //LED1_ON();                  // 复位后亮LED1，在完成AFE IC初始化之后，熄灭
+  LED2_ON();                  // 复位后亮LED1，在完成AFE IC初始化之后，熄灭
   I2C_Model_Init();           // 启用MCU的IIC模块
 #ifdef Uart_Model_Enable
   Uart_Model_Init();          // 启用MCU的UART模块
@@ -22,16 +22,19 @@ void main(void)
   Var_Init();                 // 初始化各变量值 
   Timer2Init();               // 设置TIMER 2为基准时间的定时器
   enableInterrupts();         // 打开MCU全局中断
-  Delay_ms(50);               // 延时50mS，MCU稳定
+  Delay_ms(10);               // 延时50mS，MCU稳定
   ClrWdt();                   // 启用看门狗
   Afe_Device_Init();          // 初始化AFE IC，包括开启ADC、电流检测模块、设置过放过充电芯电压值、放电过流、短路保护等参数 
-  LED1_OFF();                 // 关闭LED1
+  LED2_OFF();                 // 关闭LED1
   SOC_Init();                 // 利用EEPROM中保存数据或OCV初始化SOC数据
   //Soc_OCV_CorrectEn_Flag = 1; // 上电允许SOC的OCV校准 
   //Afe_ADC_Disable();        // 100+uA
   //Afe_Temp_Disable();       // 100+uA
-  WorkMode = DISCHARGE_MODE;
-  Bits_flag.Bit.DisOv = 1;
+  WorkMode = DISCHARGE_MODE;  
+  DisExchangeMode_Cnt = 100;  
+  Bits_flag.Bit.DisOv = 1;    
+  //Bits_flag.Bit.DisTemp = 1; 
+  DisTemp_cnt = 0;
   while(1)
   {
     //=========
@@ -48,19 +51,12 @@ void main(void)
    
 #ifdef Uart_Model_Enable
     Uart_SendStr("\r\n");
-    Uart_SendStr("\r\n SYS_STAT = ");   Uart_SendData(SYS_STAT.Byte,16); 
-    //Uart_SendStr(" ADCGain_Val = ");    Uart_SendData(ADCGain_Val,10); 
-    //Uart_SendStr(" ADCOffset_Val = ");  Uart_SendData(ADCOffset_Val,10); 
-    //ADCGain_Val = 377 ADCOffset_Val = 47
-    // UV_TRIP_Last = (uint8_t)(((uint32_t)1000 * (UV_val - ADCOffset_Val)/ADCGain_Val) >> 4); 
-    // UV_TRIP_Last = (uint8_t)(((uint32_t)1000 * (1500 - 47)/377) >> 4);//86 
-    // 01 0000,0000 0000 ==4096 
+    Uart_SendStr("\r\n SYS_STAT = ");   Uart_SendData(SYS_STAT.Byte,16);  
     Uart_SendStr(" SYS_CTRL1 = ");      Uart_SendData(SYS_CTRL1.Byte,16); 
     Uart_SendStr(" SYS_CTRL2 = ");      Uart_SendData(SYS_CTRL2.Byte,16);  
 #endif
     
-    ModeCheck();         // 充电、放电、空载工作模式检测
-    //WorkMode = DISCHARGE_MODE;
+    ModeCheck();         // 充电、放电、空载工作模式检测 
     
     ClearStatus();       // 各工作模式下的变量清零处理
     
@@ -87,8 +83,7 @@ void main(void)
     Uart_SendStr(" Check_Val= ");     Uart_SendData((uint16_t)Check_Val,10);
     Uart_SendStr(" WorkMode= ");      Uart_SendData(WorkMode,16); 
     Uart_SendStr(" Bits_flag = ");    Uart_SendData(Bits_flag.Byte,16); 
-    
-    //Uart_SendStr(" CC_Val= ");   Uart_SendData((uint16_t)CC_Val,10);
+     
     Uart_SendStr(" Current_Val= ");   Uart_SendData((uint16_t)Current_Val,10);
     Uart_SendStr(" Volt_Avg= ");      Uart_SendData(Cell_Volt_Avg,10);
     Uart_SendStr(" Max= ");           Uart_SendData(Cell_Volt_Max,10);
@@ -97,8 +92,8 @@ void main(void)
     Uart_SendStr(" soc_rt= ");        Uart_SendData((uint16_t)SocCalc.soc_rt,10); 
     Uart_SendStr(" ah= ");            Uart_SendData((uint16_t)SocReg.ah,10);
     Uart_SendStr(" CellBal = ");      Uart_SendData((uint16_t)CellBalance_Selct,16);  
-  /* 
-    Uart_SendStr(" Temp_Val = ");     Uart_SendData((uint16_t)Temp_Val,10);  
+    Uart_SendStr(" Temp_Val = ");     Uart_SendData((uint16_t)Temp_Val,10); 
+  /*  
     Uart_SendStr("\r\n");
     for(i =0;i<10;i++)
     { 
@@ -108,8 +103,7 @@ void main(void)
       Uart_SendData(Cell_Volt[i],10);
     } 
      */
-#endif
-    
+#endif 
     LowPower_Cntrl();        // 低功耗控制管理
   }    
  

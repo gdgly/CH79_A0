@@ -362,10 +362,21 @@ INTERRUPT_HANDLER(TIM1_CAP_COM_IRQHandler, 12)
   if(CC_Volt_Sample_Cnt < MAX_UINT16_T_NUM)
   {  
     CC_Volt_Sample_Cnt += 1;
-  }
+  } 
+      if(Bits_flag.Bit.DisTemp || Bits_flag.Bit.ChgTemp )
+      {
+        if(Temp_Protect_Delay_t < MAX_UINT16_T_NUM)
+        {
+          Temp_Protect_Delay_t += 1;
+        }
+      }
   //=======================================
   if(WorkMode == CHARGE_MODE)
   {
+     /*if(ChgTemp_cnt < 1000)
+     {
+       ChgTemp_cnt += 1; 
+     }*/
     if(Cell_Balance_Delay_t < MAX_UINT16_T_NUM)
     {
       Cell_Balance_Delay_t += 1;
@@ -414,6 +425,15 @@ INTERRUPT_HANDLER(TIM1_CAP_COM_IRQHandler, 12)
     //=======================================
     if(WorkMode == DISCHARGE_MODE)
     { 
+     if(DisTemp_cnt < 1000)
+     {
+       DisTemp_cnt += 1; 
+     }
+      if(DisTemp_Lock_Cnt < 500)
+      {
+        DisTemp_Lock_Cnt += 1;
+      }
+      //==============================
       if(Dis_First_Run_Flag == 0)
       {
         if(Dis_First_Run_t < 200)
@@ -470,19 +490,20 @@ INTERRUPT_HANDLER(TIM1_CAP_COM_IRQHandler, 12)
   //=======================================
   if(Bits_flag.Bit.AfeErr)
   {
-    if(DEVICE_XREADY_Re_t < MAX_UINT16_T_NUM)
+    /*if(DEVICE_XREADY_Re_t < MAX_UINT16_T_NUM)
     {
       DEVICE_XREADY_Re_t += 1;
-    }
+    }*/
     if(AfeErr_t < MAX_UINT16_T_NUM)
     {
       AfeErr_t += 1;
     }
   }
+  /*
   else
   {
     DEVICE_XREADY_Re_t = 0; 
-  }
+  }*/
   //=======================================
   if(WorkMode ==IDLE_MODE)
   {

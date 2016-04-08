@@ -5,6 +5,10 @@
 unsigned char Buf[3] ={0,0,0};
 
 
+unsigned int ChgTemp_cnt = 0;
+unsigned int DisTemp_cnt = 0; 
+unsigned int DisTemp_Lock_Cnt = 0;
+unsigned int Temp_Protect_Delay_t = 0;
 unsigned char Dis_First_Run_Flag = 0;
 unsigned char Dis_First_Run_t = 0;
     
@@ -62,7 +66,7 @@ unsigned int DisCurOv_t2;
 unsigned int DisCurOv_Re_t; 
 unsigned int DisCurShort_Re_t; 
 
-unsigned int DEVICE_XREADY_Re_t; 
+//unsigned int DEVICE_XREADY_Re_t; 
 unsigned int AfeErr_t; 
 
 unsigned int CellBalance_Cur_Selct;  

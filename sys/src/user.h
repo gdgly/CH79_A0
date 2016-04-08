@@ -104,6 +104,10 @@ void LowPower_Powerdown_Enter(void);
 
 
 
+  extern unsigned int ChgTemp_cnt;
+  extern unsigned int DisTemp_cnt; 
+  extern unsigned int DisTemp_Lock_Cnt;
+  extern unsigned int Temp_Protect_Delay_t;
   extern unsigned char Dis_First_Run_Flag;
   extern unsigned char Dis_First_Run_t;
   extern unsigned char ChgExchangeMode_Cnt;
@@ -159,7 +163,7 @@ void LowPower_Powerdown_Enter(void);
   extern unsigned int DisCurOv_Re_t; 
   extern unsigned int DisCurShort_Re_t; 
 
-  extern unsigned int DEVICE_XREADY_Re_t; 
+  //extern unsigned int DEVICE_XREADY_Re_t; 
   extern unsigned int AfeErr_t; 
 
   extern unsigned int CellBalance_Cur_Selct; 

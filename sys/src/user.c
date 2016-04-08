@@ -426,16 +426,16 @@ void Delay_ms(uint16_t Delay_time)
     RTS = (10,000 × VTSX) ÷ (3.3 – VTSX)                   (5)
 */
 void TempCheck(void)
-{ 
-    static uint8_t ChgTemp_cnt =0;
-    static uint8_t DisTemp_cnt =0;  
+{  
+    static uint8_t DisTemp_Lock = 0;
      
     Temp_Val = V_TS2_Val;//R_TS2_Val;
     if(WorkMode == CHARGE_MODE)//if(Bits_flag.Bit.Chg)
     {
+       DisTemp_Lock = 0;
        if((Temp_Val >ChgTempL_ON) || (Temp_Val < ChgTempH_ON) || (ChgTemp_cnt >= 10))
        {
-         if((ChgTemp_cnt ++) >= 10)
+         if((ChgTemp_cnt++) >= 10)
          {
            ChgTemp_cnt = 10;
            Bits_flag.Bit.ChgTemp = 1;
@@ -445,35 +445,52 @@ void TempCheck(void)
        {
          ChgTemp_cnt = 0;
        }
+    //Bits_flag.Bit.ChgTemp = 1; 
       //==========================充电温度保护恢复
       if(Bits_flag.Bit.ChgTemp && (Temp_Val < ChgTempL_OFF) && (Temp_Val >ChgTempH_OFF))
       {
           ChgTemp_cnt = 0;
           Bits_flag.Bit.ChgTemp = 0;
+          
+          //Bits_flag.Bit.ChgTemp = 1; 
       } 
     }
-    else if(WorkMode == DISCHARGE_MODE)//(Bits_flag.Bit.Dis)
+    else if(WorkMode == DISCHARGE_MODE) 
     {
       ChgTemp_cnt = 0;
-      if((Temp_Val > DisTempL_ON) || (Temp_Val < DisTempH_ON) || (DisTemp_cnt >= 10)) 
+      if((Temp_Val > DisTempL_ON) || (Temp_Val < DisTempH_ON) || (DisTemp_cnt >= 300)) 
       {
-        if((DisTemp_cnt ++) >= 10)
+        if(DisTemp_cnt >= 300)
         {
-          DisTemp_cnt = 10;
+          DisTemp_cnt = 300;
           Bits_flag.Bit.DisTemp = 1;
+          DisTemp_Lock = 1;
         }
       }
       else
       {
         DisTemp_cnt = 0;
-      }  
+        Temp_Protect_Delay_t = 0;
+      }
+      /*  
       //==========================放电温度保护恢复
-      if(Bits_flag.Bit.DisTemp && (Temp_Val < DisTempL_OFF) && (Temp_Val > DisTempH_OFF))
+      if(DisTemp_Lock == 0 && Bits_flag.Bit.DisTemp && (Temp_Val < DisTempL_OFF) && (Temp_Val > DisTempH_OFF))
       {
-        DisTemp_cnt = 0;
-        Bits_flag.Bit.DisTemp = 0;
-      } 
-    }   
+        //if(DisTemp_Lock_Cnt > 30)
+        { 
+          DisTemp_cnt = 0;
+          DisTemp_Lock_Cnt = 30;
+          Bits_flag.Bit.DisTemp = 0;
+          Temp_Protect_Delay_t = 0;
+          DisTemp_Lock = 1;
+        } 
+      }
+      */
+    }  
+    else
+    { 
+      DisTemp_Lock = 0;
+    }
 }
 //================================================================== 
 //==================================================================
@@ -627,18 +644,18 @@ void VoltCheck(void)
     { 
       if((Cell_Volt_Avg < 3300) || (Cell_Volt_Min < 3300) || SYS_STAT.Bit.UV)
       {
-        if(Dis_First_Run_t >= 100)
+        if(Dis_First_Run_t >= 50)
         {
-          Dis_First_Run_t = 100;
+          Dis_First_Run_t = 50;
           Bits_flag.Bit.DisOv = 1;
           Dis_First_Run_Flag  = 1;
         }
       }
       else 
       {
-        if(Dis_First_Run_t >= 50)
+        if(Dis_First_Run_t >= 30)
         {
-          Dis_First_Run_t = 100; 
+          Dis_First_Run_t = 30; 
           Bits_flag.Bit.DisOv = 0;
           Dis_First_Run_Flag  = 1;
           DisOv_t = 0;
@@ -682,7 +699,8 @@ void VoltCheck(void)
     }
     */
   }
-}   
+}  
+/*
 //==========================================================================
 void ModeCheck_Backup(void)
 {       
@@ -719,7 +737,7 @@ void ModeCheck_Backup(void)
     }
   } 
 }
-
+*/
 //==========================================================================
 void ModeCheck(void)
 {       
@@ -741,9 +759,9 @@ void ModeCheck(void)
    
   if(Check_Val < 10)// 无信号
   { 
-    if(IdleExchangeMode_Cnt >= 100)
+    if(IdleExchangeMode_Cnt >= 30)
     { 
-      IdleExchangeMode_Cnt = 100;
+      IdleExchangeMode_Cnt = 30;
       ChgExchangeMode_Cnt = 0;
       DisExchangeMode_Cnt = 0;
       WorkMode = IDLE_MODE;
@@ -839,6 +857,7 @@ void ClearStatus(void)
 {
   if(WorkMode == CHARGE_MODE)
   {  
+      DisTemp_Lock_Cnt = 0;
       LowPower_MCU_Entry_Flag = 0;
       Dis_First_Run_Flag = 0;
       Dis_First_Run_t = 0;
@@ -847,6 +866,7 @@ void ClearStatus(void)
       //DisCurOv_Re_t = 0; 
       PowerOff_Delay_t = 0;
        
+      //Temp_Protect_Delay_t = 0;
       Bits_flag.Bit.DisTemp = 0;
       //Bits_flag.Bit.DisCurShort = 0; 
       
@@ -892,6 +912,7 @@ void ClearStatus(void)
   }*/
   else if(WorkMode == IDLE_MODE)
   {   
+    DisTemp_Lock_Cnt = 0;
     //Bits_flag.Bit.AfeErr = 0;
     Dis_First_Run_Flag = 0;
     Dis_First_Run_t = 0;
@@ -1020,7 +1041,7 @@ void Afe_Volt_Val_Get(void)
     //V_TS2_Val = (uint16_t)((uint32_t)(382 * ((uint16_t)adcval <<8 | tmpval))/1000);//mV
     V_TS2_Val = Afe_Get_Adc(TS2_HI_ADDR) &0x3FFF ;
     V_TS2_Val = (uint16_t)(((uint32_t)382 * V_TS2_Val /1000));  //mV
-    V_TS2_Val = (uint16_t)(((uint32_t)1024 * V_TS2_Val /3300));  //mV
+    V_TS2_Val = (uint16_t)(((uint32_t)4096 * V_TS2_Val /3300));  //mV
     //R_TS2_Val = (uint16_t)((uint32_t)10000 * V_TS2_Val)/(3300 - V_TS2_Val); 
   }
   //=====================================================================================
@@ -1122,7 +1143,8 @@ void LedShow_Cntrl(void)
   if(WorkMode == IDLE_MODE)// ==流水显示方式
   {  
     FlowLedCnt = 0;
-    FlowLed_Finish_Flag = 0; 
+    FlowLed_Finish_Flag = 0;
+    /*
     if(LedFlash_Off_t < 50)
     {
       LED1_OFF();
@@ -1147,6 +1169,10 @@ void LedShow_Cntrl(void)
       LED2_OFF();
       LED3_OFF();  
     }   
+    */
+      LED1_OFF();
+      LED2_OFF();
+      LED3_OFF();  
   }
   else
   { 
@@ -1313,7 +1339,7 @@ void LedShow_Cntrl(void)
     }
   }
 }
-
+/*
 void LedShow_WorkMode(void)
 {
   if(WorkMode == IDLE_MODE)
@@ -1338,6 +1364,7 @@ void LedShow_WorkMode(void)
     //LED3_XOR(); 
   }
 }
+*/
 //==========================================================================
 void LowPower_Entry_MCU_Set(void)
 {   
@@ -1382,8 +1409,10 @@ void LowPower_Entry_MCU_Set(void)
 void LowPower_Powerdown_Enter(void)
 {
   uint8_t i = 0;
-  if(AfeErr_t >= 2000 || (LedFlash_Off_t >= 250) || (Dis_First_Run_Flag ==1 && Bits_flag.Bit.DisOv) || (WorkMode == DISCHARGE_MODE && Bits_flag.Bit.AfeErr))//PowerOff_Delay_t >= PowerOff_Delay_t_SET && 
+  //if(AfeErr_t >= 2000 || (LedFlash_Off_t >= 250) || (Dis_First_Run_Flag ==1 && Bits_flag.Bit.DisOv) || (WorkMode == DISCHARGE_MODE && (Bits_flag.Bit.AfeErr || Temp_Protect_Delay_t >= 1000)))//PowerOff_Delay_t >= PowerOff_Delay_t_SET && 
+  if(AfeErr_t >= 500 || (LedFlash_Off_t >= 10) || (Dis_First_Run_Flag ==1 && Bits_flag.Bit.DisOv) || (WorkMode == DISCHARGE_MODE && Bits_flag.Bit.AfeErr) || Temp_Protect_Delay_t >= 1000)
   {
+    Afe_Temp_Disable();
     SOC_SavedtoEEPROM();
     Delay_ms(10);
     while(1)
@@ -1404,8 +1433,10 @@ void LowPower_Powerdown_Enter(void)
 //==============================================================================
 void LowPower_Cntrl(void)
 {  
-  if(WorkMode == IDLE_MODE || AfeErr_t >= 2000 || (Dis_First_Run_Flag ==1 && Bits_flag.Bit.DisOv) || (WorkMode == DISCHARGE_MODE && Bits_flag.Bit.AfeErr))
+  //if(WorkMode == IDLE_MODE || AfeErr_t >= 2000 || (Dis_First_Run_Flag ==1 && Bits_flag.Bit.DisOv) || (WorkMode == DISCHARGE_MODE && (Bits_flag.Bit.AfeErr || Temp_Protect_Delay_t >= 1000)))
+  if(WorkMode == IDLE_MODE || AfeErr_t >= 500 || (Dis_First_Run_Flag ==1 && Bits_flag.Bit.DisOv) || (WorkMode == DISCHARGE_MODE && Bits_flag.Bit.AfeErr) || Temp_Protect_Delay_t >= 1000)
   {
+    Afe_Temp_Disable();
     if(!SYS_CTRL2.Bit.DSG_ON && !SYS_CTRL2.Bit.CHG_ON )  
     {
       LowPower_Powerdown_Enter();  
@@ -1854,10 +1885,12 @@ void SOC_SavedtoEEPROM(void)
 void Var_Init(void)
 { 
   uint8_t i = 0;
-   
+  ChgTemp_cnt = 0;
+  DisTemp_cnt = 0;
+  Temp_Protect_Delay_t = 0;
   LowPower_MCU_Entry_Flag = 0; // MCU运行于低功耗状态标识符
   LedFlash_Off_t = 0;
-  ChgExchangeMode_Cnt  = 100;
+  ChgExchangeMode_Cnt  = 0;
   DisExchangeMode_Cnt  = 0;
   IdleExchangeMode_Cnt = 0;
   for(i =0; i <10; i++)
@@ -1904,14 +1937,13 @@ void Var_Init(void)
   DisCurOv_Re_t = 0;
   DisCurShort_Re_t = 0;
   
-  DEVICE_XREADY_Re_t = 0;
+  //DEVICE_XREADY_Re_t = 0;
   
   CellBalance_Cur_Selct = 0;  
   LedFlash_t = 0;
   PowerOff_Delay_t = 0;
   Delay_time_t = 0;
-  
-  WorkMode = IDLE_MODE;
+   
   
   SYS_STAT.Byte = 0;
   
