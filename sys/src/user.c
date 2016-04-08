@@ -1141,6 +1141,7 @@ void CellBal_Cntrl(void)
 void LedShow_Cntrl(void)
 {
   static uint8_t FlowLedCnt = 0;
+  static uint8_t FlowLedCnt_Lock = 0;
   static uint8_t FlowLed_Finish_Flag = 0;
   // soc 显示
   // 异常后，报警5s后，熄灭
@@ -1148,6 +1149,7 @@ void LedShow_Cntrl(void)
   {  
     FlowLedCnt = 0;
     FlowLed_Finish_Flag = 0;
+    FlowLedCnt_Lock = 0;
     /*
     if(LedFlash_Off_t < 50)
     {
@@ -1217,7 +1219,12 @@ void LedShow_Cntrl(void)
       if(FlowLed_Finish_Flag ==0 )
       {
         if(FlowLedCnt ==0)
-        {
+        { 
+          if(FlowLedCnt_Lock ==0)
+          {
+            LedFlash_t = 0;
+            FlowLedCnt_Lock = 1;
+          }
           LED1_ON();
           LED2_OFF();
           LED3_OFF(); 
@@ -1225,6 +1232,7 @@ void LedShow_Cntrl(void)
           {
             LedFlash_t = 0;
             FlowLedCnt = 1;
+            FlowLedCnt_Lock = 0;
           }  
         }
         else if(FlowLedCnt ==1)
@@ -1306,6 +1314,7 @@ void LedShow_Cntrl(void)
     } 
     else if(WorkMode == DISCHARGE_MODE)
     {  
+      FlowLedCnt_Lock = 0;
       FlowLed_Finish_Flag = 0;
       if(Bits_flag.Bit.DisOv)
       {
