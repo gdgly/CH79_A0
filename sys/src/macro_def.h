@@ -25,8 +25,8 @@
 #define   OCD_THREHOLD_VAL_SET  11000               //  单位：mA,AFE（硬件）放电保护电流值, 有效范围:[800,10000]     
 #define   SCD_THREHOLD_VAL_SET  44000               //  单位：mA,AFE（硬件）短路保护电流值, 有效范围:[22000,200000]
 //==========================================
-#define   CHG_OV_VAL_SET        4150               //  单位：mV, MCU（软件）过充保护电压值
-#define   DIS_UV_VAL_SET        3000               //  单位：mV, MCU（软件）过过放保护电压值（平均电芯电压值）
+#define   CHG_OV_VAL_SET        4200               //  单位：mV, MCU（软件）过充保护电压值
+#define   DIS_UV_VAL_SET        2700               //  单位：mV, MCU（软件）过过放保护电压值（平均电芯电压值）
 #define   DIS_UV_MIN_VAL_SET    2700               //  单位：mV, MCU（软件）过过放保护电压值（最小电芯电压值）
 #define   CHG_OV_RE_VAL_SET     4100               //  单位：mV, MCU（软件）过过充保护释放电压值
 #define   DIS_UV_RE_VAL_SET     3300               //  单位：mV, MCU（软件）过过放保护释放电压值

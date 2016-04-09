@@ -1,6 +1,6 @@
 ###############################################################################
 #                                                                             #
-# IAR C/C++ Compiler V1.31.1.20058 [Evaluation] for STM809/Apr/2016  16:31:39 #
+# IAR C/C++ Compiler V1.31.1.20058 [Evaluation] for STM809/Apr/2016  20:06:13 #
 # Copyright 2010-2012 IAR Systems AB.                                         #
 #                                                                             #
 #    Source file  =  D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src #
@@ -683,7 +683,7 @@ D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src\user.c
     644              //=========开机整体电芯电压
     645              if(Dis_First_Run_Flag ==0 && WorkMode == DISCHARGE_MODE)
     646              { 
-    647                if((Cell_Volt_Avg < 3300) || (Cell_Volt_Min < 3300) || SYS_STAT.Bit.UV)
+    647                if((Cell_Volt_Avg < 3000) || (Cell_Volt_Min < 3000) || SYS_STAT.Bit.UV)
     648                {
     649                  if(Dis_First_Run_t >= 50)
     650                  {

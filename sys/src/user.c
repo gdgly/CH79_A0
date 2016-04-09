@@ -644,7 +644,7 @@ void VoltCheck(void)
     //=========开机整体电芯电压
     if(Dis_First_Run_Flag ==0 && WorkMode == DISCHARGE_MODE)
     { 
-      if((Cell_Volt_Avg < 3300) || (Cell_Volt_Min < 3300) || SYS_STAT.Bit.UV)
+      if((Cell_Volt_Avg < 3000) || (Cell_Volt_Min < 3000) || SYS_STAT.Bit.UV)
       {
         if(Dis_First_Run_t >= 50)
         {
