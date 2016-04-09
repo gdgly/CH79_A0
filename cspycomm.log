@@ -1,9 +1,1 @@
-Sat Apr 09 17:17:37 2016: Log started
-Sat Apr 09 17:25:26 2016: DiGdiOpen(VersionH = 294, VersionL = 294, Parameters = -stlink3 -mcuname STM8S003F3)
-Sat Apr 09 17:25:26 2016: DiGdiInitIO(DeviceFile = usb://usb)
-Sat Apr 09 17:25:26 2016: DiGdiVersion()
-Sat Apr 09 17:25:26 2016: DiGdiGetFeatures()
-Sat Apr 09 17:25:26 2016: DiGdiInitRegisterMap()
-Sat Apr 09 17:25:26 2016: DiGdiSetConfig()
-Sat Apr 09 17:25:26 2016: Failed to set configuration with MCU name STM8S003F3: SWIM error [30006]: Comm init error: chip does not answer
-Sat Apr 09 17:25:26 2016: DiGdiClose()
+Sat Apr 09 19:35:04 2016: Log started

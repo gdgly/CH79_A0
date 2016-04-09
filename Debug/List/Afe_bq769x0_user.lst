@@ -1,6 +1,6 @@
 ###############################################################################
 #                                                                             #
-# IAR C/C++ Compiler V1.31.1.20058 [Evaluation] for STM809/Apr/2016  17:05:50 #
+# IAR C/C++ Compiler V1.31.1.20058 [Evaluation] for STM809/Apr/2016  19:22:04 #
 # Copyright 2010-2012 IAR Systems AB.                                         #
 #                                                                             #
 #    Source file  =  D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src #
@@ -104,7 +104,7 @@ D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src\Afe_bq769x0_user.c
      65            if(WorkMode == CHARGE_MODE)
      66            { 
      67              FAULT_DETECT_CTRL_ON();
-     68              if(Current_Val >= 10)
+     68              if(!SYS_CTRL2.Bit.CHG_ON || (SYS_CTRL2.Bit.CHG_ON && Current_Val >= 10))
      69              {
      70                Chg_Current_Val_Small_Errer_t = 0;
      71              }
@@ -840,7 +840,7 @@ D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src\Afe_bq769x0_user.c
      Afe_CellBalance_Enable    38
      Afe_CellBalance_Disable   71
      Afe_Get_Adc               54
-     ChgDis_AbnormalCheck     175
+     ChgDis_AbnormalCheck     180
      ?Subroutine3              14
      AfeErr_Cnt                 1
      Afe_EnterShipMode         34
@@ -872,9 +872,9 @@ D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src\Afe_bq769x0_user.c
  
    1 byte  in section .near.bss
    2 bytes in section .near.noinit
- 935 bytes in section .near_func.text
+ 940 bytes in section .near_func.text
  
- 935 bytes of CODE memory
+ 940 bytes of CODE memory
    1 byte  of DATA memory (+ 2 bytes shared)
 
 Errors: none

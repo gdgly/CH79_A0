@@ -65,7 +65,7 @@ void ChgDis_AbnormalCheck(void)
   if(WorkMode == CHARGE_MODE)
   { 
     FAULT_DETECT_CTRL_ON();
-    if(Current_Val >= 10)
+    if(!SYS_CTRL2.Bit.CHG_ON || (SYS_CTRL2.Bit.CHG_ON && Current_Val >= 10))
     {
       Chg_Current_Val_Small_Errer_t = 0;
     }
