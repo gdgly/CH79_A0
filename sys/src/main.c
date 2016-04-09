@@ -7,14 +7,17 @@
 #include "bq769x0.h"
 
 //#define Uart_Model_Enable
+
 void main(void)
-{  
+{ 
   uint8_t i = 0;
   //-----------------------------
   disableInterrupts();        // 关闭MCU全局变量
   SysInit();                  // 系统初始化，MCU时钟配置、ADC模块初始化
   PortInit();                 // MCU管脚配置
-  //LED2_ON();                  // 复位后亮LED1，在完成AFE IC初始化之后，熄灭
+  //PC_ODR_ODR7 = 1;
+  VCC1_ON();
+  //LED2_ON();                // 复位后亮LED1，在完成AFE IC初始化之后，熄灭
   I2C_Model_Init();           // 启用MCU的IIC模块
 #ifdef Uart_Model_Enable
   Uart_Model_Init();          // 启用MCU的UART模块
@@ -22,7 +25,7 @@ void main(void)
   Var_Init();                 // 初始化各变量值 
   Timer2Init();               // 设置TIMER 2为基准时间的定时器
   enableInterrupts();         // 打开MCU全局中断
-  Delay_ms(10);               // 延时50mS，MCU稳定
+  Delay_ms(20);               // 延时50mS，MCU稳定
   ClrWdt();                   // 启用看门狗
   Afe_Device_Init();          // 初始化AFE IC，包括开启ADC、电流检测模块、设置过放过充电芯电压值、放电过流、短路保护等参数 
   LED2_OFF();                 // 关闭LED1

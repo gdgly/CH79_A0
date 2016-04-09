@@ -64,8 +64,9 @@
 //#define   IS_ALERT()          PC_IDR_IDR7 == 1
 #define   ALERT_PIN_HIGH()      //PC_ODR_ODR7 = 1
 #define   ALERT_PIN_LOW()       //PC_ODR_ODR7 = 0
-
-#define   VCC1_ON()             PA_ODR_ODR1 = 1
+ 
+#define   VCC1_ON()             PA_ODR_ODR2 = 1
+#define   VCC1_OFF()            PA_ODR_ODR2 = 0
 
 #define   WAKEUP_AFE_ON()       PD_ODR_ODR4 = 1
 #define   WAKEUP_AFE_OFF()      PD_ODR_ODR4 = 0

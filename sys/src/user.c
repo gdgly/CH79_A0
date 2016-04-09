@@ -9,6 +9,7 @@
 //==================================================================
 //==================================================================
 #if 1
+/*
 void PWM2_Init(void)
 { 
     CLK_PCKENR1 |= 0xA0; 
@@ -63,6 +64,7 @@ void PWM1_Init(void)
     TIM1_BKR |= 0x80;          //
     TIM1_CR1 |= 0x01;          //Ê¹ÄÜTIM1 
 }
+*/
 //==================================================================
 //==================================================================
 uint16_t ADC(int channel)
@@ -1051,7 +1053,7 @@ void Afe_Volt_Val_Get(void)
   //=====================================================================================
   
 }
- 
+ /*
 void OpenDetect_Cntrl(void)
 {
   static uint8_t Opendetect_cnt = 0;
@@ -1068,6 +1070,7 @@ void OpenDetect_Cntrl(void)
     Opendetect_cnt = 0;
   } 
 }
+*/
 //==========================================================================
 /*
   turn on condition  :    >4.0V && deltaVolt >200mV
@@ -1379,6 +1382,7 @@ void LedShow_WorkMode(void)
 }
 */
 //==========================================================================
+/*
 void LowPower_Entry_MCU_Set(void)
 {   
   static uint8_t LowPower_Entry_Exit_Cnt = 0;
@@ -1418,23 +1422,33 @@ void LowPower_Entry_MCU_Set(void)
     LowPower_Entry_Delay_t = 0; 
   }
 } 
+*/
 //========================================================================== 
 void LowPower_Powerdown_Enter(void)
 {
-  uint8_t i = 0;
+  uint8_t j,i = 0;
   //if(AfeErr_t >= 2000 || (LedFlash_Off_t >= 250) || (Dis_First_Run_Flag ==1 && Bits_flag.Bit.DisOv) || (WorkMode == DISCHARGE_MODE && (Bits_flag.Bit.AfeErr || Temp_Protect_Delay_t >= 1000)))//PowerOff_Delay_t >= PowerOff_Delay_t_SET && 
-  if(AfeErr_t >= 500 || (LedFlash_Off_t >= 10) || (Dis_First_Run_Flag ==1 && Bits_flag.Bit.DisOv) || (WorkMode == DISCHARGE_MODE && (Bits_flag.Bit.AfeErr || Bits_flag.Bit.DisTemp || Bits_flag.Bit.DisCurOv || Bits_flag.Bit.DisCurShort)) || (Bits_flag.Bit.ChgTemp && Temp_Protect_Delay_t >= 180000))
-  {
-    Afe_Temp_Disable();
+  if(AfeErr_t >= 500 || (LedFlash_Off_t >= 10) || (Dis_First_Run_Flag ==1 && Bits_flag.Bit.DisOv) || (WorkMode == DISCHARGE_MODE && (Bits_flag.Bit.AfeErr || Bits_flag.Bit.DisTemp || Bits_flag.Bit.DisCurOv || Bits_flag.Bit.DisCurShort)) || (Bits_flag.Bit.ChgTemp && Temp_Protect_Delay_t >= 60000))
+  { 
+    //Afe_Temp_Disable();
     SOC_SavedtoEEPROM();
     Delay_ms(10);
     while(1)
     {   
-      Afe_EnterShipMode(); 
-      if((i ++) < 100)
-      { 
+      for(j =0; j < 10; j++)
+      {
         ClrWdt();
-        Delay_ms(50);
+        Delay_ms(10);
+      }
+      Afe_EnterShipMode(); 
+      
+      if((i ++) < 10)
+      { 
+        for(j =0;j < 100;j++)
+        {
+          ClrWdt();
+          Delay_ms(10);
+        }
       }
       else
       {
@@ -1449,9 +1463,10 @@ void LowPower_Cntrl(void)
   static uint8_t Afe_Temp_Disable_Lock = 0;
   uint8_t Afe_Temp_Disable_Tmp = 0x08;
   //if(WorkMode == IDLE_MODE || AfeErr_t >= 2000 || (Dis_First_Run_Flag ==1 && Bits_flag.Bit.DisOv) || (WorkMode == DISCHARGE_MODE && (Bits_flag.Bit.AfeErr || Temp_Protect_Delay_t >= 1000)))
-  if(WorkMode == IDLE_MODE || AfeErr_t >= 500 || (Dis_First_Run_Flag ==1 && Bits_flag.Bit.DisOv) || (WorkMode == DISCHARGE_MODE && (Bits_flag.Bit.AfeErr || Bits_flag.Bit.DisCurOv || Bits_flag.Bit.DisTemp || Bits_flag.Bit.DisCurShort)) || (Bits_flag.Bit.ChgTemp && Temp_Protect_Delay_t >= 180000))
+  if(WorkMode == IDLE_MODE || AfeErr_t >= 500 || (Dis_First_Run_Flag ==1 && Bits_flag.Bit.DisOv) || (WorkMode == DISCHARGE_MODE && (Bits_flag.Bit.AfeErr || Bits_flag.Bit.DisCurOv || Bits_flag.Bit.DisTemp || Bits_flag.Bit.DisCurShort)) || (Bits_flag.Bit.ChgTemp && Temp_Protect_Delay_t >= 60000))
   {
     Afe_Temp_Disable();
+    VCC1_OFF();
     if(Afe_Temp_Disable_Lock ==0)
     {
       //SYS_CTRL1_Last &= ~0x08;
@@ -1475,6 +1490,7 @@ void LowPower_Cntrl(void)
     Afe_Temp_Disable_Lock = 0;
   }
 }
+/*
 //==============================================================================
 void LowPower_Cntrl_1(void)
 { 
@@ -1535,7 +1551,7 @@ void LowPower_Cntrl_Backup(void)
     LowPower_Entry_MCU_Set();  
   }
 }
-
+*/
 uint8_t CRC8_Caculate(uint8_t *ptr,uint8_t len)
 {
   uint8_t i;
