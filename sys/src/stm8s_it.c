@@ -377,6 +377,10 @@ INTERRUPT_HANDLER(TIM1_CAP_COM_IRQHandler, 12)
      {
        ChgTemp_cnt += 1; 
      }*/
+    if(Chg_Current_Val_Small_Errer_t < MAX_UINT16_T_NUM)
+    {
+      Chg_Current_Val_Small_Errer_t += 1;
+    }
     if(Cell_Balance_Delay_t < MAX_UINT16_T_NUM)
     {
       Cell_Balance_Delay_t += 1;

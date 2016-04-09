@@ -1,6 +1,6 @@
 ###############################################################################
 #                                                                             #
-# IAR C/C++ Compiler V1.31.1.20058 [Evaluation] for STM809/Apr/2016  15:02:05 #
+# IAR C/C++ Compiler V1.31.1.20058 [Evaluation] for STM809/Apr/2016  16:30:04 #
 # Copyright 2010-2012 IAR Systems AB.                                         #
 #                                                                             #
 #    Source file  =  D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src #
@@ -43,7 +43,7 @@ D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src\data_def.c
       4           
       5          unsigned char Buf[3] ={0,0,0};
       6          
-      7          
+      7          unsigned int Chg_Current_Val_Small_Errer_t = 0;
       8          unsigned int ChgTemp_cnt = 0;
       9          unsigned int DisTemp_cnt = 0; 
      10          unsigned int DisTemp_Lock_Cnt = 0;
@@ -253,88 +253,89 @@ D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src\data_def.c
 
    Section sizes:
 
-     Function/Label          Bytes
-     --------------          -----
-     Buf                        3
-     ChgTemp_cnt                2
-     DisTemp_cnt                2
-     DisTemp_Lock_Cnt           2
-     Temp_Protect_Delay_t       2
-     Dis_First_Run_Flag         1
-     Dis_First_Run_t            1
-     ChgExchangeMode_Cnt        1
-     DisExchangeMode_Cnt        1
-     IdleExchangeMode_Cnt       1
-     I2C_COM_ERROR_Flag         1
-     Current_Val                4
-     CC_Val                     4
-     int16_CC_AD                2
-     CC_AD                      2
-     ADCOffset_Val              1
-     Check_Val                  2
-     Adc_value                 20
-     Cell_Volt                 20
-     Cell_Volt_Tol              2
-     Cell_Volt_Avg              2
-     Cell_Volt_Max              2
-     Cell_Volt_Min              2
-     ADCGain_Val                2
-     Pack_Volt                  2
-     Temp_Val                   2
-     V_TS2_Val                  2
-     R_TS2_Val                  2
-     SYS_STAT_Last              1
-     CELLBAL1_Last              1
-     CELLBAL2_Last              1
-     SYS_CTRL1_Last             1
-     SYS_CTRL2_Last             1
-     PROTECT1_Last              1
-     PROTECT2_Last              1
-     PROTECT3_Last              1
-     PROTECT1_Last_Copy         1
-     PROTECT2_Last_Copy         1
-     PROTECT3_Last_Copy         1
-     OV_TRIP_Last               1
-     UV_TRIP_Last               1
-     CC_CFG_Last                1
-     Temp_Volt_Sample_Cnt       2
-     Cell_Volt_Sample_Cnt       2
-     CC_Volt_Sample_Cnt         2
-     ChgOv_t                    2
-     ChgCurOv_t                 2
-     ChgCurOv_Re_t              2
-     DisOv_t                    2
-     DisCurOv_t                 2
-     DisCurOv_t1                2
-     DisCurOv_t2                2
-     DisCurOv_Re_t              2
-     DisCurShort_Re_t           2
-     AfeErr_t                   2
-     CellBalance_Cur_Selct      2
-     LedFlash_t                 2
-     LedFlash_Off_t             2
-     PowerOff_Delay_t           2
-     Delay_time_t               2
-     Soc_OCV_CorrectEn_Flag     1
-     CellBal_Cntrl_Lock         1
-     CellBalance_Selct          2
-     Init_Soc_Flag              1
-     LowPower_MCU_Entry_Flag    1
-     LowPower_Entry_Delay_t     2
-     Cell_Balance_Delay_t       2
-     WorkMode                   1
-     SYS_STAT                   1
-     SYS_CTRL1                  1
-     SYS_CTRL2                  1
-     RevcComData                2
-     Bits_flag                  1
-     SocReg                    21
-     SocCalc                   43
+     Function/Label                Bytes
+     --------------                -----
+     Buf                              3
+     Chg_Current_Val_Small_Errer_t    2
+     ChgTemp_cnt                      2
+     DisTemp_cnt                      2
+     DisTemp_Lock_Cnt                 2
+     Temp_Protect_Delay_t             2
+     Dis_First_Run_Flag               1
+     Dis_First_Run_t                  1
+     ChgExchangeMode_Cnt              1
+     DisExchangeMode_Cnt              1
+     IdleExchangeMode_Cnt             1
+     I2C_COM_ERROR_Flag               1
+     Current_Val                      4
+     CC_Val                           4
+     int16_CC_AD                      2
+     CC_AD                            2
+     ADCOffset_Val                    1
+     Check_Val                        2
+     Adc_value                       20
+     Cell_Volt                       20
+     Cell_Volt_Tol                    2
+     Cell_Volt_Avg                    2
+     Cell_Volt_Max                    2
+     Cell_Volt_Min                    2
+     ADCGain_Val                      2
+     Pack_Volt                        2
+     Temp_Val                         2
+     V_TS2_Val                        2
+     R_TS2_Val                        2
+     SYS_STAT_Last                    1
+     CELLBAL1_Last                    1
+     CELLBAL2_Last                    1
+     SYS_CTRL1_Last                   1
+     SYS_CTRL2_Last                   1
+     PROTECT1_Last                    1
+     PROTECT2_Last                    1
+     PROTECT3_Last                    1
+     PROTECT1_Last_Copy               1
+     PROTECT2_Last_Copy               1
+     PROTECT3_Last_Copy               1
+     OV_TRIP_Last                     1
+     UV_TRIP_Last                     1
+     CC_CFG_Last                      1
+     Temp_Volt_Sample_Cnt             2
+     Cell_Volt_Sample_Cnt             2
+     CC_Volt_Sample_Cnt               2
+     ChgOv_t                          2
+     ChgCurOv_t                       2
+     ChgCurOv_Re_t                    2
+     DisOv_t                          2
+     DisCurOv_t                       2
+     DisCurOv_t1                      2
+     DisCurOv_t2                      2
+     DisCurOv_Re_t                    2
+     DisCurShort_Re_t                 2
+     AfeErr_t                         2
+     CellBalance_Cur_Selct            2
+     LedFlash_t                       2
+     LedFlash_Off_t                   2
+     PowerOff_Delay_t                 2
+     Delay_time_t                     2
+     Soc_OCV_CorrectEn_Flag           1
+     CellBal_Cntrl_Lock               1
+     CellBalance_Selct                2
+     Init_Soc_Flag                    1
+     LowPower_MCU_Entry_Flag          1
+     LowPower_Entry_Delay_t           2
+     Cell_Balance_Delay_t             2
+     WorkMode                         1
+     SYS_STAT                         1
+     SYS_CTRL1                        1
+     SYS_CTRL2                        1
+     RevcComData                      2
+     Bits_flag                        1
+     SocReg                          21
+     SocCalc                         43
 
  
- 221 bytes in section .near.bss
+ 223 bytes in section .near.bss
  
- 221 bytes of DATA memory
+ 223 bytes of DATA memory
 
 Errors: none
 Warnings: none

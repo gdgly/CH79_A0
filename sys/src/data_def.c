@@ -4,7 +4,7 @@
  
 unsigned char Buf[3] ={0,0,0};
 
-
+unsigned int Chg_Current_Val_Small_Errer_t = 0;
 unsigned int ChgTemp_cnt = 0;
 unsigned int DisTemp_cnt = 0; 
 unsigned int DisTemp_Lock_Cnt = 0;

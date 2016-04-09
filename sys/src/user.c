@@ -914,6 +914,7 @@ void ClearStatus(void)
   }*/
   else if(WorkMode == IDLE_MODE)
   {   
+    Chg_Current_Val_Small_Errer_t = 0;
     DisTemp_Lock_Cnt = 0;
     //Bits_flag.Bit.AfeErr = 0;
     Dis_First_Run_Flag = 0;
@@ -1931,6 +1932,8 @@ void Var_Init(void)
   uint8_t i = 0;
   ChgTemp_cnt = 0;
   DisTemp_cnt = 0;
+  
+  Chg_Current_Val_Small_Errer_t = 0;
   Temp_Protect_Delay_t = 0;
   LowPower_MCU_Entry_Flag = 0; // MCU运行于低功耗状态标识符
   LedFlash_Off_t = 0;

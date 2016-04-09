@@ -65,7 +65,11 @@ void ChgDis_AbnormalCheck(void)
   if(WorkMode == CHARGE_MODE)
   { 
     FAULT_DETECT_CTRL_ON();
-    if((CC_Val < (-50)) || Bits_flag.Bit.AfeErr || IS_FAULT_ON() || Cell_Volt_Max >= 4300 ||SYS_STAT.Bit.DEVICE_XREADY)         // 充电状态检测到放电电流
+    if(Current_Val >= 10)
+    {
+      Chg_Current_Val_Small_Errer_t = 0;
+    }
+    if((CC_Val < (-50)) || Bits_flag.Bit.AfeErr || IS_FAULT_ON() || Cell_Volt_Max >= 4300 || SYS_STAT.Bit.DEVICE_XREADY ||(Chg_Current_Val_Small_Errer_t >= 18000))         // 充电状态检测到放电电流
     { 
 #ifdef Uart_Model_Enable
       if((AfeErr_Cnt ++) >= 10)

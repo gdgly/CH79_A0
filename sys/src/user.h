@@ -104,6 +104,7 @@ void LowPower_Powerdown_Enter(void);
 
 
 
+  extern unsigned int Chg_Current_Val_Small_Errer_t;
   extern unsigned int ChgTemp_cnt;
   extern unsigned int DisTemp_cnt; 
   extern unsigned int DisTemp_Lock_Cnt;
