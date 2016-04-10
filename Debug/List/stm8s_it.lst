@@ -1,6 +1,6 @@
 ###############################################################################
 #                                                                             #
-# IAR C/C++ Compiler V1.31.1.20058 [Evaluation] for STM809/Apr/2016  20:06:11 #
+# IAR C/C++ Compiler V1.31.1.20058 [Evaluation] for STM810/Apr/2016  16:54:44 #
 # Copyright 2010-2012 IAR Systems AB.                                         #
 #                                                                             #
 #    Source file  =  D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src #
@@ -488,330 +488,321 @@ D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src\stm8s_it.c
     449                {
     450                  Dis_First_Run_t = 0;
     451                }
-    452                //=======================================
-    453                if(Bits_flag.Bit.DisCurShort)
-    454                {
-    455                  if( DisCurShort_Re_t < MAX_UINT16_T_NUM)
-    456                  {
-    457                    DisCurShort_Re_t += 1;
-    458                  }
-    459                }
-    460                else
-    461                {
-    462                  DisCurShort_Re_t = 0;
-    463                }
-    464                //=======================================
-    465                if(DisCurOv_t < MAX_UINT16_T_NUM)
-    466                {
-    467                  DisCurOv_t += 1;
-    468                }
-    469                //=======================================
-    470                if(DisCurOv_t1 < MAX_UINT16_T_NUM)
-    471                {
-    472                  DisCurOv_t1 += 1;
-    473                }
-    474                //=======================================
-    475                if(DisCurOv_t2 < MAX_UINT16_T_NUM)
-    476                {
-    477                  DisCurOv_t2 += 1;
-    478                }
-    479                //=======================================
-    480                
-    481                if(Bits_flag.Bit.DisCurOv)
-    482                {
-    483                  if( DisCurOv_Re_t < MAX_UINT16_T_NUM)
-    484                  {
-    485                    DisCurOv_Re_t += 1;
-    486                  }
-    487                }
-    488                else
-    489                {
-    490                  DisCurOv_Re_t = 0;
-    491                }
-    492              } 
-    493            }
-    494            //=======================================
-    495            if(Bits_flag.Bit.AfeErr)
-    496            {
-    497              /*if(DEVICE_XREADY_Re_t < MAX_UINT16_T_NUM)
-    498              {
-    499                DEVICE_XREADY_Re_t += 1;
-    500              }*/
-    501              if(AfeErr_t < MAX_UINT16_T_NUM)
-    502              {
-    503                AfeErr_t += 1;
-    504              }
-    505            }
-    506            /*
-    507            else
-    508            {
-    509              DEVICE_XREADY_Re_t = 0; 
-    510            }*/
-    511            //=======================================
-    512            if(WorkMode ==IDLE_MODE)
-    513            {
-    514              if(LowPower_Entry_Delay_t < MAX_UINT16_T_NUM)
-    515              {
-    516                LowPower_Entry_Delay_t += 1;
-    517              }
-    518              if(PowerOff_Delay_t < MAX_UINT16_T_NUM)
-    519              {
-    520                PowerOff_Delay_t += 1;
-    521              }
-    522              if(LedFlash_Off_t < MAX_UINT16_T_NUM)
-    523              {
-    524                LedFlash_Off_t += 1;
-    525              }
-    526              
-    527            } 
-    528          }
-    529          
-    530          /**
-    531            * @brief  Timer2 Capture/Compare Interrupt routine
-    532            * @param  None
-    533            * @retval None
-    534            */
-    535           INTERRUPT_HANDLER(TIM2_CAP_COM_IRQHandler, 14)
-    536          {
-    537            /* In order to detect unexpected events during development,
-    538               it is recommended to set a breakpoint on the following instruction.
-    539            */
-    540            nop();
-    541          }
-    542          #endif /*STM8S903*/
-    543          
-    544          #if defined (STM8S208) || defined(STM8S207) || defined(STM8S105) || defined (STM8AF62Ax) ||\
-    545              defined (STM8AF52Ax) || defined (STM8AF626x)
-    546          /**
-    547            * @brief Timer3 Update/Overflow/Break Interrupt routine.
-    548            * @param  None
-    549            * @retval None
-    550            */
-    551           INTERRUPT_HANDLER(TIM3_UPD_OVF_BRK_IRQHandler, 15)
-    552          {
-    553            /* In order to detect unexpected events during development,
-    554               it is recommended to set a breakpoint on the following instruction.
-    555            */
-    556            nop();
-    557          }
-    558          
-    559          /**
-    560            * @brief  Timer3 Capture/Compare Interrupt routine
-    561            * @param  None
-    562            * @retval None
-    563            */
-    564           INTERRUPT_HANDLER(TIM3_CAP_COM_IRQHandler, 16)
-    565          {
-    566            /* In order to detect unexpected events during development,
-    567               it is recommended to set a breakpoint on the following instruction.
-    568            */
-    569            nop();
-    570          }
-    571          #endif /*STM8S208, STM8S207 or STM8S105 or STM8AF62Ax or STM8AF52Ax or STM8AF626x */
-    572          
-    573          #if defined (STM8S208) || defined(STM8S207) || defined(STM8S103) || defined (STM8AF62Ax) ||\
-    574              defined (STM8AF52Ax) || defined (STM8S903)
-    575          /**
-    576            * @brief  UART1 TX Interrupt routine
-    577            * @param  None
-    578            * @retval None
-    579            */
-    580           INTERRUPT_HANDLER(UART1_TX_IRQHandler, 17)
-    581          {
-    582            /* In order to detect unexpected events during development,
-    583               it is recommended to set a breakpoint on the following instruction.
-    584            */
-    585            nop();
-    586            //UART1_ClearFlag(UART1_FLAG_RXNE); 
-    587            //if(*str!=0)
-    588            //UART1_SendData8(*srt);
-    589            //srt++;
-    590          
-    591            
-    592          }
-    593          
-    594          /**
-    595            * @brief  UART1 RX Interrupt routine
-    596            * @param  None
-    597            * @retval None
-    598            */
-    599           INTERRUPT_HANDLER(UART1_RX_IRQHandler, 18)
-    600          {
-    601            /* In order to detect unexpected events during development,
-    602               it is recommended to set a breakpoint on the following instruction.
-    603            */
-    604            
-    605            //UART1_ClearFlag(UART1_FLAG_RXNE); 
-    606            //Uart1DataReceived();
-    607            //UART1_SR &=0xD7;
-    608            //UART_Revc = UART1_DR; 
-    609          }
-    610          #endif /*STM8S105*/
-    611          
-    612          /**
-    613            * @brief  I2C Interrupt routine
-    614            * @param  None
-    615            * @retval None
-    616            */
-    617          INTERRUPT_HANDLER(I2C_IRQHandler, 19)
-    618          {
-    619            /* In order to detect unexpected events during development,
-    620               it is recommended to set a breakpoint on the following instruction.
-    621            */
-    622            nop();
-    623            I2C->SR1 = 0; 
-    624          }
-    625          
-    626          #if defined (STM8S105) || defined (STM8AF626x)
-    627          /**
-    628            * @brief  UART2 TX interrupt routine.
-    629            * @param  None
-    630            * @retval None
-    631            */
-    632           INTERRUPT_HANDLER(UART2_TX_IRQHandler, 20)
-    633          {
-    634              /* In order to detect unexpected events during development,
-    635                 it is recommended to set a breakpoint on the following instruction.
-    636              */
-    637            nop();
-    638            }
-    639          
-    640          /**
-    641            * @brief  UART2 RX interrupt routine.
-    642            * @param  None
-    643            * @retval None
-    644            */
-    645           INTERRUPT_HANDLER(UART2_RX_IRQHandler, 21)
-    646          {
-    647              /* In order to detect unexpected events during development,
-    648                 it is recommended to set a breakpoint on the following instruction.
-    649              */
-    650            nop();
-    651            }
-    652          #endif /* STM8S105*/
-    653          
-    654          #if defined(STM8S207) || defined(STM8S208) || defined (STM8AF52Ax) || defined (STM8AF62Ax)
-    655          /**
-    656            * @brief  UART3 TX interrupt routine.
-    657            * @param  None
-    658            * @retval None
-    659            */
-    660           INTERRUPT_HANDLER(UART3_TX_IRQHandler, 20)
-    661          {
-    662              /* In order to detect unexpected events during development,
-    663                 it is recommended to set a breakpoint on the following instruction.
-    664              */
-    665            nop();
-    666            }
-    667          
-    668          /**
-    669            * @brief  UART3 RX interrupt routine.
-    670            * @param  None
-    671            * @retval None
-    672            */
-    673           INTERRUPT_HANDLER(UART3_RX_IRQHandler, 21)
-    674          {
-    675              /* In order to detect unexpected events during development,
-    676                 it is recommended to set a breakpoint on the following instruction.
-    677              */
-    678            nop();
-    679            }
-    680          #endif /*STM8S208 or STM8S207 or STM8AF52Ax or STM8AF62Ax */
+    452               /*
+    453                //=======================================
+    454                if(Bits_flag.Bit.DisCurShort)
+    455                {
+    456                  if( DisCurShort_Re_t < MAX_UINT16_T_NUM)
+    457                  {
+    458                    DisCurShort_Re_t += 1;
+    459                  }
+    460                }
+    461                else
+    462                {
+    463                  DisCurShort_Re_t = 0;
+    464                }
+    465                
+    466                //=======================================
+    467                if(DisCurOv_t < MAX_UINT16_T_NUM)
+    468                {
+    469                  DisCurOv_t += 1;
+    470                }
+    471               */
+    472                //=======================================
+    473                if(DisCurOv_t1 < MAX_UINT16_T_NUM)
+    474                {
+    475                  DisCurOv_t1 += 1;
+    476                }
+    477                //=======================================
+    478                if(DisCurOv_t2 < MAX_UINT16_T_NUM)
+    479                {
+    480                  DisCurOv_t2 += 1;
+    481                }
+    482                //======================================= 
+    483              } 
+    484            }
+    485            //=======================================
+    486            if(Bits_flag.Bit.AfeErr)
+    487            {
+    488              /*if(DEVICE_XREADY_Re_t < MAX_UINT16_T_NUM)
+    489              {
+    490                DEVICE_XREADY_Re_t += 1;
+    491              }*/
+    492              if(AfeErr_t < MAX_UINT16_T_NUM)
+    493              {
+    494                AfeErr_t += 1;
+    495              }
+    496            }
+    497            /*
+    498            else
+    499            {
+    500              DEVICE_XREADY_Re_t = 0; 
+    501            }*/
+    502            //=======================================
+    503            if(WorkMode ==IDLE_MODE)
+    504            {
+    505              if(LowPower_Entry_Delay_t < MAX_UINT16_T_NUM)
+    506              {
+    507                LowPower_Entry_Delay_t += 1;
+    508              }
+    509              if(PowerOff_Delay_t < MAX_UINT16_T_NUM)
+    510              {
+    511                PowerOff_Delay_t += 1;
+    512              }
+    513              if(LedFlash_Off_t < MAX_UINT16_T_NUM)
+    514              {
+    515                LedFlash_Off_t += 1;
+    516              }
+    517              
+    518            } 
+    519          }
+    520          
+    521          /**
+    522            * @brief  Timer2 Capture/Compare Interrupt routine
+    523            * @param  None
+    524            * @retval None
+    525            */
+    526           INTERRUPT_HANDLER(TIM2_CAP_COM_IRQHandler, 14)
+    527          {
+    528            /* In order to detect unexpected events during development,
+    529               it is recommended to set a breakpoint on the following instruction.
+    530            */
+    531            nop();
+    532          }
+    533          #endif /*STM8S903*/
+    534          
+    535          #if defined (STM8S208) || defined(STM8S207) || defined(STM8S105) || defined (STM8AF62Ax) ||\
+    536              defined (STM8AF52Ax) || defined (STM8AF626x)
+    537          /**
+    538            * @brief Timer3 Update/Overflow/Break Interrupt routine.
+    539            * @param  None
+    540            * @retval None
+    541            */
+    542           INTERRUPT_HANDLER(TIM3_UPD_OVF_BRK_IRQHandler, 15)
+    543          {
+    544            /* In order to detect unexpected events during development,
+    545               it is recommended to set a breakpoint on the following instruction.
+    546            */
+    547            nop();
+    548          }
+    549          
+    550          /**
+    551            * @brief  Timer3 Capture/Compare Interrupt routine
+    552            * @param  None
+    553            * @retval None
+    554            */
+    555           INTERRUPT_HANDLER(TIM3_CAP_COM_IRQHandler, 16)
+    556          {
+    557            /* In order to detect unexpected events during development,
+    558               it is recommended to set a breakpoint on the following instruction.
+    559            */
+    560            nop();
+    561          }
+    562          #endif /*STM8S208, STM8S207 or STM8S105 or STM8AF62Ax or STM8AF52Ax or STM8AF626x */
+    563          
+    564          #if defined (STM8S208) || defined(STM8S207) || defined(STM8S103) || defined (STM8AF62Ax) ||\
+    565              defined (STM8AF52Ax) || defined (STM8S903)
+    566          /**
+    567            * @brief  UART1 TX Interrupt routine
+    568            * @param  None
+    569            * @retval None
+    570            */
+    571           INTERRUPT_HANDLER(UART1_TX_IRQHandler, 17)
+    572          {
+    573            /* In order to detect unexpected events during development,
+    574               it is recommended to set a breakpoint on the following instruction.
+    575            */
+    576            nop();
+    577            //UART1_ClearFlag(UART1_FLAG_RXNE); 
+    578            //if(*str!=0)
+    579            //UART1_SendData8(*srt);
+    580            //srt++;
+    581          
+    582            
+    583          }
+    584          
+    585          /**
+    586            * @brief  UART1 RX Interrupt routine
+    587            * @param  None
+    588            * @retval None
+    589            */
+    590           INTERRUPT_HANDLER(UART1_RX_IRQHandler, 18)
+    591          {
+    592            /* In order to detect unexpected events during development,
+    593               it is recommended to set a breakpoint on the following instruction.
+    594            */
+    595            
+    596            //UART1_ClearFlag(UART1_FLAG_RXNE); 
+    597            //Uart1DataReceived();
+    598            //UART1_SR &=0xD7;
+    599            //UART_Revc = UART1_DR; 
+    600          }
+    601          #endif /*STM8S105*/
+    602          
+    603          /**
+    604            * @brief  I2C Interrupt routine
+    605            * @param  None
+    606            * @retval None
+    607            */
+    608          INTERRUPT_HANDLER(I2C_IRQHandler, 19)
+    609          {
+    610            /* In order to detect unexpected events during development,
+    611               it is recommended to set a breakpoint on the following instruction.
+    612            */
+    613            nop();
+    614            I2C->SR1 = 0; 
+    615          }
+    616          
+    617          #if defined (STM8S105) || defined (STM8AF626x)
+    618          /**
+    619            * @brief  UART2 TX interrupt routine.
+    620            * @param  None
+    621            * @retval None
+    622            */
+    623           INTERRUPT_HANDLER(UART2_TX_IRQHandler, 20)
+    624          {
+    625              /* In order to detect unexpected events during development,
+    626                 it is recommended to set a breakpoint on the following instruction.
+    627              */
+    628            nop();
+    629            }
+    630          
+    631          /**
+    632            * @brief  UART2 RX interrupt routine.
+    633            * @param  None
+    634            * @retval None
+    635            */
+    636           INTERRUPT_HANDLER(UART2_RX_IRQHandler, 21)
+    637          {
+    638              /* In order to detect unexpected events during development,
+    639                 it is recommended to set a breakpoint on the following instruction.
+    640              */
+    641            nop();
+    642            }
+    643          #endif /* STM8S105*/
+    644          
+    645          #if defined(STM8S207) || defined(STM8S208) || defined (STM8AF52Ax) || defined (STM8AF62Ax)
+    646          /**
+    647            * @brief  UART3 TX interrupt routine.
+    648            * @param  None
+    649            * @retval None
+    650            */
+    651           INTERRUPT_HANDLER(UART3_TX_IRQHandler, 20)
+    652          {
+    653              /* In order to detect unexpected events during development,
+    654                 it is recommended to set a breakpoint on the following instruction.
+    655              */
+    656            nop();
+    657            }
+    658          
+    659          /**
+    660            * @brief  UART3 RX interrupt routine.
+    661            * @param  None
+    662            * @retval None
+    663            */
+    664           INTERRUPT_HANDLER(UART3_RX_IRQHandler, 21)
+    665          {
+    666              /* In order to detect unexpected events during development,
+    667                 it is recommended to set a breakpoint on the following instruction.
+    668              */
+    669            nop();
+    670            }
+    671          #endif /*STM8S208 or STM8S207 or STM8AF52Ax or STM8AF62Ax */
+    672          
+    673          #if defined(STM8S207) || defined(STM8S208) || defined (STM8AF52Ax) || defined (STM8AF62Ax)
+    674          /**
+    675            * @brief  ADC2 interrupt routine.
+    676            * @param  None
+    677            * @retval None
+    678            */
+    679           INTERRUPT_HANDLER(ADC2_IRQHandler, 22)
+    680          {
     681          
-    682          #if defined(STM8S207) || defined(STM8S208) || defined (STM8AF52Ax) || defined (STM8AF62Ax)
-    683          /**
-    684            * @brief  ADC2 interrupt routine.
-    685            * @param  None
-    686            * @retval None
-    687            */
-    688           INTERRUPT_HANDLER(ADC2_IRQHandler, 22)
-    689          {
-    690          
-    691              /* In order to detect unexpected events during development,
-    692                 it is recommended to set a breakpoint on the following instruction.
-    693              */
-    694            nop();
-    695              return;
-    696          
-    697          }
-    698          #else /*STM8S105, STM8S103 or STM8S903 or STM8AF626x */
-    699          /**
-    700            * @brief  ADC1 interrupt routine.
-    701            * @param  None
-    702            * @retval None
-    703            */
-    704           INTERRUPT_HANDLER(ADC1_IRQHandler, 22)
-    705          {
+    682              /* In order to detect unexpected events during development,
+    683                 it is recommended to set a breakpoint on the following instruction.
+    684              */
+    685            nop();
+    686              return;
+    687          
+    688          }
+    689          #else /*STM8S105, STM8S103 or STM8S903 or STM8AF626x */
+    690          /**
+    691            * @brief  ADC1 interrupt routine.
+    692            * @param  None
+    693            * @retval None
+    694            */
+    695           INTERRUPT_HANDLER(ADC1_IRQHandler, 22)
+    696          {
+    697          
+    698              /* In order to detect unexpected events during development,
+    699                 it is recommended to set a breakpoint on the following instruction.
+    700              */
+    701            nop();
+    702              return;
+    703          
+    704          }
+    705          #endif /*STM8S208 or STM8S207 or STM8AF52Ax or STM8AF62Ax */
     706          
-    707              /* In order to detect unexpected events during development,
-    708                 it is recommended to set a breakpoint on the following instruction.
-    709              */
-    710            nop();
-    711              return;
-    712          
-    713          }
-    714          #endif /*STM8S208 or STM8S207 or STM8AF52Ax or STM8AF62Ax */
-    715          
-    716          #ifdef STM8S903
-    717          /**
-    718            * @brief  Timer6 Update/Overflow/Trigger Interrupt routine
-    719            * @param  None
-    720            * @retval None
-    721            */
-    722          INTERRUPT_HANDLER(TIM6_UPD_OVF_TRG_IRQHandler, 23)
-    723          {
-    724            /* In order to detect unexpected events during development,
-    725               it is recommended to set a breakpoint on the following instruction.
-    726            */
-    727          //200uS INTERRUPT FOR USER CODE 
-    728           TIM6_ClearFlag(TIM6_FLAG_UPDATE);
-    729          
-    730            nop();
-    731           //TIM6_SR1 = 0x00;
-    732          //--------------------test only
-    733          
-    734           //GPIO_WriteReverse(GPIOD, GPIO_PIN_2 | GPIO_PIN_3 |GPIO_PIN_4 |GPIO_PIN_5);
-    735          
-    736            
-    737              
-    738            }  
-    739          #else /*STM8S208, STM8S207, STM8S105 or STM8S103 or STM8AF62Ax or STM8AF52Ax or STM8AF626x */
-    740          /**
-    741            * @brief  Timer4 Update/Overflow Interrupt routine
-    742            * @param  None
-    743            * @retval None
-    744            */
-    745           INTERRUPT_HANDLER(TIM4_UPD_OVF_IRQHandler, 23)
-    746          { 
-    747            
-    748             TIM4->SR1 &= ~0x01;
-    749             //-------------------extern unsigned int DisLedW_t,DisLedW_tt; 
-    750             if(Delay_time_t > 0)
-    751             {
-    752               Delay_time_t -= 1;
-    753             }
-    754             
-    755             //==================================== 
-    756          }
-    757          #endif /*STM8S903*/
-    758          
-    759          /**
-    760            * @brief  Eeprom EEC Interrupt routine
-    761            * @param  None
-    762            * @retval None
-    763            */
-    764          INTERRUPT_HANDLER(EEPROM_EEC_IRQHandler, 24)
-    765          {
-    766            /* In order to detect unexpected events during development,
-    767               it is recommended to set a breakpoint on the following instruction.
-    768            */
-    769          }
-    770          
-    771          /**
-    772            * @}
-    773            */
-    774          
-    775          /******************* (C) COPYRIGHT 2011 STMicroelectronics *****END OF FILE****/
+    707          #ifdef STM8S903
+    708          /**
+    709            * @brief  Timer6 Update/Overflow/Trigger Interrupt routine
+    710            * @param  None
+    711            * @retval None
+    712            */
+    713          INTERRUPT_HANDLER(TIM6_UPD_OVF_TRG_IRQHandler, 23)
+    714          {
+    715            /* In order to detect unexpected events during development,
+    716               it is recommended to set a breakpoint on the following instruction.
+    717            */
+    718          //200uS INTERRUPT FOR USER CODE 
+    719           TIM6_ClearFlag(TIM6_FLAG_UPDATE);
+    720          
+    721            nop();
+    722           //TIM6_SR1 = 0x00;
+    723          //--------------------test only
+    724          
+    725           //GPIO_WriteReverse(GPIOD, GPIO_PIN_2 | GPIO_PIN_3 |GPIO_PIN_4 |GPIO_PIN_5);
+    726          
+    727            
+    728              
+    729            }  
+    730          #else /*STM8S208, STM8S207, STM8S105 or STM8S103 or STM8AF62Ax or STM8AF52Ax or STM8AF626x */
+    731          /**
+    732            * @brief  Timer4 Update/Overflow Interrupt routine
+    733            * @param  None
+    734            * @retval None
+    735            */
+    736           INTERRUPT_HANDLER(TIM4_UPD_OVF_IRQHandler, 23)
+    737          { 
+    738            
+    739             TIM4->SR1 &= ~0x01;
+    740             //-------------------extern unsigned int DisLedW_t,DisLedW_tt; 
+    741             if(Delay_time_t > 0)
+    742             {
+    743               Delay_time_t -= 1;
+    744             }
+    745             
+    746             //==================================== 
+    747          }
+    748          #endif /*STM8S903*/
+    749          
+    750          /**
+    751            * @brief  Eeprom EEC Interrupt routine
+    752            * @param  None
+    753            * @retval None
+    754            */
+    755          INTERRUPT_HANDLER(EEPROM_EEC_IRQHandler, 24)
+    756          {
+    757            /* In order to detect unexpected events during development,
+    758               it is recommended to set a breakpoint on the following instruction.
+    759            */
+    760          }
+    761          
+    762          /**
+    763            * @}
+    764            */
+    765          
+    766          /******************* (C) COPYRIGHT 2011 STMicroelectronics *****END OF FILE****/
 
    Section sizes:
 
@@ -831,7 +822,7 @@ D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src\stm8s_it.c
      TIM1_UPD_OVF_TRG_BRK_IRQHandler
                                        2
      TIM1_CAP_COM_IRQHandler           2
-     TIM2_UPD_OVF_BRK_IRQHandler     469
+     TIM2_UPD_OVF_BRK_IRQHandler     413
      cntr100ms                         1
      Init_Soc_Flag_Delay               2
      TIM2_CAP_COM_IRQHandler           2
@@ -845,9 +836,9 @@ D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src\stm8s_it.c
  
    3 bytes in section .near.bss
    1 byte  in section .near.noinit
- 533 bytes in section .near_func.text
+ 477 bytes in section .near_func.text
  
- 533 bytes of CODE memory
+ 477 bytes of CODE memory
    3 bytes of DATA memory (+ 1 byte shared)
 
 Errors: none

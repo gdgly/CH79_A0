@@ -16,7 +16,7 @@ void main(void)
   disableInterrupts();        // 关闭MCU全局变量
   SysInit();                  // 系统初始化，MCU时钟配置、ADC模块初始化
   PortInit();                 // MCU管脚配置
-  //PC_ODR_ODR7 = 1;
+  ALERT_PIN_HIGH();
   VCC1_ON();
   //LED2_ON();                // 复位后亮LED1，在完成AFE IC初始化之后，熄灭
   I2C_Model_Init();           // 启用MCU的IIC模块
@@ -34,11 +34,22 @@ void main(void)
   //Soc_OCV_CorrectEn_Flag = 1; // 上电允许SOC的OCV校准 
   //Afe_ADC_Disable();        // 100+uA
   //Afe_Temp_Disable();       // 100+uA
+  
   WorkMode = DISCHARGE_MODE;  
-  DisExchangeMode_Cnt = 100;  
-  Bits_flag.Bit.DisOv = 1;    
+  DisExchangeMode_Cnt  = 100;  
+  IdleExchangeMode_Cnt = 0;
+  ChgExchangeMode_Cnt  = 50; 
+  Bits_flag.Bit.DisOv  = 1;    
+  
+  DisCurOv_t1 = 0;
+  DisCurOv_t2 = 0;
+  CC_Volt_Sample_Cnt = 0;
+  
   //Bits_flag.Bit.DisTemp = 1; 
   DisTemp_cnt = 0;
+  ALERT_PIN_LOW();
+       
+  
   while(1)
   {
     //=========

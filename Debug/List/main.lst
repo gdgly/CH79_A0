@@ -1,6 +1,6 @@
 ###############################################################################
 #                                                                             #
-# IAR C/C++ Compiler V1.31.1.20058 [Evaluation] for STM809/Apr/2016  20:06:11 #
+# IAR C/C++ Compiler V1.31.1.20058 [Evaluation] for STM810/Apr/2016  18:30:32 #
 # Copyright 2010-2012 IAR Systems AB.                                         #
 #                                                                             #
 #    Source file  =  D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src #
@@ -55,7 +55,7 @@ D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src\main.c
      16            disableInterrupts();        // 关闭MCU全局变量
      17            SysInit();                  // 系统初始化，MCU时钟配置、ADC模块初始化
      18            PortInit();                 // MCU管脚配置
-     19            //PC_ODR_ODR7 = 1;
+     19            ALERT_PIN_HIGH();
      20            VCC1_ON();
      21            //LED2_ON();                // 复位后亮LED1，在完成AFE IC初始化之后，熄灭
      22            I2C_Model_Init();           // 启用MCU的IIC模块
@@ -73,98 +73,109 @@ D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src\main.c
      34            //Soc_OCV_CorrectEn_Flag = 1; // 上电允许SOC的OCV校准 
      35            //Afe_ADC_Disable();        // 100+uA
      36            //Afe_Temp_Disable();       // 100+uA
-     37            WorkMode = DISCHARGE_MODE;  
-     38            DisExchangeMode_Cnt = 100;  
-     39            Bits_flag.Bit.DisOv = 1;    
-     40            //Bits_flag.Bit.DisTemp = 1; 
-     41            DisTemp_cnt = 0;
-     42            while(1)
-     43            {
-     44              //=========
-     45              // 问题1：放电状态下，电芯电压处于过充时，BQ会自动关闭充电MOS管;   解决方案：放电状态下，重新设置硬件过充电压为4.3V
-     46              // 问题2：充电状态下，电芯电压处于过放时，BQ会自动关闭放电MOS管;   解决方案：充电状态下，重新设置硬件过充电压为1.5V
-     47              // 问题3：（充放电及空载识别问题）欠压状态下，插上充电器时，识别不了充电器;  
-     48                        //解决方案：检测无Triger信号时，为空载模式; Triger信号范围在[]时，或检测到有负载信号、或放电电流 >= 10mA 时，为放电模式，否则为充电模式.
-     49              // 问题4：BQ供给MCU的3.3V不稳定;
-     50              // 问题5：拨出负载时，BQ有时会出现电流采样值变大的异常;
-     51              // 问题6：
-     52              ClrWdt();                          // 刷新看门狗 1.02S未刷新系统复位 
-     53              
-     54              Afe_Get_SysStatus();               // AFE IC 状态检测，包括充放电MOS管开关状态、电流采样结束状态、AFE IC（错误、过流、短路、过充、过放）异常状态
-     55             
-     56          #ifdef Uart_Model_Enable
-     57              Uart_SendStr("\r\n");
-     58              Uart_SendStr("\r\n SYS_STAT = ");   Uart_SendData(SYS_STAT.Byte,16);  
-     59              Uart_SendStr(" SYS_CTRL1 = ");      Uart_SendData(SYS_CTRL1.Byte,16); 
-     60              Uart_SendStr(" SYS_CTRL2 = ");      Uart_SendData(SYS_CTRL2.Byte,16);  
-     61          #endif
-     62              
-     63              ModeCheck();         // 充电、放电、空载工作模式检测 
+     37            
+     38            WorkMode = DISCHARGE_MODE;  
+     39            DisExchangeMode_Cnt  = 100;  
+     40            IdleExchangeMode_Cnt = 0;
+     41            ChgExchangeMode_Cnt  = 50; 
+     42            Bits_flag.Bit.DisOv  = 1;    
+     43            
+     44            DisCurOv_t1 = 0;
+     45            DisCurOv_t2 = 0;
+     46            CC_Volt_Sample_Cnt = 0;
+     47            
+     48            //Bits_flag.Bit.DisTemp = 1; 
+     49            DisTemp_cnt = 0;
+     50            ALERT_PIN_LOW();
+     51                 
+     52            
+     53            while(1)
+     54            {
+     55              //=========
+     56              // 问题1：放电状态下，电芯电压处于过充时，BQ会自动关闭充电MOS管;   解决方案：放电状态下，重新设置硬件过充电压为4.3V
+     57              // 问题2：充电状态下，电芯电压处于过放时，BQ会自动关闭放电MOS管;   解决方案：充电状态下，重新设置硬件过充电压为1.5V
+     58              // 问题3：（充放电及空载识别问题）欠压状态下，插上充电器时，识别不了充电器;  
+     59                        //解决方案：检测无Triger信号时，为空载模式; Triger信号范围在[]时，或检测到有负载信号、或放电电流 >= 10mA 时，为放电模式，否则为充电模式.
+     60              // 问题4：BQ供给MCU的3.3V不稳定;
+     61              // 问题5：拨出负载时，BQ有时会出现电流采样值变大的异常;
+     62              // 问题6：
+     63              ClrWdt();                          // 刷新看门狗 1.02S未刷新系统复位 
      64              
-     65              ClearStatus();       // 各工作模式下的变量清零处理
-     66              
-     67              Afe_Volt_Val_Get();  // AFE IC 温度值、电芯电压值、电流值采样
-     68              
-     69              CurrentCheck();      // 电流异常检测
-     70              
-     71              VoltCheck();         // 电压异常检测
-     72              
-     73              TempCheck();         // 温度异常检测
-     74              
-     75              CellBal_Cntrl();     // 充电均衡控制管理
-     76              
-     77              ChgDis_AbnormalCheck();         // 充放电状态下出现电流异常
-     78               
-     79              Afe_FET_ChgDis_Cntrl();         // 充放电MOS管控制管理
-     80              
-     81              //Afe_AbnormalCheck();          // AFE IC 内部异常检测
-     82              
-     83              LedShow_Cntrl();     // LedShow_WorkMode();   // 工作电量指示灯显示
-     84               
-     85          #ifdef Uart_Model_Enable  
-     86              
-     87              Uart_SendStr(" Check_Val= ");     Uart_SendData((uint16_t)Check_Val,10);
-     88              Uart_SendStr(" WorkMode= ");      Uart_SendData(WorkMode,16); 
-     89              Uart_SendStr(" Bits_flag = ");    Uart_SendData(Bits_flag.Byte,16); 
-     90               
-     91              Uart_SendStr(" Current_Val= ");   Uart_SendData((uint16_t)Current_Val,10);
-     92              Uart_SendStr(" Volt_Avg= ");      Uart_SendData(Cell_Volt_Avg,10);
-     93              Uart_SendStr(" Max= ");           Uart_SendData(Cell_Volt_Max,10);
-     94              Uart_SendStr(" Min= ");           Uart_SendData(Cell_Volt_Min,10);
-     95                 
-     96              Uart_SendStr(" soc_rt= ");        Uart_SendData((uint16_t)SocCalc.soc_rt,10); 
-     97              Uart_SendStr(" ah= ");            Uart_SendData((uint16_t)SocReg.ah,10);
-     98              Uart_SendStr(" CellBal = ");      Uart_SendData((uint16_t)CellBalance_Selct,16);  
-     99              Uart_SendStr(" Temp_Val = ");     Uart_SendData((uint16_t)Temp_Val,10); 
-    100              /*  
-    101              Uart_SendStr("\r\n");
-    102              for(i =0;i<10;i++)
-    103              { 
-    104                Uart_SendStr(" C_");
-    105                Uart_SendData(i,10);
-    106                Uart_SendStr("= ");
-    107                Uart_SendData(Cell_Volt[i],10);
-    108              } 
-    109              */
-    110          #endif 
-    111              LowPower_Cntrl();        // 低功耗控制管理
-    112            }    
-    113           
-    114          }
-    115           
-    116          
-    117          
-    118          
-    119          
-    120          
-    121          
-    122          
-    123          
-    124          
-    125          
-    126          
+     65              Afe_Get_SysStatus();               // AFE IC 状态检测，包括充放电MOS管开关状态、电流采样结束状态、AFE IC（错误、过流、短路、过充、过放）异常状态
+     66             
+     67          #ifdef Uart_Model_Enable
+     68              Uart_SendStr("\r\n");
+     69              Uart_SendStr("\r\n SYS_STAT = ");   Uart_SendData(SYS_STAT.Byte,16);  
+     70              Uart_SendStr(" SYS_CTRL1 = ");      Uart_SendData(SYS_CTRL1.Byte,16); 
+     71              Uart_SendStr(" SYS_CTRL2 = ");      Uart_SendData(SYS_CTRL2.Byte,16);  
+     72          #endif
+     73              
+     74              ModeCheck();         // 充电、放电、空载工作模式检测 
+     75              
+     76              ClearStatus();       // 各工作模式下的变量清零处理
+     77              
+     78              Afe_Volt_Val_Get();  // AFE IC 温度值、电芯电压值、电流值采样
+     79              
+     80              CurrentCheck();      // 电流异常检测
+     81              
+     82              VoltCheck();         // 电压异常检测
+     83              
+     84              TempCheck();         // 温度异常检测
+     85              
+     86              CellBal_Cntrl();     // 充电均衡控制管理
+     87              
+     88              ChgDis_AbnormalCheck();         // 充放电状态下出现电流异常
+     89               
+     90              Afe_FET_ChgDis_Cntrl();         // 充放电MOS管控制管理
+     91              
+     92              //Afe_AbnormalCheck();          // AFE IC 内部异常检测
+     93              
+     94              LedShow_Cntrl();     // LedShow_WorkMode();   // 工作电量指示灯显示
+     95               
+     96          #ifdef Uart_Model_Enable  
+     97              
+     98              Uart_SendStr(" Check_Val= ");     Uart_SendData((uint16_t)Check_Val,10);
+     99              Uart_SendStr(" WorkMode= ");      Uart_SendData(WorkMode,16); 
+    100              Uart_SendStr(" Bits_flag = ");    Uart_SendData(Bits_flag.Byte,16); 
+    101               
+    102              Uart_SendStr(" Current_Val= ");   Uart_SendData((uint16_t)Current_Val,10);
+    103              Uart_SendStr(" Volt_Avg= ");      Uart_SendData(Cell_Volt_Avg,10);
+    104              Uart_SendStr(" Max= ");           Uart_SendData(Cell_Volt_Max,10);
+    105              Uart_SendStr(" Min= ");           Uart_SendData(Cell_Volt_Min,10);
+    106                 
+    107              Uart_SendStr(" soc_rt= ");        Uart_SendData((uint16_t)SocCalc.soc_rt,10); 
+    108              Uart_SendStr(" ah= ");            Uart_SendData((uint16_t)SocReg.ah,10);
+    109              Uart_SendStr(" CellBal = ");      Uart_SendData((uint16_t)CellBalance_Selct,16);  
+    110              Uart_SendStr(" Temp_Val = ");     Uart_SendData((uint16_t)Temp_Val,10); 
+    111              /*  
+    112              Uart_SendStr("\r\n");
+    113              for(i =0;i<10;i++)
+    114              { 
+    115                Uart_SendStr(" C_");
+    116                Uart_SendData(i,10);
+    117                Uart_SendStr("= ");
+    118                Uart_SendData(Cell_Volt[i],10);
+    119              } 
+    120              */
+    121          #endif 
+    122              LowPower_Cntrl();        // 低功耗控制管理
+    123            }    
+    124           
+    125          }
+    126           
     127          
     128          
+    129          
+    130          
+    131          
+    132          
+    133          
+    134          
+    135          
+    136          
+    137          
+    138          
+    139          
 
    Section sizes:
 
@@ -172,14 +183,14 @@ D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src\main.c
      -------------- -----
      _A_PA_ODR         1
      _A_PC_ODR         1
-     main             97
+     main            122
 
  
-  2 bytes in section .near.noinit
- 97 bytes in section .near_func.text
+   2 bytes in section .near.noinit
+ 122 bytes in section .near_func.text
  
- 97 bytes of CODE memory
-  0 bytes of DATA memory (+ 2 bytes shared)
+ 122 bytes of CODE memory
+   0 bytes of DATA memory (+ 2 bytes shared)
 
 Errors: none
 Warnings: 1

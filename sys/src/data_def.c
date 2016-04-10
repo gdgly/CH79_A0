@@ -38,6 +38,7 @@ unsigned int Temp_Val;
 unsigned int V_TS2_Val; 
 unsigned int R_TS2_Val;  
 
+unsigned char     SYS_STAT_Last_tmp;
 unsigned char     SYS_STAT_Last;
 unsigned char     CELLBAL1_Last;
 unsigned char     CELLBAL2_Last;

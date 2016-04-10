@@ -59,13 +59,12 @@ uint16_t Afe_Get_Adc(uint8_t addr)
 */
 void ChgDis_AbnormalCheck(void)
 {
-  static uint8_t AfeErr_Cnt = 0;
- 
+  static uint8_t AfeErr_Cnt = 0; 
   //========================================
   if(WorkMode == CHARGE_MODE)
   { 
     FAULT_DETECT_CTRL_ON();
-    if(!SYS_CTRL2.Bit.CHG_ON || (SYS_CTRL2.Bit.CHG_ON && Current_Val >= 10))
+    if(!SYS_CTRL2.Bit.CHG_ON || (SYS_CTRL2.Bit.CHG_ON && CC_Val >= 10))
     {
       Chg_Current_Val_Small_Errer_t = 0;
     }
@@ -128,8 +127,9 @@ void ChgDis_AbnormalCheck(void)
     Bits_flag.Bit.AfeErr = 1;
   } 
   if(Bits_flag.Bit.AfeErr )//&& DEVICE_XREADY_Re_t >= DEVICE_XREADY_Re_SET)//SYS_STAT.Bit.DEVICE_XREADY
-  {
+  { 
     SYS_STAT_Last |= 0x30;
+    //SYS_STAT_Last_tmp = SYS_STAT_Last & 0xF0
     I2C_Write(SYS_STAT_ADDR,SYS_STAT_Last);
     SYS_STAT_Last &= ~0x30;
     
@@ -151,15 +151,16 @@ void Afe_AbnormalCheck(void)
    
   if(SYS_STAT.Bit.OVRD_ALERT)
   {
+    //SYS_STAT_Last &= ~0x0F;
     SYS_STAT_Last |= 0x10;
     I2C_Write(SYS_STAT_ADDR,SYS_STAT_Last);
     SYS_STAT_Last &= ~0x10;
     SYS_STAT.Bit.OVRD_ALERT = 0;
   }*/
   if(Bits_flag.Bit.AfeErr )//&& DEVICE_XREADY_Re_t >= DEVICE_XREADY_Re_SET)//SYS_STAT.Bit.DEVICE_XREADY
-  {
+  {  
     SYS_STAT_Last |= 0x30;
-    I2C_Write(SYS_STAT_ADDR,SYS_STAT_Last);
+    I2C_Write(SYS_STAT_ADDR,SYS_STAT_Last & 0xF0);
     SYS_STAT_Last &= ~0x30;
     
     SYS_STAT.Bit.DEVICE_XREADY = 0;
@@ -258,11 +259,13 @@ void Afe_Device_Init(void)
 { 
   uint8_t tmp = 0; 
   //==For optimal performance, these bits should be programmed to 0x19 upon device startup
-  I2C_Write(CC_CFG_ADDR,CC_CFG_INIT_VAL);   // 初始化CC_CFG寄存器为0x19
- 
+  I2C_Write(CC_CFG_ADDR,CC_CFG_INIT_VAL);   // 初始化CC_CFG寄存器为0x19 
+  
+  Afe_FET_ChgOff_DisOff(); // 关闭充电MOS、关闭放电MOS 
   //Delay_ms(100); 
   I2C_Write(SYS_STAT_ADDR,0xFF);   // SYS_STAT寄存器清零，写"1"清零
-  SYS_STAT_Last = 0x00;          
+  SYS_STAT_Last = 0x00;  
+  SYS_STAT_Last_tmp = 0x00;
   ClrWdt(); 
   //Delay_us(50);  
    /**/
@@ -563,7 +566,9 @@ void Afe_OCD_Set(uint16_t OCD_val, uint16_t OCD_delay)
   }
   //== Protect page36
   OCD_delay_tmp = 0x06;   // 640mS
-  OCD_val_tmp = 0x07;     //  56mV/5mR = 11A 
+  //OCD_val_tmp = 0x07;     //  56mV/5mR = 11A 
+  OCD_val_tmp = 0x0C;     //  83mV/5mR = 16.6A//0x00 
+  //OCD_val_tmp = 0x00;     //  83mV/5mR = 16.6A// 
   PROTECT2_Last = (OCD_delay_tmp << 4) + OCD_val_tmp; //OCD
   I2C_Write(PROTECT2_ADDR,PROTECT2_Last); 
 }
@@ -639,9 +644,9 @@ void Afe_OV_UV_Threshold_Set(uint16_t OV_val, uint16_t UV_val)
 //==========================================================================
 void Afe_CC_Disable(void)
 { 
-  // 电流采样结束标志位，写"1"清零
-  SYS_STAT_Last |= 0x80;
-  I2C_Write(SYS_STAT_ADDR,SYS_STAT_Last); 
+  // 电流采样结束标志位，写"1"清零 
+  SYS_STAT_Last |= 0x80; 
+  I2C_Write(SYS_STAT_ADDR,SYS_STAT_Last & 0xF0); 
   SYS_STAT_Last &= ~0x80;
     
   SYS_CTRL2.Bit.CC_EN = 0;       // 关闭电流连续采样模式
@@ -659,8 +664,8 @@ void Afe_CC_Disable(void)
 void Afe_CC_1Shot_Set(void)
 { 
   // 电流采样结束标志位，写"1"清零
-  SYS_STAT_Last |= 0x80;
-  I2C_Write(SYS_STAT_ADDR,SYS_STAT_Last); 
+  SYS_STAT_Last |= 0x80; 
+  I2C_Write(SYS_STAT_ADDR,SYS_STAT_Last & 0xF0);  
   SYS_STAT_Last &= ~0x80;
   
   SYS_CTRL2.Bit.CC_EN = 0;       // 关闭电流连续采样模式
@@ -758,20 +763,18 @@ void Afe_FET_ChgOff_DisOff(void)
 void Afe_FET_ChgDis_Cntrl(void)
 { 
   if(WorkMode == IDLE_MODE)
-  {
-    Afe_FET_ChgOff_DisOff(); // 关闭充电MOS、关闭放电MOS
-    ALERT_PIN_HIGH();
+  { 
+    Afe_FET_ChgOff_DisOff(); // 关闭充电MOS、关闭放电MOS 
   }
   else if(WorkMode == CHARGE_MODE)
   { 
+    //ALERT_PIN_LOW();
     if(Bits_flag.Bit.ChgOv || Bits_flag.Bit.ChgTemp || Bits_flag.Bit.ChgCurOv || Bits_flag.Bit.AfeErr)
     {   
-      Afe_FET_ChgOff_DisOff();  // 关闭充电MOS、关闭放电MOS
-      ALERT_PIN_HIGH();
+      Afe_FET_ChgOff_DisOff();  // 关闭充电MOS、关闭放电MOS 
     }
     else
-    { 
-      ALERT_PIN_LOW();
+    {  
       Afe_FET_ChgOn_DisOn();  // 开启充电MOS、开启放电MOS
     }
   }
@@ -779,12 +782,14 @@ void Afe_FET_ChgDis_Cntrl(void)
   { 
     if(Bits_flag.Bit.DisOv || Bits_flag.Bit.DisTemp || Bits_flag.Bit.DisCurOv || Bits_flag.Bit.AfeErr || Bits_flag.Bit.DisCurShort)
     {
-      Afe_FET_ChgOff_DisOff();  // 关闭充电MOS、关闭放电MOS
-      ALERT_PIN_HIGH();
+      if(!Bits_flag.Bit.DisOv)
+      {
+        ;//ALERT_PIN_HIGH();
+      }
+      Afe_FET_ChgOff_DisOff();  // 关闭充电MOS、关闭放电MOS 
     }
     else
-    { 
-      ALERT_PIN_LOW();
+    {  
       Afe_FET_ChgOn_DisOn();  // 开启充电MOS、开启放电MOS
     }
   }

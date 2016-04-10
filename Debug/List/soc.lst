@@ -1,6 +1,6 @@
 ###############################################################################
 #                                                                             #
-# IAR C/C++ Compiler V1.31.1.20058 [Evaluation] for STM809/Apr/2016  16:30:04 #
+# IAR C/C++ Compiler V1.31.1.20058 [Evaluation] for STM810/Apr/2016  19:08:02 #
 # Copyright 2010-2012 IAR Systems AB.                                         #
 #                                                                             #
 #    Source file  =  D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src #
@@ -241,16 +241,16 @@ D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src\soc.c
     202              }
     203              else //(WorkMode == DISCHARGE_MODE ) // 放出。 
     204              {  
-    205                if(Bits_flag.Bit.DisOv)  // 有任一电池过放了。
+    205                if(Bits_flag.Bit.DisOv )//&& Cell_Volt_Avg < 2900)  // 有任一电池过放了。
     206                {
     207                  if(SocReg.min_cell_vlt > 0)
     208                  {
-    209                    if((SocCalc.uv_cnt++) >= 30)
+    209                   // if((SocCalc.uv_cnt++) >= 5)
     210                    {
-    211                      SocCalc.uv_cnt = 30;
+    211                      SocCalc.uv_cnt = 5;
     212                      SocCalc.curAh = 0;
     213                      SocCalc.totalOutAh = 0;
-    214                      SocCalc.totalOutAh_bak = 0;
+    214                      SocCalc.totalOutAh_bak = 0; 
     215                    } 
     216                  }
     217                }
@@ -264,275 +264,286 @@ D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src\soc.c
     225              SocReg.ah = SocCalc.curAh; // 计算SOC。  
     226              SocReg.soc = (uint8_t)(SocCalc.curAh * 100 / SocReg.rated_cap);
     227              SocCalc.soc_rt = SocReg.soc;
-    228               
-    229          }
-    230          void SOCCalculate1(void)
-    231          {
-    232              uint32_t deltAh;
-    233              SocCalc.curAh = SocReg.ah; 
-    234              SocReg.rated_cap = 2050;
-    235              SocReg.min_cell_temp_vlt = V_TS2_Val; 
-    236              SocReg.min_cell_vlt = Cell_Volt_Min;
-    237              SOCCorrectOCV();      // OCV 校准
-    238              //SOCCorrectTemp();   // 温度校准 
-    239              
-    240              if(WorkMode == CHARGE_MODE && SocCalc.totalInAh > SocCalc.totalInAh_bak)   // 充入。
-    241              {
-    242                deltAh = (uint16_t)(SocCalc.totalInAh - SocCalc.totalInAh_bak);
-    243                SocCalc.totalInAh_bak = SocCalc.totalInAh;
-    244                SocCalc.curAh += deltAh; 
-    245          
-    246                if(SocCalc.curAh > SocReg.rated_cap)    // 防止大于额定容量。
-    247                {
-    248                  SocCalc.curAh = SocReg.rated_cap;
-    249                }
-    250           
-    251                if(Bits_flag.Bit.ChgOv)   // 过充 
-    252                {
-    253                  if((SocCalc.ov_cnt ++) >= 30)
-    254                  {
-    255                    SocCalc.ov_cnt = 30;
-    256                    SocCalc.curAh = SocReg.rated_cap;
-    257                  } 
-    258                }
-    259                else
-    260                {
-    261                  SocCalc.ov_cnt = 0;
-    262                }
-    263              }
-    264          
-    265              if(WorkMode == DISCHARGE_MODE && SocCalc.totalOutAh > SocCalc.totalOutAh_bak) // 放出。
-    266              {
-    267                deltAh = (uint16_t)(SocCalc.totalOutAh - SocCalc.totalOutAh_bak);
-    268                SocCalc.totalOutAh_bak = SocCalc.totalOutAh;
-    269           
-    270                if(SocCalc.curAh < deltAh)  // 防止小于0。
+    228              
+    229               /*
+    230              Soc_Tmp = FLASH_ReadByte(SOC_ADDR);     // 读取SOC数据
+    231              SocReg.soc = Soc_Tmp; //SocReg.ah = SocCalc.curAh; // 计算SOC。 
+    232              SocCalc.curAh = ((uint32_t)SocReg.rated_cap * Soc_Tmp) / 100;
+    233              SocReg.ah = SocCalc.curAh;
+    234              SocCalc.soc_rt = SocReg.soc;
+    235              
+    236              
+    237              SocReg.ah = SocCalc.curAh; // 计算SOC。  
+    238              SocReg.soc = (uint8_t)((uint32_t)SocCalc.curAh * 100 / SocReg.rated_cap);
+    239              SocCalc.soc_rt = SocReg.soc;*/
+    240          }
+    241          void SOCCalculate1(void)
+    242          {
+    243              uint32_t deltAh;
+    244              SocCalc.curAh = SocReg.ah; 
+    245              SocReg.rated_cap = 2050;
+    246              SocReg.min_cell_temp_vlt = V_TS2_Val; 
+    247              SocReg.min_cell_vlt = Cell_Volt_Min;
+    248              SOCCorrectOCV();      // OCV 校准
+    249              //SOCCorrectTemp();   // 温度校准 
+    250              
+    251              if(WorkMode == CHARGE_MODE && SocCalc.totalInAh > SocCalc.totalInAh_bak)   // 充入。
+    252              {
+    253                deltAh = (uint16_t)(SocCalc.totalInAh - SocCalc.totalInAh_bak);
+    254                SocCalc.totalInAh_bak = SocCalc.totalInAh;
+    255                SocCalc.curAh += deltAh; 
+    256          
+    257                if(SocCalc.curAh > SocReg.rated_cap)    // 防止大于额定容量。
+    258                {
+    259                  SocCalc.curAh = SocReg.rated_cap;
+    260                }
+    261           
+    262                if(Bits_flag.Bit.ChgOv)   // 过充 
+    263                {
+    264                  if((SocCalc.ov_cnt ++) >= 30)
+    265                  {
+    266                    SocCalc.ov_cnt = 30;
+    267                    SocCalc.curAh = SocReg.rated_cap;
+    268                  } 
+    269                }
+    270                else
     271                {
-    272                  SocCalc.curAh = 0;
+    272                  SocCalc.ov_cnt = 0;
     273                }
-    274                else
-    275                { 
-    276                  SocCalc.curAh -= deltAh; 
-    277                }
-    278           
-    279                if(Bits_flag.Bit.DisOv)  // 有任一电池过放了。
-    280                {
-    281                  if(SocReg.min_cell_vlt > 0)
-    282                  {
-    283                    if((SocCalc.uv_cnt++) >= 30)
-    284                    {
-    285                      SocCalc.uv_cnt = 30;
-    286                      SocCalc.curAh = 0;
-    287                    } 
-    288                  }
-    289                }
-    290                else
+    274              }
+    275          
+    276              if(WorkMode == DISCHARGE_MODE && SocCalc.totalOutAh > SocCalc.totalOutAh_bak) // 放出。
+    277              {
+    278                deltAh = (uint16_t)(SocCalc.totalOutAh - SocCalc.totalOutAh_bak);
+    279                SocCalc.totalOutAh_bak = SocCalc.totalOutAh;
+    280           
+    281                if(SocCalc.curAh < deltAh)  // 防止小于0。
+    282                {
+    283                  SocCalc.curAh = 0;
+    284                }
+    285                else
+    286                { 
+    287                  SocCalc.curAh -= deltAh; 
+    288                }
+    289           
+    290                if(Bits_flag.Bit.DisOv)  // 有任一电池过放了。
     291                {
-    292                  SocCalc.uv_cnt = 0;
-    293                }
-    294          
-    295              }
-    296          /*
-    297              
-    298              SocReg.soc = soc;   
-    299              SocCalc.curAh = (uint32_t)(SocReg.rated_cap * soc) / 100;
-    300              SocReg.ah = SocCalc.curAh;
-    301              */
-    302             
-    303              SocReg.ah = SocCalc.curAh; // 计算SOC。  
-    304              SocReg.soc = (uint8_t)(SocCalc.curAh * 100 / SocReg.rated_cap);
-    305              SocCalc.soc_rt = SocReg.soc;
-    306              
-    307              
-    308              //SOCSmooth();
-    309              //SOCConvert();//BMSRegs.soc_rt = SocReg.soc;
-    310              //BMSReflashFromSOC();
-    311          }
-    312          /*  静置后进行OCV 修正。
-    313          *
-    314          *   需要输入的参数:
-    315          *
-    316          *  1. SocReg.curr           实时电流
-    317          *  2. SocReg.min_cell_vlt   最低单节电压(关键参数)
-    318          *
-    319          *   输出:
-    320          *
-    321          *  1. SocReg.soc
-    322          *  2. SocCalc.curAh
-    323          */
-    324          void SOCCorrectOCV(void)
-    325          {
-    326            uint8_t i, soc;
-    327            uint32_t tmpah;
-    328            uint16_t deltV;
-    329            tmpah = SocReg.curr;    // xmA 10ms 
-    330            if(WorkMode != IDLE_MODE && Soc_OCV_CorrectEn_Flag == 1) 
-    331            { 
-    332              Soc_OCV_CorrectEn_Flag = 0; 
-    333              /*
-    334              //if(SocReg.min_cell_temp >= 0) // 20160131 - add for OCV tbl under different temp.
-    335              if(SocReg.min_cell_temp_vlt < 757)  // 20160224 - add for OCV tbl under different temp.
-    336              {
-    337                for(i = 0; i < 11; i++)
-    338                { 
-    339                  Soc2OcvTbl[i].volt = Soc2OcvTbl_0deg[i].volt; 
-    340                }
-    341              }
-    342              else
-    343              {
-    344                for(i = 0; i < 11; i++)
-    345                { 
-    346                  Soc2OcvTbl[i].volt = Soc2OcvTbl_N10deg[i].volt; 
-    347                }
-    348              }
-    349              */
-    350              if(SocReg.min_cell_vlt <= Soc2OcvTbl[0].volt)   // 防止超范围
-    351              {
-    352                soc = 0;
-    353              }
-    354              else if(SocReg.min_cell_vlt >= Soc2OcvTbl[10].volt)
-    355              {
-    356                soc = 100;
-    357              }
-    358              else
-    359              {
-    360                for(i = 1; i < 11; i++)     // 查表根据OCV 表取soc。
-    361                {
-    362                  if(SocReg.min_cell_vlt == Soc2OcvTbl[i].volt)   // NOTE: 采用最低电压的一节电池来比较。
-    363                  {
-    364                    soc = Soc2OcvTbl[i].soc;
-    365                    break;
-    366                  }
-    367                  else if(SocReg.min_cell_vlt > Soc2OcvTbl[i-1].volt && SocReg.min_cell_vlt < Soc2OcvTbl[i].volt)
-    368                  {
-    369                    deltV = (uint16_t)(Soc2OcvTbl[i].soc - Soc2OcvTbl[i - 1].soc) * 1000 / (Soc2OcvTbl[i].volt - Soc2OcvTbl[i - 1].volt);
-    370                    soc = Soc2OcvTbl[i - 1].soc + (uint8_t)((SocReg.min_cell_vlt - Soc2OcvTbl[i - 1].volt) * deltV / 1000);
-    371                    break;
-    372                  } 
-    373                }
-    374                /*
-    375                for(i = 1; i < 11; i++)     // 查表根据OCV 表取soc。
-    376                {
-    377                  if(SocReg.min_cell_vlt == Soc2OcvTbl[i].volt)   // NOTE: 采用最低电压的一节电池来比较。
-    378                  {
-    379                    soc = Soc2OcvTbl[i].soc;
-    380                    break;
-    381                  }
-    382                  else if(SocReg.min_cell_vlt < Soc2OcvTbl[i].volt)
-    383                  {
-    384                    deltV = (Soc2OcvTbl[i].soc - Soc2OcvTbl[i - 1].soc) * 1000 / (Soc2OcvTbl[i].volt - Soc2OcvTbl[i - 1].volt);
-    385                    soc = Soc2OcvTbl[i - 1].soc + (SocReg.min_cell_vlt - Soc2OcvTbl[i - 1].volt) * deltV / 1000;
-    386                    break;
-    387                  }
-    388                }*/
-    389              }
-    390          
-    391              SocReg.soc = soc; //SocReg.ah = SocCalc.curAh; // 计算SOC。 
-    392              SocCalc.curAh = ((uint32_t)SocReg.rated_cap * soc) / 100;
-    393              SocReg.ah = SocCalc.curAh;
-    394              SocCalc.soc_rt = SocReg.soc;
-    395            }
-    396          }
-    397          
-    398          /*  进行温度和额定容量的校正。
-    399          *
-    400          *   需要输入的参数:
-    401          *
-    402          *  1. SocReg.min_cell_temp  最低单节温度
-    403          *  2. SocReg.temp_corr      校正使能标志位
-    404          *
-    405          *   输出:
-    406          *
-    407          *  1. SocReg.rated_cap      修正后的额定容量
-    408          */
-    409          void SOCCorrectTemp(void)
-    410          {
-    411              int8_t minTemp;
-    412              uint16_t deltT;
-    413              uint8_t i;
-    414              minTemp = SocReg.min_cell_temp;
-    415          
-    416              if(SocReg.temp_corr == 1)
-    417              {
-    418                  SocReg.temp_corr = 0;
-    419          
-    420                  if(minTemp <= Temp2CapacityTbl[0].temp)
-    421                  {SocReg.rated_cap = Temp2CapacityTbl[0].rated_cap;}
-    422                  else if(minTemp >= Temp2CapacityTbl[9].temp)
-    423                  {SocReg.rated_cap = Temp2CapacityTbl[9].rated_cap;}
-    424                  else
-    425                  {
-    426                      for(i = 1; i < 10; i++)
-    427                      {
-    428                          if(minTemp == Temp2CapacityTbl[i].temp)
-    429                          {
-    430                              SocReg.rated_cap = Temp2CapacityTbl[i].rated_cap;
-    431                              break;
-    432                          }
-    433                          else if(minTemp < Temp2CapacityTbl[i].temp)
-    434                          {
-    435                              // 线性化再等分。
-    436                              deltT = (Temp2CapacityTbl[i].rated_cap - Temp2CapacityTbl[i - 1].rated_cap)
-    437                                      / (Temp2CapacityTbl[i].temp - Temp2CapacityTbl[i - 1].temp);
-    438                              SocReg.rated_cap = Temp2CapacityTbl[i - 1].rated_cap
-    439                                                 + (SocReg.min_cell_temp - Temp2CapacityTbl[i - 1].temp) * deltT;
-    440                              break;
-    441                          }
-    442                      }
-    443                  }
-    444              }
-    445          }
-    446          
-    447          /************************************************************************/
-    448          /************************************************************************/
-    449          /************************************************************************/
-    450          /************************************************************************/
-    451          /************************************************************************/
-    452          /************************************************************************/
-    453          
-    454          uint8_t smooth_cnt;
-    455          //sword smooth_delt_v;
-    456          uint32_t smooth_delt_v;
-    457          uint16_t old_v = 0;
-    458          uint16_t new_v = 0;
-    459          
-    460          /*  10 秒内将SocReg.soc  值平滑变化到BMSRegs.soc_rt  值。
-    461          */
-    462          void SOCSmooth(void)
-    463          {
-    464              new_v = SocReg.soc * 10;
-    465          
-    466              //if((old_v != new_v)&&(abs(old_v-new_v)<10))
-    467              if(old_v != new_v)
-    468              {
-    469                  smooth_cnt++;
+    292                  if(SocReg.min_cell_vlt > 0)
+    293                  {
+    294                    if((SocCalc.uv_cnt++) >= 30)
+    295                    {
+    296                      SocCalc.uv_cnt = 30;
+    297                      SocCalc.curAh = 0;
+    298                    } 
+    299                  }
+    300                }
+    301                else
+    302                {
+    303                  SocCalc.uv_cnt = 0;
+    304                }
+    305          
+    306              }
+    307          /*
+    308              
+    309              SocReg.soc = soc;   
+    310              SocCalc.curAh = (uint32_t)(SocReg.rated_cap * soc) / 100;
+    311              SocReg.ah = SocCalc.curAh;
+    312              */
+    313             
+    314              SocReg.ah = SocCalc.curAh; // 计算SOC。  
+    315              SocReg.soc = (uint8_t)(SocCalc.curAh * 100 / SocReg.rated_cap);
+    316              SocCalc.soc_rt = SocReg.soc;
+    317              
+    318              
+    319              //SOCSmooth();
+    320              //SOCConvert();//BMSRegs.soc_rt = SocReg.soc;
+    321              //BMSReflashFromSOC();
+    322          }
+    323          /*  静置后进行OCV 修正。
+    324          *
+    325          *   需要输入的参数:
+    326          *
+    327          *  1. SocReg.curr           实时电流
+    328          *  2. SocReg.min_cell_vlt   最低单节电压(关键参数)
+    329          *
+    330          *   输出:
+    331          *
+    332          *  1. SocReg.soc
+    333          *  2. SocCalc.curAh
+    334          */
+    335          void SOCCorrectOCV(void)
+    336          {
+    337            uint8_t i, soc;
+    338            uint32_t tmpah;
+    339            uint16_t deltV;
+    340            tmpah = SocReg.curr;    // xmA 10ms 
+    341            if(WorkMode != IDLE_MODE && Soc_OCV_CorrectEn_Flag == 1) 
+    342            { 
+    343              Soc_OCV_CorrectEn_Flag = 0; 
+    344              /*
+    345              //if(SocReg.min_cell_temp >= 0) // 20160131 - add for OCV tbl under different temp.
+    346              if(SocReg.min_cell_temp_vlt < 757)  // 20160224 - add for OCV tbl under different temp.
+    347              {
+    348                for(i = 0; i < 11; i++)
+    349                { 
+    350                  Soc2OcvTbl[i].volt = Soc2OcvTbl_0deg[i].volt; 
+    351                }
+    352              }
+    353              else
+    354              {
+    355                for(i = 0; i < 11; i++)
+    356                { 
+    357                  Soc2OcvTbl[i].volt = Soc2OcvTbl_N10deg[i].volt; 
+    358                }
+    359              }
+    360              */
+    361              if(SocReg.min_cell_vlt <= Soc2OcvTbl[0].volt)   // 防止超范围
+    362              {
+    363                soc = 0;
+    364              }
+    365              else if(SocReg.min_cell_vlt >= Soc2OcvTbl[10].volt)
+    366              {
+    367                soc = 100;
+    368              }
+    369              else
+    370              {
+    371                for(i = 1; i < 11; i++)     // 查表根据OCV 表取soc。
+    372                {
+    373                  if(SocReg.min_cell_vlt == Soc2OcvTbl[i].volt)   // NOTE: 采用最低电压的一节电池来比较。
+    374                  {
+    375                    soc = Soc2OcvTbl[i].soc;
+    376                    break;
+    377                  }
+    378                  else if(SocReg.min_cell_vlt > Soc2OcvTbl[i-1].volt && SocReg.min_cell_vlt < Soc2OcvTbl[i].volt)
+    379                  {
+    380                    deltV = (uint16_t)(Soc2OcvTbl[i].soc - Soc2OcvTbl[i - 1].soc) * 1000 / (Soc2OcvTbl[i].volt - Soc2OcvTbl[i - 1].volt);
+    381                    soc = Soc2OcvTbl[i - 1].soc + (uint8_t)((SocReg.min_cell_vlt - Soc2OcvTbl[i - 1].volt) * deltV / 1000);
+    382                    break;
+    383                  } 
+    384                }
+    385                /*
+    386                for(i = 1; i < 11; i++)     // 查表根据OCV 表取soc。
+    387                {
+    388                  if(SocReg.min_cell_vlt == Soc2OcvTbl[i].volt)   // NOTE: 采用最低电压的一节电池来比较。
+    389                  {
+    390                    soc = Soc2OcvTbl[i].soc;
+    391                    break;
+    392                  }
+    393                  else if(SocReg.min_cell_vlt < Soc2OcvTbl[i].volt)
+    394                  {
+    395                    deltV = (Soc2OcvTbl[i].soc - Soc2OcvTbl[i - 1].soc) * 1000 / (Soc2OcvTbl[i].volt - Soc2OcvTbl[i - 1].volt);
+    396                    soc = Soc2OcvTbl[i - 1].soc + (SocReg.min_cell_vlt - Soc2OcvTbl[i - 1].volt) * deltV / 1000;
+    397                    break;
+    398                  }
+    399                }*/
+    400              }
+    401          
+    402              SocReg.soc = soc; //SocReg.ah = SocCalc.curAh; // 计算SOC。 
+    403              SocCalc.curAh = ((uint32_t)SocReg.rated_cap * soc) / 100;
+    404              SocReg.ah = SocCalc.curAh;
+    405              SocCalc.soc_rt = SocReg.soc;
+    406            }
+    407          }
+    408          
+    409          /*  进行温度和额定容量的校正。
+    410          *
+    411          *   需要输入的参数:
+    412          *
+    413          *  1. SocReg.min_cell_temp  最低单节温度
+    414          *  2. SocReg.temp_corr      校正使能标志位
+    415          *
+    416          *   输出:
+    417          *
+    418          *  1. SocReg.rated_cap      修正后的额定容量
+    419          */
+    420          void SOCCorrectTemp(void)
+    421          {
+    422              int8_t minTemp;
+    423              uint16_t deltT;
+    424              uint8_t i;
+    425              minTemp = SocReg.min_cell_temp;
+    426          
+    427              if(SocReg.temp_corr == 1)
+    428              {
+    429                  SocReg.temp_corr = 0;
+    430          
+    431                  if(minTemp <= Temp2CapacityTbl[0].temp)
+    432                  {SocReg.rated_cap = Temp2CapacityTbl[0].rated_cap;}
+    433                  else if(minTemp >= Temp2CapacityTbl[9].temp)
+    434                  {SocReg.rated_cap = Temp2CapacityTbl[9].rated_cap;}
+    435                  else
+    436                  {
+    437                      for(i = 1; i < 10; i++)
+    438                      {
+    439                          if(minTemp == Temp2CapacityTbl[i].temp)
+    440                          {
+    441                              SocReg.rated_cap = Temp2CapacityTbl[i].rated_cap;
+    442                              break;
+    443                          }
+    444                          else if(minTemp < Temp2CapacityTbl[i].temp)
+    445                          {
+    446                              // 线性化再等分。
+    447                              deltT = (Temp2CapacityTbl[i].rated_cap - Temp2CapacityTbl[i - 1].rated_cap)
+    448                                      / (Temp2CapacityTbl[i].temp - Temp2CapacityTbl[i - 1].temp);
+    449                              SocReg.rated_cap = Temp2CapacityTbl[i - 1].rated_cap
+    450                                                 + (SocReg.min_cell_temp - Temp2CapacityTbl[i - 1].temp) * deltT;
+    451                              break;
+    452                          }
+    453                      }
+    454                  }
+    455              }
+    456          }
+    457          
+    458          /************************************************************************/
+    459          /************************************************************************/
+    460          /************************************************************************/
+    461          /************************************************************************/
+    462          /************************************************************************/
+    463          /************************************************************************/
+    464          
+    465          uint8_t smooth_cnt;
+    466          //sword smooth_delt_v;
+    467          uint32_t smooth_delt_v;
+    468          uint16_t old_v = 0;
+    469          uint16_t new_v = 0;
     470          
-    471                  if(smooth_cnt > 5) // 100ms=1 x 100ms
-    472                  {
-    473                      smooth_cnt = 0;
-    474          
-    475                      if(old_v > new_v)
-    476                      {
-    477                          smooth_delt_v = (old_v - new_v) / 10;
-    478                          old_v -= smooth_delt_v;
-    479                      }
-    480                      else
-    481                      {
-    482                          smooth_delt_v = (new_v - old_v) / 10;
-    483                          old_v += smooth_delt_v;
-    484                      }
+    471          /*  10 秒内将SocReg.soc  值平滑变化到BMSRegs.soc_rt  值。
+    472          */
+    473          void SOCSmooth(void)
+    474          {
+    475              new_v = SocReg.soc * 10;
+    476          
+    477              //if((old_v != new_v)&&(abs(old_v-new_v)<10))
+    478              if(old_v != new_v)
+    479              {
+    480                  smooth_cnt++;
+    481          
+    482                  if(smooth_cnt > 5) // 100ms=1 x 100ms
+    483                  {
+    484                      smooth_cnt = 0;
     485          
-    486                      if(smooth_delt_v == 0)
-    487                      { old_v = new_v; }
-    488                  }
-    489              }
-    490              else
-    491              { smooth_cnt = 0; }
-    492          
-    493              SocCalc.soc_rt = (uint8_t)(old_v / 10);
-    494          }
-    495          
+    486                      if(old_v > new_v)
+    487                      {
+    488                          smooth_delt_v = (old_v - new_v) / 10;
+    489                          old_v -= smooth_delt_v;
+    490                      }
+    491                      else
+    492                      {
+    493                          smooth_delt_v = (new_v - old_v) / 10;
+    494                          old_v += smooth_delt_v;
+    495                      }
     496          
+    497                      if(smooth_delt_v == 0)
+    498                      { old_v = new_v; }
+    499                  }
+    500              }
+    501              else
+    502              { smooth_cnt = 0; }
+    503          
+    504              SocCalc.soc_rt = (uint8_t)(old_v / 10);
+    505          }
+    506          
+    507          
 
    Section sizes:
 
@@ -543,31 +554,29 @@ D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src\soc.c
      Soc2OcvTbl_N10deg   33
      Temp2CapacityTbl    30
      SOCAhIntergrate     94
-     ?Subroutine15        8
-     ?Subroutine13       18
-     ??Subroutine19_0     6
+     ?Subroutine14        8
+     ?Subroutine12       18
+     ??Subroutine18_0     6
      SOCConvert          47
-     ?Subroutine17        3
-     ??Subroutine20_0     6
+     ?Subroutine16        3
+     ??Subroutine19_0     6
      ?Subroutine0        49
-     ?Subroutine12        3
-     ??Subroutine21_0     4
-     SOCCalculate       157
-     ?Subroutine14       10
-     ?Subroutine11        9
-     ??Subroutine22_0     9
-     ?Subroutine10       30
-     ?Subroutine9        14
+     ?Subroutine11        3
+     ??Subroutine20_0     4
+     SOCCalculate       156
+     ?Subroutine13       10
+     ?Subroutine10        9
+     ??Subroutine21_0     9
+     ?Subroutine9        30
      ?Subroutine8        14
      ?Subroutine7         9
      ?Subroutine6         7
-     ?Subroutine18        6
+     ?Subroutine17        6
      ?Subroutine5        13
-     ?Subroutine3         4
-     ??Subroutine23_0     8
+     ?Subroutine3         8
      ?Subroutine1        18
-     ?Subroutine16       12
-     SOCCalculate1      115
+     ?Subroutine15       12
+     SOCCalculate1      129
      ?Subroutine4         3
      SOCCorrectOCV      233
      SOCCorrectTemp     192
@@ -582,9 +591,9 @@ D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src\soc.c
      9 bytes in section .near.bss
     33 bytes in section .near.data
     96 bytes in section .near.rodata
- 1 232 bytes in section .near_func.text
+ 1 227 bytes in section .near_func.text
  
- 1 232 bytes of CODE  memory
+ 1 227 bytes of CODE  memory
     96 bytes of CONST memory
     42 bytes of DATA  memory
 

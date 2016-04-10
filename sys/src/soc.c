@@ -202,16 +202,16 @@ void SOCCalculate(void)
     }
     else //(WorkMode == DISCHARGE_MODE ) // 放出。 
     {  
-      if(Bits_flag.Bit.DisOv)  // 有任一电池过放了。
+      if(Bits_flag.Bit.DisOv )//&& Cell_Volt_Avg < 2900)  // 有任一电池过放了。
       {
         if(SocReg.min_cell_vlt > 0)
         {
-          if((SocCalc.uv_cnt++) >= 30)
+         // if((SocCalc.uv_cnt++) >= 5)
           {
-            SocCalc.uv_cnt = 30;
+            SocCalc.uv_cnt = 5;
             SocCalc.curAh = 0;
             SocCalc.totalOutAh = 0;
-            SocCalc.totalOutAh_bak = 0;
+            SocCalc.totalOutAh_bak = 0; 
           } 
         }
       }
@@ -225,7 +225,18 @@ void SOCCalculate(void)
     SocReg.ah = SocCalc.curAh; // 计算SOC。  
     SocReg.soc = (uint8_t)(SocCalc.curAh * 100 / SocReg.rated_cap);
     SocCalc.soc_rt = SocReg.soc;
-     
+    
+     /*
+    Soc_Tmp = FLASH_ReadByte(SOC_ADDR);     // 读取SOC数据
+    SocReg.soc = Soc_Tmp; //SocReg.ah = SocCalc.curAh; // 计算SOC。 
+    SocCalc.curAh = ((uint32_t)SocReg.rated_cap * Soc_Tmp) / 100;
+    SocReg.ah = SocCalc.curAh;
+    SocCalc.soc_rt = SocReg.soc;
+    
+    
+    SocReg.ah = SocCalc.curAh; // 计算SOC。  
+    SocReg.soc = (uint8_t)((uint32_t)SocCalc.curAh * 100 / SocReg.rated_cap);
+    SocCalc.soc_rt = SocReg.soc;*/
 }
 void SOCCalculate1(void)
 {

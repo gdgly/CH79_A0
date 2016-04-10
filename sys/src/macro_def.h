@@ -34,7 +34,7 @@
 #define   ChgCurOv_Val_SET      3000               //  单位：mA, MCU（软件）充电保护电流值
 #define   DisCurOv_Val_SET      9000//11000              //  单位：mA, MCU（软件）
 #define   DisCurOv_1_Val_SET    9000//11000              //  单位：mA, MCU（软件）放电保护电流值
-#define   DisCurOv_2_Val_SET    15000//11000              //  单位：mA, MCU（软件）放电保护电流值
+#define   DisCurOv_2_Val_SET    12000//11000              //  单位：mA, MCU（软件）放电保护电流值
 //================================== 
 #define   ChgOv_t_SET           100                 //  单位：mS, MCU（软件）过充保护延时时间
 #define   DisOv_t_SET           100                 //  单位：mS, MCU（软件）过放保护延时时间
@@ -62,8 +62,8 @@
 #define   IS_CHG_DETECT()       PD_IDR_IDR2 == 0
 //#define   IS_LOAD_DETECT()    PA_IDR_IDR3 == 0
 //#define   IS_ALERT()          PC_IDR_IDR7 == 1
-#define   ALERT_PIN_HIGH()      //PC_ODR_ODR7 = 1
-#define   ALERT_PIN_LOW()       //PC_ODR_ODR7 = 0
+#define   ALERT_PIN_HIGH()      PC_ODR_ODR7 = 1
+#define   ALERT_PIN_LOW()       PC_ODR_ODR7 = 0
  
 #define   VCC1_ON()             PA_ODR_ODR2 = 1
 #define   VCC1_OFF()            PA_ODR_ODR2 = 0

@@ -525,17 +525,17 @@ void CurrentCheck(void)
     } */
   }
   else if(WorkMode == DISCHARGE_MODE)//9A,  15A
-  {
-    if(SYS_STAT.Bit.OCD || Current_Val > DisCurOv_2_Val_SET || (DisCurOv_t1 >= DisCurOv_t1_SET) || (DisCurOv_t1 >= DisCurOv_t1_SET))
+  {   
+    if(Bits_flag.Bit.DisCurOv || SYS_STAT.Bit.OCD || Current_Val >= DisCurOv_2_Val_SET || DisCurOv_t2 >= DisCurOv_t2_SET || DisCurOv_t1 >= DisCurOv_t1_SET)
     {
-      if(SYS_STAT.Bit.OCD || (DisCurOv_t2 >= DisCurOv_t2_SET) || (DisCurOv_t1 >= DisCurOv_t1_SET))
+      if(Bits_flag.Bit.DisCurOv || SYS_STAT.Bit.OCD || DisCurOv_t2 >= DisCurOv_t2_SET || DisCurOv_t1 >= DisCurOv_t1_SET)
       {
         DisCurOv_t1 = DisCurOv_t1_SET;
         DisCurOv_t2 = DisCurOv_t2_SET;
         Bits_flag.Bit.DisCurOv = 1;
       } 
     }
-    else if(Current_Val > DisCurOv_1_Val_SET)//9A
+    else if(Current_Val >= DisCurOv_1_Val_SET)//9A
     { 
       DisCurOv_t2 = 0;
       if(DisCurOv_t1 >= DisCurOv_t1_SET)
@@ -548,36 +548,7 @@ void CurrentCheck(void)
     {
       DisCurOv_t1 = 0;
       DisCurOv_t2 = 0;
-    }
-    /*
-    if(Current_Val > DisCurOv_Val_SET || SYS_STAT.Bit.OCD || (DisCurOv_t >= DisCurOv_t_SET))
-    {
-      if(SYS_STAT.Bit.OCD || (DisCurOv_t >= DisCurOv_t_SET))
-      {
-        DisCurOv_t = DisCurOv_t_SET; 
-        Bits_flag.Bit.DisCurOv = 1;
-      } 
-    }
-    else
-    {
-      DisCurOv_t = 0;
-    }
-    */
-    /*
-    if(0)//(Bits_flag.Bit.DisCurOv)// && DisCurOv_Re_t >= DisCurOv_Re_t_SET)
-    {
-      //clear the OV bit by writing "1"
-      if(SYS_STAT.Bit.OCD)
-      {
-        SYS_STAT_Last |= 0x01;
-        I2C_Write(SYS_STAT_ADDR,SYS_STAT_Last);
-        SYS_STAT_Last &= ~0x01;
-      }
-      DisCurOv_t = 0;
-      DisCurOv_Re_t = 0;
-      Bits_flag.Bit.DisCurOv = 0;
-    }*/
-    
+    } 
     //==========================短路检测
     //if(WorkMode != CHARGE_MODE)
     {
@@ -589,7 +560,7 @@ void CurrentCheck(void)
       if(Bits_flag.Bit.DisCurShort && DisCurShort_Re_t >= DisCurShort_Re_t_SET)
       { 
         SYS_STAT_Last |= 0x02;   //clear the SCD bit by writing "1" 
-        I2C_Write(SYS_STAT_ADDR,SYS_STAT_Last); 
+        I2C_Write(SYS_STAT_ADDR,SYS_STAT_Last & 0xF2); 
         SYS_STAT_Last &= ~0x02;
         DisCurOv_Re_t = 0;
         SYS_STAT.Bit.SCD = 0;
@@ -629,8 +600,9 @@ void VoltCheck(void)
       //clear the OV bit by writing "1"
       if(SYS_STAT.Bit.OV)
       {
+        //SYS_STAT_Last &= ~0x0F;
         SYS_STAT_Last |= 0x04;
-        I2C_Write(SYS_STAT_ADDR,SYS_STAT_Last);
+        I2C_Write(SYS_STAT_ADDR,SYS_STAT_Last &0xF4);
         SYS_STAT_Last &= ~0x04;
       }
       ChgOv_t = 0;
@@ -664,8 +636,9 @@ void VoltCheck(void)
           //clear the UV bit by writing "1"
           if(SYS_STAT.Bit.UV)
           {
+            //SYS_STAT_Last &= ~0x0F;
             SYS_STAT_Last |= 0x08;
-            I2C_Write(SYS_STAT_ADDR,SYS_STAT_Last);
+            I2C_Write(SYS_STAT_ADDR,SYS_STAT_Last &0xF8);
             SYS_STAT_Last &= ~0x08;
           }
         }
@@ -691,8 +664,9 @@ void VoltCheck(void)
       //clear the UV bit by writing "1"
       if(SYS_STAT.Bit.UV)
       {
+        //SYS_STAT_Last &= ~0x0F;
         SYS_STAT_Last |= 0x08;
-        I2C_Write(SYS_STAT_ADDR,SYS_STAT_Last);
+        I2C_Write(SYS_STAT_ADDR,SYS_STAT_Last &0xF8);
         SYS_STAT_Last &= ~0x08;
       }
       DisOv_t = 0;
@@ -861,12 +835,12 @@ void ClearStatus(void)
   {  
       DisTemp_Lock_Cnt = 0;
       LowPower_MCU_Entry_Flag = 0;
+      PowerOff_Delay_t = 0;
       Dis_First_Run_Flag = 0;
       Dis_First_Run_t = 0;
       DisOv_t = 0;  
       //DisCurOv_t = 0;  
       //DisCurOv_Re_t = 0; 
-      PowerOff_Delay_t = 0;
        
       //Temp_Protect_Delay_t = 0;
       Bits_flag.Bit.DisTemp = 0;
@@ -875,9 +849,10 @@ void ClearStatus(void)
       if(Bits_flag.Bit.DisOv || SYS_STAT.Bit.UV)
       { 
         if(SYS_STAT.Bit.UV)  //clear the UV bit by writing "1"
-        {
+        { 
+          //SYS_STAT_Last &= ~0x0F;
           SYS_STAT_Last |= 0x08;
-          I2C_Write(SYS_STAT_ADDR,SYS_STAT_Last);
+          I2C_Write(SYS_STAT_ADDR,SYS_STAT_Last &0xF8);
           SYS_STAT_Last &= ~0x08;
         }  
         Bits_flag.Bit.DisOv = 0;
@@ -886,8 +861,9 @@ void ClearStatus(void)
       { 
         if(SYS_STAT.Bit.OCD)  //clear the OV bit by writing "1"
         {
+          //SYS_STAT_Last &= ~0x0F;
           SYS_STAT_Last |= 0x01;
-          I2C_Write(SYS_STAT_ADDR,SYS_STAT_Last);
+          I2C_Write(SYS_STAT_ADDR,SYS_STAT_Last &0xF1);
           SYS_STAT_Last &= ~0x01;
         }
         Bits_flag.Bit.DisCurOv = 0;
@@ -904,9 +880,9 @@ void ClearStatus(void)
       if(Bits_flag.Bit.ChgOv || SYS_STAT.Bit.OV)
       { 
         if(SYS_STAT.Bit.OV)  //clear the UV bit by writing "1"
-        {
+        {  
           SYS_STAT_Last |= 0x04;
-          I2C_Write(SYS_STAT_ADDR,SYS_STAT_Last);
+          I2C_Write(SYS_STAT_ADDR,SYS_STAT_Last &0xF4);
           SYS_STAT_Last &= ~0x04;
         }  
         Bits_flag.Bit.ChgOv = 0;
@@ -920,23 +896,25 @@ void ClearStatus(void)
     Dis_First_Run_Flag = 0;
     Dis_First_Run_t = 0;
     //if(Bits_flag.Bit.ChgCurOv)// && ChgCurOv_Re_t >= ChgCurOv_Re_t_SET)
-    {
-      ChgCurOv_t = 0; 
+    { 
+      DisCurOv_t = 0;
+      DisCurOv_Re_t = 0;
       DisCurOv_t1 = 0;
-      DisCurOv_t2 = 0;
-      ChgCurOv_Re_t = 0;
+      DisCurOv_t2 = 0; 
       Bits_flag.Bit.ChgCurOv = 0;
     } 
     //=========================================================
+    /*
     DisCurShort_Re_t = 0;
     if(Bits_flag.Bit.DisCurShort  || SYS_STAT.Bit.SCD) 
     { 
+      //SYS_STAT_Last &= ~0x0F;
       SYS_STAT_Last |= 0x02;
-      I2C_Write(SYS_STAT_ADDR,SYS_STAT_Last); //clear the SCD bit by writing "1" 
+      I2C_Write(SYS_STAT_ADDR,SYS_STAT_Last &0xF2); //clear the SCD bit by writing "1" 
       SYS_STAT_Last &= ~0x02;
       Afe_SCD_Set(SCD_THREHOLD_VAL_SET, SCD_DELAY_SET);
       DisCurOv_Re_t = 0;
-      SYS_STAT.Bit.SCD = 0;
+      //SYS_STAT.Bit.SCD = 0;
       Bits_flag.Bit.DisCurShort = 0;
     }
     //=========================================================
@@ -944,23 +922,25 @@ void ClearStatus(void)
     { 
       if(SYS_STAT.Bit.OCD)  //clear the OV bit by writing "1"
       {
+        //SYS_STAT_Last &= ~0x0F;
         SYS_STAT_Last |= 0x01;
-        I2C_Write(SYS_STAT_ADDR,SYS_STAT_Last);
+        I2C_Write(SYS_STAT_ADDR,SYS_STAT_Last &0xF1);
         SYS_STAT_Last &= ~0x01;
         Afe_OCD_Set(OCD_THREHOLD_VAL_SET, OCD_DELAY_SET);
       }
       Bits_flag.Bit.DisCurOv = 0;
-    } 
+    } */
     //=========================================================
-    DisCurOv_t = 0;
-    DisCurOv_Re_t = 0;
+    
+    ChgCurOv_t = 0; 
+    ChgCurOv_Re_t = 0;
     Bits_flag.Bit.ChgOv = 0;
     Bits_flag.Bit.ChgCurOv = 0;
     Bits_flag.Bit.ChgTemp = 0;
     
     
-      Bits_flag.Bit.DisTemp = 0;
-      DisTemp_cnt = 0;
+    Bits_flag.Bit.DisTemp = 0;
+    DisTemp_cnt = 0;
      
   }
   else
@@ -1019,6 +999,9 @@ void Afe_Volt_Val_Get(void)
     The following equation shows how to convert the 16-bit CC reading into an analog voltage if no boardlevel calibration is performed:
     CC Reading (in μV) = [16-bit 2’s Complement Value] × (8.44 μV/LSB) 
   */
+  
+  I2C_Read(SYS_STAT_ADDR,&SYS_STAT_Last); 
+  SYS_STAT.Byte = SYS_STAT_Last; 
   if((CC_Volt_Sample_Cnt >= 26) && SYS_STAT.Bit.CC_READY) //(0)//
   {
     CC_Volt_Sample_Cnt = 0;
@@ -1328,8 +1311,9 @@ void LedShow_Cntrl(void)
       }
       else if(SocCalc.soc_rt >= 50)  //50%           LED全亮
       {
-        LED1_OFF();  LED2_OFF(); LED3_ON();
-        //LED3_OFF();  LED2_OFF(); LED1_ON();
+        LED1_OFF();  
+        LED2_OFF(); 
+        LED3_ON(); 
       }
       else if(SocCalc.soc_rt >= 30) //30%---50%     LED1、LED2常亮
       {
@@ -1467,10 +1451,9 @@ void LowPower_Cntrl(void)
   if(WorkMode == IDLE_MODE || AfeErr_t >= 500 || (Dis_First_Run_Flag ==1 && Bits_flag.Bit.DisOv) || (WorkMode == DISCHARGE_MODE && (Bits_flag.Bit.AfeErr || Bits_flag.Bit.DisCurOv || Bits_flag.Bit.DisTemp || Bits_flag.Bit.DisCurShort)) || (Bits_flag.Bit.ChgTemp && Temp_Protect_Delay_t >= 60000))
   {
     Afe_Temp_Disable();
-    VCC1_OFF();
+    //VCC1_OFF();
     if(Afe_Temp_Disable_Lock ==0)
-    {
-      //SYS_CTRL1_Last &= ~0x08;
+    { 
       I2C_Read(SYS_CTRL1_ADDR,&Afe_Temp_Disable_Tmp);
       if((Afe_Temp_Disable_Tmp & 0x08) == 0)
       {
@@ -1478,9 +1461,12 @@ void LowPower_Cntrl(void)
       }
     }
     else
-    {
+    { 
+      I2C_Read(SYS_CTRL2_ADDR,&SYS_CTRL2_Last); 
+      SYS_CTRL2.Byte = SYS_CTRL2_Last;
       if(!SYS_CTRL2.Bit.DSG_ON && !SYS_CTRL2.Bit.CHG_ON )  
-      {
+      { 
+        VCC1_OFF();
         LowPower_Powerdown_Enter();  
       } 
     }
@@ -1898,16 +1884,34 @@ void SOC_Init(void)
   
   if(result == 0xAA)//判断校验地址中数据是否为0xAA, Y: EEPROM 中保存有SOC数据;  N: EEPROM 中保存有SOC数据
   {
-    FLASH_Unlock(FLASH_MEMTYPE_DATA);       // 解锁EEPROM
-    FLASH_ProgramByte(ADJUST_ADDR,0x00);    // 清除校验地址中数据 
-    FLASH_Lock(FLASH_MEMTYPE_DATA);         // 加锁EEPROM
     Soc_Tmp = FLASH_ReadByte(SOC_ADDR);     // 读取SOC数据
-     
     SocReg.soc = Soc_Tmp; //SocReg.ah = SocCalc.curAh; // 计算SOC。 
     SocCalc.curAh = ((uint32_t)SocReg.rated_cap * Soc_Tmp) / 100;
     SocReg.ah = SocCalc.curAh;
     SocCalc.soc_rt = SocReg.soc;
     Soc_OCV_CorrectEn_Flag = 0;  // 上电禁止SOC的OCV校准  
+    
+    FLASH_Unlock(FLASH_MEMTYPE_DATA);       // 解锁EEPROM
+    FLASH_ProgramByte(ADJUST_ADDR,0x00);    // 清除校验地址中数据 
+    FLASH_Lock(FLASH_MEMTYPE_DATA);         // 加锁EEPROM
+     
+    FLASH_Unlock(FLASH_MEMTYPE_DATA);       // 解锁EEPROM
+    FLASH_ProgramByte(0x004008,SocCalc.soc_rt);    // 清除校验地址中数据 
+    FLASH_Lock(FLASH_MEMTYPE_DATA);         // 加锁EEPROM
+     /*
+            FLASH_Unlock(FLASH_MEMTYPE_DATA);       // 解锁EEPROM
+            FLASH_ProgramByte(0x00400C,(uint8_t)SocReg.ah);    // 清除校验地址中数据 
+            FLASH_Lock(FLASH_MEMTYPE_DATA);         // 加锁EEPROM
+            FLASH_Unlock(FLASH_MEMTYPE_DATA);       // 解锁EEPROM
+            FLASH_ProgramByte(0x00400D,(uint8_t)(SocReg.ah>>8));    // 清除校验地址中数据 
+            FLASH_Lock(FLASH_MEMTYPE_DATA);         // 加锁EEPROM
+            FLASH_Unlock(FLASH_MEMTYPE_DATA);       // 解锁EEPROM
+            FLASH_ProgramByte(0x00400E,(uint8_t)(SocReg.ah>>16));    // 清除校验地址中数据 
+            FLASH_Lock(FLASH_MEMTYPE_DATA);         // 加锁EEPROM
+            FLASH_Unlock(FLASH_MEMTYPE_DATA);       // 解锁EEPROM
+            FLASH_ProgramByte(0x00400F,(uint8_t)(SocReg.ah>>24));    // 清除校验地址中数据 
+            FLASH_Lock(FLASH_MEMTYPE_DATA);         // 加锁EEPROM
+    */
   }
   else
   {
@@ -1916,10 +1920,19 @@ void SOC_Init(void)
 }
 void SOC_SavedtoEEPROM(void)
 {   
+  static uint8_t soc_rt_lock = 0;
+  static uint8_t soc_rt_tmp = 0;
+  if(soc_rt_lock ==0)
+  {
+    soc_rt_tmp  = SocCalc.soc_rt;
+    soc_rt_lock = 1;
+  }
+  //soc_rt_tmp  = 80;
   FLASH_Unlock(FLASH_MEMTYPE_DATA);               // 解锁EEPROM
-  FLASH_ProgramByte(SOC_ADDR,SocCalc.soc_rt);     // 保存SOC到EEPROM 
+  FLASH_ProgramByte(SOC_ADDR,soc_rt_tmp);     // 保存SOC到EEPROM 
   FLASH_Lock(FLASH_MEMTYPE_DATA);                 // 加锁EEPROM
-  if(SocCalc.soc_rt == FLASH_ReadByte(SOC_ADDR))  // 读取数据 ?= 写入数据
+  
+  if(soc_rt_tmp == FLASH_ReadByte(SOC_ADDR))  // 读取数据 ?= 写入数据
   {
     FLASH_Unlock(FLASH_MEMTYPE_DATA);             // 解锁EEPROM
     FLASH_ProgramByte(ADJUST_ADDR,0xAA);          // 写入保存SOC成功标志符
@@ -1933,6 +1946,7 @@ void Var_Init(void)
   ChgTemp_cnt = 0;
   DisTemp_cnt = 0;
   
+    SocReg.rated_cap = 2050;
   Chg_Current_Val_Small_Errer_t = 0;
   Temp_Protect_Delay_t = 0;
   LowPower_MCU_Entry_Flag = 0; // MCU运行于低功耗状态标识符

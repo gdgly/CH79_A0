@@ -1,5 +1,5 @@
 [DebugChecksum]
-Checksum=-2022134968
+Checksum=-817957862
 [DisAssemblyWindow]
 NumStates=_ 1
 State 1=_ 1
@@ -69,13 +69,6 @@ Fmt1=unsigned char[32]	3	0
 Fmt2=unsigned char[50]	3	0
 [watch_formats]
 Fmt0={W}0:arr	3	2
-[Log file]
-LoggingEnabled=_ 0
-LogFile=_ ""
-Category=_ 0
-[TermIOLog]
-LoggingEnabled=_ 0
-LogFile=_ ""
 [Breakpoints]
 Bp0=_ "STD_CODE" "{$PROJ_DIR$}.154.4@1" 0 0 0 0 "" 0 ""
 Bp1=_ "STD_CODE" "{$PROJ_DIR$}.130.1@1" 0 0 0 0 "" 0 ""
@@ -91,6 +84,13 @@ Bp10=_ "STD_DATA" "Afe_Device_Init" 0 0 0 3 0 "" 0 ""
 Bp11=_ "STD_DATA" "Afe_Device_Init" 0 0 0 3 0 "" 0 ""
 Bp12=_ "STD_DATA" "TempCheck" 0 0 0 3 0 "" 0 ""
 Count=13
+[Log file]
+LoggingEnabled=_ 0
+LogFile=_ ""
+Category=_ 0
+[TermIOLog]
+LoggingEnabled=_ 0
+LogFile=_ ""
 [Aliases]
 A0=_ "D:\ProjectPath\STMPath\CH79_A0_3nd_Changed\CH79_A0\sys\src\user.c" ""
 A1=_ "D:\R88 XCQ-5S\R88 XCQ-5S\lib\src\stm8s_iwdg.c" ""

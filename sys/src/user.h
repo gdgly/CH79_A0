@@ -136,6 +136,7 @@ void LowPower_Powerdown_Enter(void);
   extern unsigned int V_TS2_Val; 
   extern unsigned int R_TS2_Val; 
   
+  extern unsigned char     SYS_STAT_Last_tmp;
   extern unsigned char     SYS_STAT_Last;
   extern unsigned char     CELLBAL1_Last;
   extern unsigned char     CELLBAL2_Last;
