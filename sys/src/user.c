@@ -1136,36 +1136,10 @@ void LedShow_Cntrl(void)
   {  
     FlowLedCnt = 0;
     FlowLed_Finish_Flag = 0;
-    FlowLedCnt_Lock = 0;
-    /*
-    if(LedFlash_Off_t < 50)
-    {
-      LED1_OFF();
-      LED2_OFF();
-      LED3_ON();  
-    }  
-    else if(LedFlash_Off_t < 100)
-    {
-      LED1_OFF();
-      LED2_ON();
-      LED3_OFF();  
-    }  
-    else if(LedFlash_Off_t < 150)
-    {
-      LED1_ON();
-      LED2_OFF();
-      LED3_OFF();  
-    }  
-    else  
-    {
-      LED1_OFF();
-      LED2_OFF();
-      LED3_OFF();  
-    }   
-    */
-      LED1_OFF();
-      LED2_OFF();
-      LED3_OFF();  
+    FlowLedCnt_Lock = 0; 
+    LED1_OFF();
+    LED2_OFF();
+    LED3_OFF();  
   }
   else
   { 
@@ -1246,13 +1220,13 @@ void LedShow_Cntrl(void)
           }  
         }
       }
-      else if(Bits_flag.Bit.ChgOv || (Cell_Volt_Max >= 4100 && Cell_Volt_Avg >= 4100)) 
+      else if(Bits_flag.Bit.ChgOv || (Cell_Volt_Max >= 4050 && Cell_Volt_Avg >= 4050)) 
       {
         LED1_OFF();
         LED2_OFF(); 
         LED3_ON(); 
       } 
-      else if(SocCalc.soc_rt >= 70)  // 65%---90%     LED1°¢LED2≥£¡¡°¢LED3…¡À∏  
+      else if(SocCalc.soc_rt >= 50)  // 50%     LED1°¢LED2≥£¡¡°¢LED3…¡À∏  
       {
         LED1_OFF();
         if(LedFlash_t < 50)
@@ -1270,7 +1244,7 @@ void LedShow_Cntrl(void)
           LedFlash_t = 0;
         } 
       }
-      else if(SocCalc.soc_rt >= 50 )//30%---65%     LED1≥£¡¡°¢LED2…¡À∏
+      else if(SocCalc.soc_rt >= 20 )//20%---50%     LED1≥£¡¡°¢LED2…¡À∏
       {
         if(LedFlash_t < 50)
         {
@@ -1288,7 +1262,7 @@ void LedShow_Cntrl(void)
         } 
         LED3_OFF();
       }
-      else //0%----30%     LED1…¡À∏
+      else //20%     LED1…¡À∏
       { 
         if(LedFlash_t >= 50)
         {
@@ -1315,25 +1289,15 @@ void LedShow_Cntrl(void)
         LED2_OFF(); 
         LED3_ON(); 
       }
-      else if(SocCalc.soc_rt >= 30) //30%---50%     LED1°¢LED2≥£¡¡
+      else if(SocCalc.soc_rt >= 20) //20%---50%     LED1°¢LED2≥£¡¡
       {
         LED1_OFF();
         LED2_ON();
         LED3_OFF();
       }
-      else if(SocCalc.soc_rt >= 10) //10%---30%     LED1≥£¡¡
+      else   //20%     LED1…¡À∏
       {
         LED1_ON();
-        LED2_OFF();
-        LED3_OFF();
-      }
-      else                             //10%           LED1…¡À∏ 1Hz
-      {
-        if(LedFlash_t >= 100)
-        {
-          LedFlash_t = 0;
-          LED1_XOR();
-        }
         LED2_OFF();
         LED3_OFF();
       } 
