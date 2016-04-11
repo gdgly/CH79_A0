@@ -155,7 +155,7 @@ void LowPower_Powerdown_Enter(void);
   extern unsigned int Temp_Volt_Sample_Cnt;
   extern unsigned int Cell_Volt_Sample_Cnt;
   extern unsigned int CC_Volt_Sample_Cnt;
-  extern unsigned int ChgOv_t;
+  extern unsigned long ChgOv_t;
   extern unsigned int ChgCurOv_t;
   extern unsigned int ChgCurOv_Re_t;   
   extern unsigned int DisOv_t;  

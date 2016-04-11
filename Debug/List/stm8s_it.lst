@@ -1,6 +1,6 @@
 ###############################################################################
 #                                                                             #
-# IAR C/C++ Compiler V1.31.1.20058 [Evaluation] for STM810/Apr/2016  16:54:44 #
+# IAR C/C++ Compiler V1.31.1.20058 [Evaluation] for STM811/Apr/2016  17:26:27 #
 # Copyright 2010-2012 IAR Systems AB.                                         #
 #                                                                             #
 #    Source file  =  D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src #
@@ -424,7 +424,7 @@ D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src\stm8s_it.c
     385              {
     386                Cell_Balance_Delay_t += 1;
     387              }
-    388              if(ChgOv_t < MAX_UINT16_T_NUM)
+    388              if(ChgOv_t < MAX_UINT32_T_NUM)
     389              {
     390                ChgOv_t += 1;
     391              }
@@ -822,7 +822,7 @@ D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src\stm8s_it.c
      TIM1_UPD_OVF_TRG_BRK_IRQHandler
                                        2
      TIM1_CAP_COM_IRQHandler           2
-     TIM2_UPD_OVF_BRK_IRQHandler     413
+     TIM2_UPD_OVF_BRK_IRQHandler     430
      cntr100ms                         1
      Init_Soc_Flag_Delay               2
      TIM2_CAP_COM_IRQHandler           2
@@ -836,9 +836,9 @@ D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src\stm8s_it.c
  
    3 bytes in section .near.bss
    1 byte  in section .near.noinit
- 477 bytes in section .near_func.text
+ 494 bytes in section .near_func.text
  
- 477 bytes of CODE memory
+ 494 bytes of CODE memory
    3 bytes of DATA memory (+ 1 byte shared)
 
 Errors: none

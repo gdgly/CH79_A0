@@ -57,7 +57,7 @@ unsigned char     CC_CFG_Last;
 unsigned int Temp_Volt_Sample_Cnt;
 unsigned int Cell_Volt_Sample_Cnt;
 unsigned int CC_Volt_Sample_Cnt;
-unsigned int ChgOv_t;
+unsigned long ChgOv_t;
 unsigned int ChgCurOv_t;
 unsigned int ChgCurOv_Re_t;   
 unsigned int DisOv_t;  

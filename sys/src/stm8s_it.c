@@ -385,7 +385,7 @@ INTERRUPT_HANDLER(TIM1_CAP_COM_IRQHandler, 12)
     {
       Cell_Balance_Delay_t += 1;
     }
-    if(ChgOv_t < MAX_UINT16_T_NUM)
+    if(ChgOv_t < MAX_UINT32_T_NUM)
     {
       ChgOv_t += 1;
     }

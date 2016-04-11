@@ -1,6 +1,6 @@
 ###############################################################################
 #                                                                             #
-# IAR C/C++ Compiler V1.31.1.20058 [Evaluation] for STM810/Apr/2016  16:54:44 #
+# IAR C/C++ Compiler V1.31.1.20058 [Evaluation] for STM811/Apr/2016  17:26:28 #
 # Copyright 2010-2012 IAR Systems AB.                                         #
 #                                                                             #
 #    Source file  =  D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src #
@@ -96,7 +96,7 @@ D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src\data_def.c
      57          unsigned int Temp_Volt_Sample_Cnt;
      58          unsigned int Cell_Volt_Sample_Cnt;
      59          unsigned int CC_Volt_Sample_Cnt;
-     60          unsigned int ChgOv_t;
+     60          unsigned long ChgOv_t;
      61          unsigned int ChgCurOv_t;
      62          unsigned int ChgCurOv_Re_t;   
      63          unsigned int DisOv_t;  
@@ -303,7 +303,7 @@ D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src\data_def.c
      Temp_Volt_Sample_Cnt             2
      Cell_Volt_Sample_Cnt             2
      CC_Volt_Sample_Cnt               2
-     ChgOv_t                          2
+     ChgOv_t                          4
      ChgCurOv_t                       2
      ChgCurOv_Re_t                    2
      DisOv_t                          2
@@ -335,9 +335,9 @@ D:\ProjectPath\STMPath\CH79_A0_C-version\CH79_A0\sys\src\data_def.c
      SocCalc                         43
 
  
- 224 bytes in section .near.bss
+ 226 bytes in section .near.bss
  
- 224 bytes of DATA memory
+ 226 bytes of DATA memory
 
 Errors: none
 Warnings: none

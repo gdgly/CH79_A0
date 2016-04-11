@@ -7,6 +7,7 @@
 #define   SLAVE_ADDR            0x18
 #define   CC_CFG_INIT_VAL       0x19
 //==================================
+#define   MAX_UINT32_T_NUM      10000000
 #define   MAX_UINT16_T_NUM      65535
 #define   MAX_UINT8_T_NUM       255
 
